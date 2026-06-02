@@ -17,6 +17,7 @@ import {
   FaEnvelope,
   FaFacebook,
   FaLinkedinIn,
+  FaRobot,
 } from "react-icons/fa";
 
 import AOS from "aos";
@@ -31,6 +32,7 @@ const iconMap = {
   ShieldCheck: FaShieldAlt,
   Bug: FaBug,
   Brain: FaBrain,
+  Robot: FaRobot,
 };
 
 const ServiceDetails = () => {

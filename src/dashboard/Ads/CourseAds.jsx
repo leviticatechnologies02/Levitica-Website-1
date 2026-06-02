@@ -13,16 +13,23 @@ import {
   Award,
   BookOpenCheck,
   TrendingUp,
-  Compass
+  Compass,
+  Briefcase
 } from "lucide-react";
 import { useCourses } from '@/hooks/useCourses';
 import { useTheme } from '@/context/ThemeContext';
+import { useGetAllInternshipsDomainsQuery } from '@/Services/paymentServices/internshipsServices';
 
 const CourseAdsCarousel = () => {
   const navigate = useNavigate();
   const { theme } = useTheme();
   const isDark = theme === 'dark';
   const { courses = [], isLoading } = useCourses();
+  const { data: domainsResponse = { data: [] }, isLoading: internshipsLoading } = useGetAllInternshipsDomainsQuery({ isActive: true });
+  const activeDomains = useMemo(() => {
+    const list = domainsResponse.data || [];
+    return list.slice(0, 8);
+  }, [domainsResponse.data]);
 
   // Get dynamic student details from Redux auth
   const user = useSelector((state) => state.auth?.user);
@@ -447,6 +454,157 @@ const CourseAdsCarousel = () => {
               />
             ))}
           </div>
+        </div>
+
+        {/* ================= INTERNSHIPS GRID SECTION ================= */}
+        <div className="mt-8 mb-12">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4 border-b border-lightgray/40 dark:border-dark_border/30 pb-4">
+            <div>
+              <h2 className="text-2xl font-bold text-midnight_text dark:text-white flex items-center gap-2">
+                <Briefcase className="text-primary animate-pulse" size={24} />
+                Explore Premium Internships
+              </h2>
+              <p className="text-sm text-gray mt-1">Boost your career with certified industrial internships and live project execution</p>
+            </div>
+
+            <button
+              onClick={() => navigate("/internships")}
+              className="inline-flex items-center gap-1 text-sm font-semibold text-primary hover:text-skyBlue transition-colors group"
+            >
+              View all internships
+              <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+            </button>
+          </div>
+
+          {internshipsLoading ? (
+            <div className="py-12 flex flex-col items-center justify-center gap-2">
+              <div className="w-8 h-8 rounded-full border-2 border-primary border-t-transparent animate-spin" />
+              <span className="text-gray text-xs font-medium">Loading internships...</span>
+            </div>
+          ) : activeDomains.length > 0 ? (
+            <motion.div
+              variants={containerVariants}
+              initial="hidden"
+              animate="show"
+              className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6"
+            >
+              {activeDomains.map((domain, index) => {
+                // Find lowest fee
+                const lowestFee = domain.durations && domain.durations.length > 0
+                  ? Math.min(...domain.durations.map(d => d.fee))
+                  : 0;
+
+                // Pick a gradient based on the domain index for visual diversity
+                const gradients = [
+                  "from-blue-500 to-cyan-400",
+                  "from-violet-500 to-purple-400",
+                  "from-emerald-500 to-teal-400",
+                  "from-amber-500 to-orange-400",
+                  "from-pink-500 to-rose-400",
+                  "from-indigo-500 to-blue-400"
+                ];
+                const cardGradient = gradients[index % gradients.length];
+
+                return (
+                  <motion.div
+                    key={domain._id}
+                    variants={cardVariants}
+                    whileHover={{
+                      y: -8,
+                      scale: 1.02,
+                      boxShadow: isDark
+                        ? "rgba(10, 25, 47, 0.4) 0px 12px 30px"
+                        : "rgba(104, 117, 141, 0.18) 0px 12px 30px"
+                    }}
+                    className="
+                      bg-white dark:bg-semidark
+                      rounded-2xl shadow-property
+                      border border-lightgray/60 dark:border-dark_border/50
+                      overflow-hidden
+                      transition-all duration-300
+                      flex flex-col
+                      group/icard
+                      h-[380px]
+                    "
+                  >
+                    {/* Header Banner */}
+                    <div className={`relative h-28 bg-gradient-to-r ${cardGradient} p-4 flex flex-col justify-between overflow-hidden shrink-0`}>
+                      {/* Decorative Background Circles */}
+                      <div className="absolute -right-6 -bottom-6 w-20 h-20 rounded-full bg-white/10" />
+                      <div className="absolute right-12 top-[-10px] w-12 h-12 rounded-full bg-white/10" />
+                      
+                      {/* Level Badge */}
+                      <span className="self-start text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded bg-white/20 text-white backdrop-blur-md border border-white/15">
+                        {domain.level || "Industrial"}
+                      </span>
+
+                      {/* Floating Briefcase Icon */}
+                      <div className="absolute right-4 bottom-4 p-2.5 rounded-xl bg-white/25 text-white backdrop-blur-md shadow-sm">
+                        <Briefcase size={20} />
+                      </div>
+                    </div>
+
+                    {/* Card Body */}
+                    <div className="p-5 flex flex-col justify-between flex-grow">
+                      <div>
+                        {/* Title */}
+                        <h3 className="
+                          font-bold text-sm text-midnight_text dark:text-white
+                          line-clamp-2 min-h-[40px] leading-snug group-hover/icard:text-primary transition-colors
+                        ">
+                          {domain.name}
+                        </h3>
+
+                        {/* Focus / Technologies */}
+                        <p className="
+                          mt-2 text-xs text-gray/90 dark:text-slate-400
+                          line-clamp-2 min-h-[32px] leading-relaxed
+                        ">
+                          <span className="font-semibold text-midnight_text dark:text-white">Focus:</span> {domain.focus}
+                        </p>
+
+                        {/* Duration Pill Items */}
+                        <div className="mt-3 flex flex-wrap gap-1.5">
+                          {domain.durations && domain.durations.slice(0, 2).map((d, i) => (
+                            <span key={i} className="text-[10px] font-medium text-gray dark:text-slate-400 bg-light dark:bg-darklight/60 px-2.5 py-1 rounded-md">
+                              {d.days}d program
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Footer Info & Action */}
+                      <div className="mt-4 pt-3 border-t border-lightgray/40 dark:border-dark_border/20 flex items-center justify-between">
+                        <div className="flex flex-col">
+                          <span className="text-[9px] text-gray uppercase tracking-wider font-semibold">Starting at</span>
+                          <span className="text-sm font-black text-emerald-600 dark:text-emerald-400">
+                            ₹{lowestFee.toLocaleString()}
+                          </span>
+                        </div>
+
+                        <button
+                          onClick={() => navigate("/internships")}
+                          className="
+                            inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg
+                            bg-primary text-white hover:bg-opacity-95 hover:shadow-md
+                            text-xs font-semibold shadow-sm transition-all duration-300
+                          "
+                        >
+                          Apply Now
+                          <ArrowRight size={13} className="group-hover/icard:translate-x-1 transition-transform" />
+                        </button>
+                      </div>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </motion.div>
+          ) : (
+            <div className="text-center py-12 bg-white dark:bg-semidark border border-lightgray/50 dark:border-dark_border/30 rounded-xl">
+              <Award size={36} className="mx-auto text-gray mb-3" />
+              <p className="text-sm text-gray font-medium">No active internships available right now.</p>
+            </div>
+          )}
         </div>
 
         {/* ================= COURSE GRID SECTION ================= */}

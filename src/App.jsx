@@ -17,6 +17,8 @@ import Trainings from '@/pages/public/Trainings';
 import CourseDetail from '@/pages/public/CoursesDetails';
 import Services from '@/pages/public/Services';
 import ServiceDetails from '@/pages/public/ServicesDetails';
+import ProductDetails from '@/pages/public/Sections/ProductDetails';
+import ProductEnquiry from '@/pages/public/Sections/ProductEnquiry';
 import GetApp from '@/pages/public/Get_App';
 
 
@@ -98,6 +100,8 @@ const AppRouter = () => {
           <Route path="trainings/:category/:courseId?" element={<CourseDetail />} />
           <Route path="services" element={<Services />} />
           <Route path="services/:serviceName" element={<ServiceDetails />} />
+          <Route path="products/:slug" element={<ProductDetails />} />
+          <Route path="products/:slug/enquiry" element={<ProductEnquiry />} />
           <Route path="contact-us" element={<ContactUs />} />
           <Route path="about-us" element={<AboutUs />} />
 

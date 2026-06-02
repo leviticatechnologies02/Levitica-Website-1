@@ -74,7 +74,7 @@ const CoursesCarouselInHome = () => {
   }, [paused, courses.length]);
 
   return (
-    <section className="py-20 bg-section dark:bg-darkmode overflow-hidden flex justify-center items-center">
+    <section className="py-14 bg-section dark:bg-darkmode overflow-hidden flex justify-center items-center">
       <div className="lg:max-w-screen-xl md:max-w-screen-md mx-auto container px-4">
 
         {/* HEADER */}

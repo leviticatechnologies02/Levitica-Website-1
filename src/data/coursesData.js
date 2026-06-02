@@ -34,8 +34,8 @@ export const coursesData = {
         answer: "Yes, the course includes hands-on exercises and real-world testing scenarios."
       }
     ],
-    price: "₹15,000",
-    duration: "3 months",
+    price: "₹5,000",
+    duration: "1 month",
     mode: "Online Live Classes"
   },
   "selenium-automation": {
@@ -414,7 +414,7 @@ export const coursesData = {
         answer: "Yes, we cover WebSockets and real-time data handling."
       }
     ],
-    price: "₹19,000",
+    price: "₹15,000",
     duration: "6 months",
     mode: "Online Live Classes"
   },
@@ -490,7 +490,7 @@ export const coursesData = {
         answer: "Yes, we cover camera, GPS, storage, and other device APIs."
       }
     ],
-    price: "₹15,000",
+    price: "₹25,000",
     duration: "3 months",
     mode: "Online Live Classes"
   },

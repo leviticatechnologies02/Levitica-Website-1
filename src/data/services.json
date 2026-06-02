@@ -7,6 +7,12 @@
       "path": "/services/it-services"
     },
     {
+      "title": "AI & Machine Learning Solutions",
+      "img": "/img/artificial-intelligence.svg",
+      "description": "Empower your organization with secure, white-label, AI-powered collaboration tools, intelligent workflow automation, and custom LLM productivity integrations.",
+      "path": "/services/ai-solutions"
+    },
+    {
       "title": "Digital Marketing Services",
       "img": "/img/basic.svg",
       "description": "Data-driven digital marketing strategies for SEO, social media, PPC, and content marketing that increase visibility and drive measurable business growth.",

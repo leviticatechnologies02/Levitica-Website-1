@@ -494,11 +494,11 @@ const Footer = () => {
                 href="tel:+919032503559"
                 className="group flex items-center gap-2 hover:text-cyan transition duration-300"
               >
-                <span className="text-white font-semibold">
+                <span className="text-white ">
                   Phone :
                 </span>
 
-                <span className="group-hover:text-white text-cyan">
+                <span className="font-semibold group-hover:text-white text-white">
                   +91 9032503559
                 </span>
               </a>
@@ -508,11 +508,11 @@ const Footer = () => {
                 href="mailto:hr@leviticatechnologies.com"
                 className="group flex items-center gap-2 hover:text-cyan transition duration-300"
               >
-                <span className="text-white font-semibold">
+                <span className="text-white ">
                   Email :
                 </span>
 
-                <span className="group-hover:text-white text-cyan">
+                <span className="font-semibold group-hover:text-white text-white">
                   hr@leviticatechnologies.com
                 </span>
               </a>

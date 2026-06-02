@@ -9,7 +9,10 @@ import {
   FaBrain,
   FaGraduationCap,
   FaHospital,
-  FaCheckCircle
+  FaCheckCircle,
+  FaComments,
+  FaDatabase,
+  FaUniversity
 } from "react-icons/fa";
 
 const ProductsSection = () => {
@@ -27,8 +30,62 @@ const ProductsSection = () => {
 
   const products = [
     {
+      id: 8,
+      title: "Levitica Academy",
+      slug: "levitica-academy",
+      subtitle: "Internship & Learning Platform",
+      description:
+        "Online and offline internship programs for colleges combined with a complete course learning platform featuring live sessions, mentorship, and certifications.",
+      features: [
+        "Online & Offline Internships",
+        "Live Learning Sessions",
+        "Industry Certifications",
+      ],
+      icon: FaUniversity,
+      category: ["education"],
+      deployment: "Cloud",
+      image:
+        "https://images.unsplash.com/photo-1610484826625-ac2be7f1c8c1?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fG9ubGluZSUyMGFjYWRlbXl8ZW58MHx8MHx8fDA%3D"
+    },
+    {
+      id: 6,
+      title: "Levitica Connects U",
+      slug: "levitica-connects-u",
+      subtitle: "Collaboration & Communication Platform",
+      description:
+        "A unified workspace for secure instant messaging, high-quality video meetings, collaborative document sharing, and seamless corporate communication.",
+      features: [
+        "Real-time chat & channels",
+        "HD Video conferencing",
+        "Secure document sharing",
+      ],
+      icon: FaComments,
+      category: ["enterprise"],
+      deployment: "SaaS",
+      image:
+        "https://images.unsplash.com/photo-1712904124132-857e6577aab9?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Y29sbGFib3JhdGlvbiUyMG1lZXRpbmdzJTIwb25saW5lfGVufDB8fDB8fHww"
+    },
+    {
+      id: 2,
+      title: "Hostel & PG System",
+      slug: "hostel-pg-system",
+      subtitle: "Property Management Platform",
+      description:
+        "Smart solution for managing bookings, tenants, billing, and maintenance.",
+      features: [
+        "Room management",
+        "Automated billing",
+        "Tenant dashboards",
+      ],
+      icon: FaBuilding,
+      category: ["property"],
+      deployment: "Cloud",
+      image: "/img/hostel.png"
+    },
+    {
       id: 1,
       title: "HRMS",
+      slug: "hrms",
       subtitle: "Human Resource Management System",
       description:
         "Cloud-based HR platform covering the complete employee lifecycle with automation and compliance.",
@@ -44,24 +101,9 @@ const ProductsSection = () => {
         "https://images.unsplash.com/photo-1531403009284-440f080d1e12"
     },
     {
-      id: 2,
-      title: "Hostel & PG System",
-      subtitle: "Property Management Platform",
-      description:
-        "Smart solution for managing bookings, tenants, billing, and maintenance.",
-      features: [
-        "Room management",
-        "Automated billing",
-        "Tenant dashboards",
-      ],
-      icon: FaBuilding,
-      category: ["property"],
-      deployment: "Cloud",
-      image: "/img/hostel.png"
-    },
-    {
       id: 3,
       title: "AI HR + CRM",
+      slug: "ai-hr-crm",
       subtitle: "AI Automation",
       description:
         "AI-driven HR and CRM solution delivering predictive insights.",
@@ -79,6 +121,7 @@ const ProductsSection = () => {
     {
       id: 4,
       title: "DVSkillHub",
+      slug: "dvskillhub",
       subtitle: "Learning Platform",
       description:
         "Modern LMS for institutes and corporates with live classes.",
@@ -97,6 +140,7 @@ const ProductsSection = () => {
     {
       id: 5,
       title: "Hospital System",
+      slug: "hospital-system",
       subtitle: "Healthcare Platform",
       description:
         "Complete hospital digitization with records and billing.",
@@ -110,8 +154,27 @@ const ProductsSection = () => {
       deployment: "Cloud",
       image:
         "https://media.istockphoto.com/id/1134679866/photo/doctor-working-in-hospital-writing-prescription-clipboard-working-an-laptop-on-desk-in.webp?a=1&b=1&s=612x612&w=0&k=20&c=R-VFqH-naNMbAC4jJabJXNO9RYOq4CKgAcYtevXCtzk="
+    },
+    {
+      id: 7,
+      title: "Levitica Data Management",
+      slug: "levitica-data-management",
+      subtitle: "Enterprise Database Hub",
+      description:
+        "A secure, centralized platform to store and manage critical organizational records across Sales, Finance, HR, and Admin departments.",
+      features: [
+        "Centralized secure database",
+        "Sales, Finance, HR, Admin silos",
+        "Advanced role-based access",
+      ],
+      icon: FaDatabase,
+      category: ["enterprise", "hr"],
+      deployment: "Cloud",
+      image:
+        "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8ZGF0YSUyMG1hbmFnZW1lbnR8ZW58MHx8MHx8fDA%3D"
     }
   ];
+
 
   const categories = [
     { id: "all", name: "All" },
@@ -119,7 +182,8 @@ const ProductsSection = () => {
     { id: "hr", name: "HR Tech" },
     { id: "education", name: "Education" },
     { id: "healthcare", name: "Healthcare" },
-    { id: "ai", name: "AI" }
+    { id: "ai", name: "AI" },
+    { id: "property", name: "Property" }
   ];
 
   const filteredProducts =
@@ -130,15 +194,13 @@ const ProductsSection = () => {
   // Function to determine grid classes based on number of filtered items
   const getGridClasses = () => {
     const itemCount = filteredProducts.length;
-    
+
     if (itemCount === 0) {
       return "grid grid-cols-1";
     } else if (itemCount === 1) {
-      return "grid grid-cols-1 max-w-md mx-auto";
+      return "grid grid-cols-1 max-w-md mx-auto gap-8";
     } else if (itemCount === 2) {
       return "grid sm:grid-cols-2 max-w-4xl gap-8 mx-auto";
-    } else if (itemCount === 4) {
-      return "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4";
     } else {
       return "flex flex-wrap justify-center gap-8";
     }
@@ -146,21 +208,14 @@ const ProductsSection = () => {
 
   // Function to get item width classes for flex layout
   const getItemWidthClass = () => {
-    const itemCount = filteredProducts.length;
-    
-    if (itemCount === 3) {
-      return "w-full sm:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.5rem)]";
-    } else if (itemCount === 5) {
-      return "w-full sm:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.5rem)]";
-    }
-    return "";
+    return "w-full sm:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.5rem)]";
   };
 
   const ProductCard = ({ product }) => {
     const Icon = product.icon;
 
     return (
-      <div className="bg-white dark:bg-darklight rounded-lg shadow-property overflow-hidden group transition h-full">
+      <div className="w-full bg-white dark:bg-darklight rounded-lg shadow-property overflow-hidden group transition h-full">
 
         {/* IMAGE */}
         <div className="relative overflow-hidden">
@@ -204,7 +259,7 @@ const ProductsSection = () => {
 
           <div className="mt-5 flex justify-between items-center">
             <Link
-              to={`${product.link}`}
+              to={`/products/${product.slug}`}
               className="text-primary text-sm font-medium hover:underline"
             >
               View Details →
@@ -237,11 +292,10 @@ const ProductsSection = () => {
             <button
               key={c.id}
               onClick={() => setActiveTab(c.id)}
-              className={`px-5 py-2 rounded-full text-sm font-medium transition ${
-                activeTab === c.id
-                  ? "btn-primary"
-                  : "btn-white border border-lightgray text-gray hover:border-primary"
-              }`}
+              className={`px-5 py-2 rounded-full text-sm font-medium transition ${activeTab === c.id
+                ? "btn-primary"
+                : "btn-white border border-lightgray text-gray hover:border-primary"
+                }`}
             >
               {c.name}
             </button>
@@ -256,7 +310,7 @@ const ProductsSection = () => {
                 key={product.id}
                 data-aos="fade-up"
                 data-aos-delay={index * 120}
-                className={filteredProducts.length >= 3 && filteredProducts.length !== 4 ? getItemWidthClass() : ""}
+                className={`${filteredProducts.length !== 1 && filteredProducts.length !== 2 ? getItemWidthClass() : ""} flex`}
               >
                 <ProductCard product={product} />
               </div>

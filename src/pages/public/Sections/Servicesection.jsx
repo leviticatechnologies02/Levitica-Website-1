@@ -9,6 +9,7 @@ import {
   FaChartLine,
   FaCogs,
   FaBullhorn,
+  FaRobot,
 } from "react-icons/fa";
 
 const ServicesSection = () => {
@@ -30,6 +31,21 @@ const ServicesSection = () => {
     },
     {
       id: 2,
+      title: "AI & Machine Learning Solutions",
+      description:
+        "Empower your organization with secure, white-label, AI-powered collaboration tools, intelligent workflow automation, and custom LLM productivity integrations.",
+      features: [
+        "AI Productivity & Meeting Summaries",
+        "Intelligent Workflow Automation",
+        "Smart Messaging & Cognitive Bots",
+        "White-Label Enterprise Platforms",
+        "Secure AI Integration & Consulting",
+      ],
+      icon: FaRobot,
+      path: "/services/ai-solutions",
+    },
+    {
+      id: 3,
       title: "Manpower & Staffing Solutions",
       description:
         "Complete staffing solutions with specialized professionals across IT, engineering, and business domains.",
@@ -44,7 +60,7 @@ const ServicesSection = () => {
       path: "/services/manpower-and-staffing-solutions",
     },
     {
-      id: 3,
+      id: 4,
       title: "Campus Recruitment Training (CRT)",
       description:
         "Industry-ready training programs focusing on aptitude, technical skills, and interview preparation.",
@@ -59,7 +75,7 @@ const ServicesSection = () => {
       path: "/services/campus-recruitment-training",
     },
     {
-      id: 4,
+      id: 5,
       title: "Business Development & Consulting",
       description:
         "Strategic consulting to drive growth, optimize operations, and implement data-driven strategies.",
@@ -73,7 +89,7 @@ const ServicesSection = () => {
       path: "/services/business-development-and-consulting",
     },
     {
-      id: 5,
+      id: 6,
       title: "Digital Marketing Services",
       description:
         "SEO, social media, and PPC campaigns that engage audiences and drive conversions.",
@@ -102,13 +118,15 @@ const ServicesSection = () => {
   // Function to determine grid column classes based on number of items
   const getGridClasses = () => {
     const itemCount = services.length;
-    
+
     if (itemCount === 1) {
-      return "grid grid-cols-1 max-w-md mx-auto";
+      return "grid grid-cols-1 max-w-md mx-auto gap-8";
     } else if (itemCount === 2) {
-      return "grid md:grid-cols-2 max-w-4xl mx-auto";
+      return "grid md:grid-cols-2 max-w-4xl mx-auto gap-8";
     } else if (itemCount === 4) {
-      return "grid md:grid-cols-2 lg:grid-cols-4";
+      return "grid md:grid-cols-2 lg:grid-cols-4 gap-8";
+    } else if (itemCount === 6) {
+      return "grid md:grid-cols-2 lg:grid-cols-3 gap-8";
     } else {
       // For 3 or 5 items, use flexbox with proper centering
       return "flex flex-wrap justify-center gap-8";
@@ -118,7 +136,7 @@ const ServicesSection = () => {
   // Function to get item width classes for flex layout
   const getItemWidthClass = () => {
     const itemCount = services.length;
-    
+
     if (itemCount === 3) {
       return "w-full md:w-[calc(33.333%-1.5rem)] lg:w-[calc(33.333%-1.5rem)]";
     } else if (itemCount === 5) {
@@ -128,7 +146,7 @@ const ServicesSection = () => {
   };
 
   return (
-    <section className="py-24 bg-section dark:bg-darkmode flex justify-center items-center">
+    <section className="py-14 bg-section dark:bg-darkmode flex justify-center items-center">
       <div className="lg:max-w-screen-xl md:max-w-screen-md mx-auto container px-4">
 
         {/* HEADER */}
@@ -157,9 +175,9 @@ const ServicesSection = () => {
               key={service.id}
               data-aos="fade-up"
               data-aos-delay={index * 120}
-              className={services.length >= 3 && services.length !== 4 ? getItemWidthClass() : ""}
+              className={`${services.length >= 3 && services.length !== 4 ? getItemWidthClass() : ""} flex`}
             >
-              <div className="bg-white dark:bg-semidark rounded-xl shadow-property p-6 border border-lightgray hover:shadow-lg transition flex flex-col h-full">
+              <div className="bg-white dark:bg-semidark rounded-xl shadow-property p-6 border border-lightgray hover:shadow-lg transition flex flex-col h-full w-full">
 
                 {/* ICON */}
                 <div className="w-14 h-14 flex items-center justify-center rounded-lg bg-primary/10 mb-5">

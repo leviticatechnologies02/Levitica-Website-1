@@ -58,7 +58,7 @@ const ContactUs = () => {
               </h4>
 
               <p className="text-gray dark:text-slate-300 mt-2 text-sm max-w-xs">
-                2nd Floor, Vittal Rao Nagar, Madhapur, Hyderabad
+                5th Floor, S2, C9WP+P68 Techno Park, Capital Pk Rd, VIP Hills, Hyderabad, Telangana – 500081
               </p>
             </div>
 
@@ -123,7 +123,7 @@ const ContactUs = () => {
 
             <div className="col-span-3">
               <p className="text-white/70 text-xl">
-                Madhapur, Telangana
+                Techno Park, Capital Pk Rd, <br/> Hyderabad, Telangana
               </p>
             </div>
 

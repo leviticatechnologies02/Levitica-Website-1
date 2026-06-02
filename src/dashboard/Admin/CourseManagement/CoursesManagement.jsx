@@ -56,14 +56,16 @@ const CoursesManagement = () => {
           </div>
 
           {/* 💡 Google Play Note */}
-          <div className={`mt-6 p-4 rounded-xl border ${isDark
+          <div className={`mt-6 p-3 sm:p-4 rounded-xl border ${isDark
               ? 'bg-blue-500/10 border-blue-500/20 text-blue-400'
               : 'bg-blue-50 border-blue-100 text-blue-700'
             }`}>
-            <p className="text-xs sm:text-sm font-medium flex items-center gap-2">
-              <span className="flex-shrink-0 w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
-              <strong>Note:</strong> Use the <b>Google Product ID</b> generated for each course in your Google Play Console to enable mobile in-app purchases.
-            </p>
+            <div className="text-xs sm:text-sm font-medium flex items-start gap-2">
+              <span className="flex-shrink-0 w-2 h-2 rounded-full bg-blue-500 animate-pulse mt-1 sm:mt-1.5" />
+              <span>
+                <strong>Note:</strong> Use the <b>Google Product ID</b> generated for each course in your Google Play Console to enable mobile in-app purchases.
+              </span>
+            </div>
           </div>
         </div>
 

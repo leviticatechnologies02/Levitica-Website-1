@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { FiCreditCard, FiTrendingUp, FiLoader, FiBook, FiBriefcase } from "react-icons/fi";
+import { FiCreditCard, FiTrendingUp, FiLoader, FiBook, FiBriefcase, FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { useTheme } from '@/context/ThemeContext';
 import {
   useGetTransactionQuery,
@@ -86,9 +86,8 @@ const PaymentOverview = () => {
         <div className={`px-2`}>
           <div className="flex items-center gap-3">
             <div>
-              <h1 className={`text-2xl sm:text-3xl font-bold ${
-                isDark ? 'text-white' : 'text-midnight_text'
-              }`}>
+              <h1 className={`text-2xl sm:text-3xl font-bold ${isDark ? 'text-white' : 'text-midnight_text'
+                }`}>
                 Payment Overview
               </h1>
 
@@ -112,13 +111,12 @@ const PaymentOverview = () => {
               setActiveTab("course");
               setPage(1);
             }}
-            className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm transition-all shadow-md hover:shadow-lg ${
-              activeTab === "course"
-                ? "btn-primary"
-                : isDark
+            className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm transition-all shadow-md hover:shadow-lg ${activeTab === "course"
+              ? "btn-primary"
+              : isDark
                 ? "bg-darklight text-gray hover:text-white"
                 : "bg-light text-gray hover:text-midnight_text"
-            }`}
+              }`}
           >
             <FiBook className="h-4 w-4" />
             Course Payments
@@ -131,24 +129,22 @@ const PaymentOverview = () => {
               setActiveTab("internship");
               setPage(1);
             }}
-            className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm transition-all shadow-md hover:shadow-lg ${
-              activeTab === "internship"
-                ? "btn-primary"
-                : isDark
+            className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm transition-all shadow-md hover:shadow-lg ${activeTab === "internship"
+              ? "btn-primary"
+              : isDark
                 ? "bg-darklight text-gray hover:text-white"
                 : "bg-light text-gray hover:text-midnight_text"
-            }`}
+              }`}
           >
             <FiBriefcase className="h-4 w-4" />
             Internship Payments
           </motion.button>
 
           {/* Tab Indicator */}
-          <div className={`ml-auto flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium ${
-            isDark
-              ? 'bg-darklight text-gray'
-              : 'bg-light text-gray'
-          }`}>
+          <div className={`ml-auto flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium ${isDark
+            ? 'bg-darklight text-gray'
+            : 'bg-light text-gray'
+            }`}>
             <FiTrendingUp className="h-4 w-4 text-primary" />
             <span>{normalizedData.length} transactions</span>
           </div>
@@ -160,11 +156,10 @@ const PaymentOverview = () => {
         {/* ================= Table ================= */}
         <div>
           {isLoading ? (
-            <div className={`rounded-xl border shadow-property p-12 text-center ${
-              isDark
-                ? 'bg-semidark border-dark_border'
-                : 'bg-white border-border'
-            }`}>
+            <div className={`rounded-xl border shadow-property p-12 text-center ${isDark
+              ? 'bg-semidark border-dark_border'
+              : 'bg-white border-border'
+              }`}>
               <div className="flex flex-col items-center justify-center gap-4">
                 <div className="h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
                 <div className="text-center">
@@ -180,37 +175,30 @@ const PaymentOverview = () => {
 
         {/* ================= Pagination ================= */}
         {totalPages && totalPages > 1 && (
-          <div className={`flex items-center justify-between sm:justify-center gap-4 p-4 rounded-xl border ${
-            isDark
-              ? 'bg-semidark border-dark_border'
-              : 'bg-white border-border'
-          }`}>
+          <div className={`flex items-center justify-between gap-6 py-2 px-3 rounded-xl border w-fit mx-auto shadow-sm ${isDark
+            ? 'bg-semidark border-dark_border'
+            : 'bg-white border-border'
+            }`}>
             <button
               disabled={page === 1}
               onClick={() => setPage(page - 1)}
-              className={`px-4 py-2 rounded-lg font-medium transition disabled:opacity-50 ${
-                isDark
-                  ? 'bg-darklight text-gray hover:bg-darklight/80'
-                  : 'bg-light text-gray hover:bg-light/80'
-              }`}
+              className={`flex items-center gap-1 py-1.5 px-3 rounded-lg text-xs font-semibold transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed btn-border`}
             >
-              Previous
+              <FiChevronLeft className="h-3.5 w-3.5" />
+              <span>Prev</span>
             </button>
 
-            <span className={`font-medium text-sm text-gray`}>
-              Page {page} of {totalPages}
+            <span className={`text-xs font-medium text-slate-500 dark:text-slate-400 select-none min-w-[75px] text-center`}>
+              Page <strong className="text-midnight_text dark:text-white">{page}</strong> of <strong className="text-midnight_text dark:text-white">{totalPages}</strong>
             </span>
 
             <button
               disabled={page === totalPages}
               onClick={() => setPage(page + 1)}
-              className={`px-4 py-2 rounded-lg font-medium transition disabled:opacity-50 ${
-                isDark
-                  ? 'bg-primary text-white hover:bg-skyBlue'
-                  : 'bg-primary text-white hover:bg-skyBlue'
-              }`}
+              className={`flex items-center gap-1 py-1.5 px-3 rounded-lg text-xs font-semibold transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed btn-border`}
             >
-              Next
+              <span>Next</span>
+              <FiChevronRight className="h-3.5 w-3.5" />
             </button>
           </div>
         )}

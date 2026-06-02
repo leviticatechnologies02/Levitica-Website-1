@@ -251,7 +251,7 @@ export const servicesData = {
       }
     ]
   },
-   "data-science-and-analytics-services": {
+  "data-science-and-analytics-services": {
     id: 5,
     title: "Data Science & Analytics Services",
     slug: "data-science-analytics",
@@ -449,7 +449,7 @@ export const servicesData = {
       }
     ]
   },
-   
+
   "ca-and-financial-services": {
     id: 8,
     title: "CA & Financial Services",
@@ -649,288 +649,382 @@ export const servicesData = {
     ]
   },
   "it-services": {
-  id: 11,
-  title: "IT Services & Solutions",
-  slug: "it-services",
-  image: "/img/svg/429-error.svg",
-  description:
-    `End-to-end IT services designed to help organizations build, modernize, secure, and scale digital systems efficiently.
+    id: 11,
+    title: "IT Services & Solutions",
+    slug: "it-services",
+    image: "/img/svg/429-error.svg",
+    description:
+      `End-to-end IT services designed to help organizations build, modernize, secure, and scale digital systems efficiently.
 We combine technology expertise, industry best practices, and agile delivery to create reliable, future-ready solutions.
 Our focus is on driving business value through scalable architecture, performance optimization, and long-term support`,
 
-  serviceTypes: [
-    {
-      name: "Web Development",
-      description:
-        "Scalable, secure, and responsive web applications using modern frameworks.",
-      icon: "Code",
-    },
-    {
-      name: "Mobile App Development",
-      description:
-        "High-performance Android and iOS apps built for scalability and user experience.",
-      icon: "Smartphone",
-    },
-    {
-      name: "Cloud Services",
-      description:
-        "Cloud migration, optimization, and managed services across AWS, Azure, and GCP.",
-      icon: "Cloud",
-    },
-    {
-      name: "DevOps & Infrastructure",
-      description:
-        "CI/CD pipelines, automation, monitoring, and infrastructure reliability.",
-      icon: "ServerCog",
-    },
-    {
-      name: "Cybersecurity",
-      description:
-        "Security audits, compliance, threat monitoring, and risk mitigation solutions.",
-      icon: "ShieldCheck",
-    },
-    {
-      name: "Software Testing & QA",
-      description:
-        "Manual and automated testing to ensure quality, stability, and performance.",
-      icon: "Bug",
-    },
-    {
-      name: "Machine Learning & AI",
-      description:
-        "AI-driven solutions for automation, analytics, and smarter decision-making.",
-      icon: "Brain",
-    },
-  ],
+    serviceTypes: [
+      {
+        name: "Web Development",
+        description:
+          "Scalable, secure, and responsive web applications using modern frameworks.",
+        icon: "Code",
+      },
+      {
+        name: "Mobile App Development",
+        description:
+          "High-performance Android and iOS apps built for scalability and user experience.",
+        icon: "Smartphone",
+      },
+      {
+        name: "Cloud Services",
+        description:
+          "Cloud migration, optimization, and managed services across AWS, Azure, and GCP.",
+        icon: "Cloud",
+      },
+      {
+        name: "DevOps & Infrastructure",
+        description:
+          "CI/CD pipelines, automation, monitoring, and infrastructure reliability.",
+        icon: "ServerCog",
+      },
+      {
+        name: "Cybersecurity",
+        description:
+          "Security audits, compliance, threat monitoring, and risk mitigation solutions.",
+        icon: "ShieldCheck",
+      },
+      {
+        name: "Software Testing & QA",
+        description:
+          "Manual and automated testing to ensure quality, stability, and performance.",
+        icon: "Bug",
+      },
+      {
+        name: "Machine Learning & AI",
+        description:
+          "AI-driven solutions for automation, analytics, and smarter decision-making.",
+        icon: "Brain",
+      },
+    ],
 
-  keyHighlights: [
-    "Business-focused IT consulting approach",
-    "Modern, scalable, and secure architectures",
-    "Experienced engineers and domain experts",
-    "Agile and transparent delivery process",
-  ],
+    keyHighlights: [
+      "Business-focused IT consulting approach",
+      "Modern, scalable, and secure architectures",
+      "Experienced engineers and domain experts",
+      "Agile and transparent delivery process",
+    ],
 
-  engagementModels: [
-    "Fixed-price project delivery",
-    "Dedicated development teams",
-    "Time & material engagement",
-    "Long-term support & maintenance",
-  ],
+    engagementModels: [
+      "Fixed-price project delivery",
+      "Dedicated development teams",
+      "Time & material engagement",
+      "Long-term support & maintenance",
+    ],
 
-  benefits: [
-    "Future-ready and scalable IT solutions",
-    "Improved system performance and security",
-    "Faster time-to-market",
-    "Reduced operational and infrastructure costs",
-    "Reliable post-deployment support",
-  ],
+    benefits: [
+      "Future-ready and scalable IT solutions",
+      "Improved system performance and security",
+      "Faster time-to-market",
+      "Reduced operational and infrastructure costs",
+      "Reliable post-deployment support",
+    ],
 
-  industries: [
-    "Information Technology",
-    "Healthcare",
-    "Finance & Banking",
-    "E-commerce",
-    "Manufacturing",
-    "Education",
-    "Startups & SaaS",
-  ],
+    industries: [
+      "Information Technology",
+      "Healthcare",
+      "Finance & Banking",
+      "E-commerce",
+      "Manufacturing",
+      "Education",
+      "Startups & SaaS",
+    ],
 
-  process: [
-    {
-      step: "Discover",
-      description:
-        "Understand business goals, technical requirements, and challenges.",
-    },
-    {
-      step: "Design & Build",
-      description:
-        "Architect, develop, and test scalable IT solutions.",
-    },
-    {
-      step: "Deploy & Support",
-      description:
-        "Secure deployment, monitoring, and ongoing optimization.",
-    },
-  ],
+    process: [
+      {
+        step: "Discover",
+        description:
+          "Understand business goals, technical requirements, and challenges.",
+      },
+      {
+        step: "Design & Build",
+        description:
+          "Architect, develop, and test scalable IT solutions.",
+      },
+      {
+        step: "Deploy & Support",
+        description:
+          "Secure deployment, monitoring, and ongoing optimization.",
+      },
+    ],
 
-  faqs: [
-    {
-      question: "What technologies do you work with?",
-      answer:
-        "We work with modern technologies including React, Node.js, Java, Python, AWS, Azure, Docker, Kubernetes, and AI/ML frameworks.",
-    },
-    {
-      question: "Do you provide ongoing support and maintenance?",
-      answer:
-        "Yes, we offer long-term support, maintenance, monitoring, and continuous optimization services.",
-    },
-    {
-      question: "Can you scale teams based on project needs?",
-      answer:
-        "Absolutely. Our engagement models allow flexible team scaling based on project requirements.",
-    },
-    {
-      question: "How do you ensure security and quality?",
-      answer:
-        "We follow industry best practices, security standards, and rigorous QA processes throughout the project lifecycle.",
-    },
-    {
-      question: "Do you support startups and enterprises?",
-      answer:
-        "Yes, we work with startups, SMEs, and large enterprises across multiple industries.",
-    },
-  ],
+    faqs: [
+      {
+        question: "What technologies do you work with?",
+        answer:
+          "We work with modern technologies including React, Node.js, Java, Python, AWS, Azure, Docker, Kubernetes, and AI/ML frameworks.",
+      },
+      {
+        question: "Do you provide ongoing support and maintenance?",
+        answer:
+          "Yes, we offer long-term support, maintenance, monitoring, and continuous optimization services.",
+      },
+      {
+        question: "Can you scale teams based on project needs?",
+        answer:
+          "Absolutely. Our engagement models allow flexible team scaling based on project requirements.",
+      },
+      {
+        question: "How do you ensure security and quality?",
+        answer:
+          "We follow industry best practices, security standards, and rigorous QA processes throughout the project lifecycle.",
+      },
+      {
+        question: "Do you support startups and enterprises?",
+        answer:
+          "Yes, we work with startups, SMEs, and large enterprises across multiple industries.",
+      },
+    ],
 
   },
   "digital-marketing": {
-  id: 15,
-  title: "Digital Marketing Services",
-  slug: "digital-marketing",
-  image: "/img/basic.svg",
-  description:
-    `End-to-end digital marketing solutions designed to increase online visibility, drive qualified traffic, and generate measurable business growth.
+    id: 15,
+    title: "Digital Marketing Services",
+    slug: "digital-marketing",
+    image: "/img/basic.svg",
+    description:
+      `End-to-end digital marketing solutions designed to increase online visibility, drive qualified traffic, and generate measurable business growth.
 We combine data-driven strategies, creative execution, and continuous optimization to deliver superior ROI.
 Our focus is on building brand authority, engaging target audiences, and converting leads into loyal customers.`,
 
-  serviceTypes: [
-    {
-      name: "Search Engine Optimization (SEO)",
-      description:
-        "On-page, technical, and off-page SEO to improve organic rankings and drive sustainable traffic.",
-      icon: "Search",
-    },
-    {
-      name: "Social Media Marketing",
-      description:
-        "Strategic content creation, community management, and paid campaigns across all major platforms.",
-      icon: "Users",
-    },
-    {
-      name: "Pay-Per-Click (PPC) Advertising",
-      description:
-        "Google Ads, social media ads, and display campaigns optimized for maximum conversions.",
-      icon: "TrendingUp",
-    },
-    {
-      name: "Content Marketing",
-      description:
-        "Strategic content creation including blogs, videos, infographics, and whitepapers.",
-      icon: "FileText",
-    },
-    {
-      name: "Email Marketing",
-      description:
-        "Automated email campaigns, newsletters, and lead nurturing sequences for customer retention.",
-      icon: "Mail",
-    },
-    {
-      name: "Conversion Rate Optimization (CRO)",
-      description:
-        "A/B testing, UX analysis, and optimization to maximize website conversions and revenue.",
-      icon: "Target",
-    },
-    {
-      name: "Marketing Analytics",
-      description:
-        "Performance tracking, ROI analysis, and data-driven insights for continuous improvement.",
-      icon: "BarChart",
-    },
-  ],
+    serviceTypes: [
+      {
+        name: "Search Engine Optimization (SEO)",
+        description:
+          "On-page, technical, and off-page SEO to improve organic rankings and drive sustainable traffic.",
+        icon: "Search",
+      },
+      {
+        name: "Social Media Marketing",
+        description:
+          "Strategic content creation, community management, and paid campaigns across all major platforms.",
+        icon: "Users",
+      },
+      {
+        name: "Pay-Per-Click (PPC) Advertising",
+        description:
+          "Google Ads, social media ads, and display campaigns optimized for maximum conversions.",
+        icon: "TrendingUp",
+      },
+      {
+        name: "Content Marketing",
+        description:
+          "Strategic content creation including blogs, videos, infographics, and whitepapers.",
+        icon: "FileText",
+      },
+      {
+        name: "Email Marketing",
+        description:
+          "Automated email campaigns, newsletters, and lead nurturing sequences for customer retention.",
+        icon: "Mail",
+      },
+      {
+        name: "Conversion Rate Optimization (CRO)",
+        description:
+          "A/B testing, UX analysis, and optimization to maximize website conversions and revenue.",
+        icon: "Target",
+      },
+      {
+        name: "Marketing Analytics",
+        description:
+          "Performance tracking, ROI analysis, and data-driven insights for continuous improvement.",
+        icon: "BarChart",
+      },
+    ],
 
-  keyHighlights: [
-    "Data-driven marketing strategies",
-    "Transparent reporting and analytics",
-    "Industry-specific campaign expertise",
-    "Omnichannel marketing approach",
-  ],
+    keyHighlights: [
+      "Data-driven marketing strategies",
+      "Transparent reporting and analytics",
+      "Industry-specific campaign expertise",
+      "Omnichannel marketing approach",
+    ],
 
-  engagementModels: [
-    "Monthly retainer packages",
-    "Project-based campaigns",
-    "Performance-based pricing",
-    "Consultation & strategy planning",
-  ],
+    engagementModels: [
+      "Monthly retainer packages",
+      "Project-based campaigns",
+      "Performance-based pricing",
+      "Consultation & strategy planning",
+    ],
 
-  benefits: [
-    "Increased online visibility and brand awareness",
-    "Higher quality lead generation",
-    "Improved ROI on marketing spend",
-    "Better customer engagement and retention",
-    "Data-backed decision making",
-  ],
+    benefits: [
+      "Increased online visibility and brand awareness",
+      "Higher quality lead generation",
+      "Improved ROI on marketing spend",
+      "Better customer engagement and retention",
+      "Data-backed decision making",
+    ],
 
-  industries: [
-    "E-commerce & Retail",
-    "Technology & SaaS",
-    "Healthcare & Wellness",
-    "Real Estate & Construction",
-    "Education & EdTech",
-    "Hospitality & Travel",
-    "B2B & Professional Services",
-  ],
+    industries: [
+      "E-commerce & Retail",
+      "Technology & SaaS",
+      "Healthcare & Wellness",
+      "Real Estate & Construction",
+      "Education & EdTech",
+      "Hospitality & Travel",
+      "B2B & Professional Services",
+    ],
 
-  process: [
-    {
-      step: "Research & Strategy",
-      description:
-        "Market analysis, competitor research, and customized marketing strategy development.",
-    },
-    {
-      step: "Campaign Execution",
-      description:
-        "Multi-channel campaign implementation with creative content and precise targeting.",
-    },
-    {
-      step: "Monitor & Optimize",
-      description:
-        "Continuous performance tracking, A/B testing, and strategy refinement.",
-    },
-  ],
+    process: [
+      {
+        step: "Research & Strategy",
+        description:
+          "Market analysis, competitor research, and customized marketing strategy development.",
+      },
+      {
+        step: "Campaign Execution",
+        description:
+          "Multi-channel campaign implementation with creative content and precise targeting.",
+      },
+      {
+        step: "Monitor & Optimize",
+        description:
+          "Continuous performance tracking, A/B testing, and strategy refinement.",
+      },
+    ],
 
-  faqs: [
-    {
-      question: "How long does it take to see results from SEO?",
-      answer:
-        "SEO is a long-term strategy. Initial improvements can be seen in 3-6 months, with significant results typically appearing within 6-12 months of consistent effort.",
-    },
-    {
-      question: "Do you provide monthly performance reports?",
-      answer:
-        "Yes, we provide comprehensive monthly reports with detailed analytics, campaign performance metrics, and actionable insights.",
-    },
-    {
-      question: "Can you handle both B2B and B2C marketing campaigns?",
-      answer:
-        "Absolutely. We have expertise in creating tailored strategies for both B2B and B2C audiences across various industries.",
-    },
-    {
-      question: "How do you measure campaign success?",
-      answer:
-        "We track KPIs like traffic growth, conversion rates, ROI, engagement metrics, and customer acquisition costs using advanced analytics tools.",
-    },
-    {
-      question: "Do you manage social media content creation?",
-      answer:
-        "Yes, we offer complete social media management including content strategy, creation, scheduling, community engagement, and performance analysis.",
-    },
-  ],
+    faqs: [
+      {
+        question: "How long does it take to see results from SEO?",
+        answer:
+          "SEO is a long-term strategy. Initial improvements can be seen in 3-6 months, with significant results typically appearing within 6-12 months of consistent effort.",
+      },
+      {
+        question: "Do you provide monthly performance reports?",
+        answer:
+          "Yes, we provide comprehensive monthly reports with detailed analytics, campaign performance metrics, and actionable insights.",
+      },
+      {
+        question: "Can you handle both B2B and B2C marketing campaigns?",
+        answer:
+          "Absolutely. We have expertise in creating tailored strategies for both B2B and B2C audiences across various industries.",
+      },
+      {
+        question: "How do you measure campaign success?",
+        answer:
+          "We track KPIs like traffic growth, conversion rates, ROI, engagement metrics, and customer acquisition costs using advanced analytics tools.",
+      },
+      {
+        question: "Do you manage social media content creation?",
+        answer:
+          "Yes, we offer complete social media management including content strategy, creation, scheduling, community engagement, and performance analysis.",
+      },
+    ],
+  },
+  "ai-solutions": {
+    id: 16,
+    title: "AI & Machine Learning Solutions",
+    slug: "ai-solutions",
+    image: "/img/artificial-intelligence.svg",
+    description: `Accelerate innovation and drive competitive advantage with custom machine learning models, intelligent process automation, and generative AI integrations. 
+We combine advanced research, engineering excellence, and domain understanding to build intelligent systems that solve complex business challenges and scale seamlessly.
+Our focus is on delivering high-performance, secure, and reliable AI models backed by expert integration support.`,
+    serviceTypes: [
+      {
+        name: "Custom AI & ML Model Development",
+        description: "Designing, training, and deploying bespoke machine learning and deep learning models tailored to your unique business data and requirements.",
+        icon: "Robot"
+      },
+      {
+        name: "Generative AI & LLM Integrations",
+        description: "Integrating powerful Large Language Models (LLMs) like GPT, Claude, or custom open-source models into your applications for automated content generation, intelligent search, and chatbots.",
+        icon: "Robot"
+      },
+      {
+        name: "Predictive Analytics & Forecasting",
+        description: "Leveraging historical data to build predictive models that forecast demand, identify market trends, detect anomalies, and optimize operational resource allocation.",
+        icon: "Robot"
+      },
+      {
+        name: "Intelligent Process Automation (RPA)",
+        description: "Automating repetitive cognitive tasks, document processing, and workflows using advanced optical character recognition (OCR) and natural language processing (NLP).",
+        icon: "Robot"
+      },
+      {
+        name: "Natural Language Processing (NLP)",
+        description: "Implementing sentiment analysis, multi-lingual text translation, entity extraction, and automated summarization systems to analyze textual data.",
+        icon: "Robot"
+      },
+      {
+        name: "Computer Vision Solutions",
+        description: "Developing custom object detection, image classification, facial recognition, and automated video analytics systems for security, retail, and manufacturing.",
+        icon: "Robot"
+      },
+      {
+        name: "AI Consulting & Strategy",
+        description: "Guiding organizations through feasibility studies, data preparation audits, security compliance reviews, and roadmap planning for AI adoption.",
+        icon: "Robot"
+      }
+    ],
+    benefits: [
+      "Significant boost in operational efficiency through intelligent automation",
+      "Actionable predictive insights for data-driven strategic planning",
+      "Hyper-personalized customer experiences via intelligent virtual assistants",
+      "Reduced error rates in complex cognitive and manual workflows",
+      "Seamless integration with existing enterprise software stacks",
+      "Comprehensive post-deployment support and regular model maintenance"
+    ],
+    industries: [
+      "Information Technology & SaaS",
+      "Healthcare & Life Sciences",
+      "Finance, Banking & Insurance",
+      "E-commerce & Retail",
+      "Manufacturing & Supply Chain",
+      "Logistics & Smart Mobility",
+      "Education & EdTech"
+    ],
+    serviceFeatures: [
+      "Feasibility studies & data readiness assessment",
+      "Secure and compliant cloud/on-premise deployment",
+      "Continuous model monitoring & performance tuning",
+      "API integrations for modern web and mobile apps",
+      "Custom analytics dashboards for business users",
+      "End-to-end data pipelines and model auditing"
+    ],
+    faqs: [
+      {
+        question: "How do you ensure data privacy and security when using AI models?",
+        answer: "We prioritize security by utilizing local deployment, VPCs, and enterprise API keys with strict zero-data-retention policies. We fully comply with GDPR, HIPAA, and industry-standard security frameworks."
+      },
+      {
+        question: "What is the typical timeframe for developing a custom AI solution?",
+        answer: "A typical AI project begins with a 2-4 week proof-of-concept (PoC), followed by 8-12 weeks of development, training, and integration, depending on the complexity and data availability."
+      },
+      {
+        question: "Do you support integration with open-source and proprietary models?",
+        answer: "Yes, we integrate both proprietary models (OpenAI, Anthropic, Gemini) and open-source models (Llama, Mistral, BERT) optimized for cloud or on-premise execution."
+      },
+      {
+        question: "How do you handle model retraining and updates?",
+        answer: "We design continuous learning pipelines that detect model drift. We offer monthly or quarterly retraining packages to keep models highly accurate as your data patterns evolve."
+      },
+      {
+        question: "What kind of data do we need to provide to get started?",
+        answer: "We work with you to audit your existing data. Start with structured databases, clean logs, text archives, or media files. We can also assist in creating data labelling and preparation pipelines."
+      }
+    ]
+  }
 }
-}
 
 
 
-export const allServices =   [
-    "Manpower & Staffing Solutions",
-    "Corporate Trainings",
-    "Campus Recruitment Training (CRT)",
-    "Internships & Certification Programs",
-    "Data Science & Analytics Services",
-    "HR Operations & Payroll Management",
-    "Business Development & Consulting (BDE Services)",
-    "CA & Financial Services",
-    "In House Projects & Consulting",
-    "Soft Skills & Online Training"
-]  
+export const allServices = [
+  "Manpower & Staffing Solutions",
+  "Corporate Trainings",
+  "Campus Recruitment Training (CRT)",
+  "Internships & Certification Programs",
+  "Data Science & Analytics Services",
+  "AI & Machine Learning Solutions",
+  "HR Operations & Payroll Management",
+  "Business Development & Consulting (BDE Services)",
+  "CA & Financial Services",
+  "In House Projects & Consulting",
+  "Soft Skills & Online Training"
+]
 
 
 export const contactInfo = {
