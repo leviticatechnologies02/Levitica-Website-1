@@ -166,7 +166,7 @@ const ProductDetails = () => {
                                     to={`/products/${slug}/enquiry`}
                                     className="inline-flex items-center gap-2 bg-primary hover:bg-primary-hover dark:bg-cyan dark:hover:bg-cyan-hover text-white dark:text-midnight_text font-semibold px-6 py-3 rounded-lg shadow-md hover:shadow-lg transition duration-300"
                                 >
-                                    Enquire Now →
+                                    Register Now →
                                 </Link>
                                 {product.link && (
                                     <a

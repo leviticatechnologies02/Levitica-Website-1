@@ -20,7 +20,9 @@ export const productsData = {
       formSchema: [
         { type: "text", name: "companyName", label: "Company / Organization Name", placeholder: "Enter company name", required: true, half: true },
         { type: "text", name: "hrManager", label: "HR Manager / Contact Name", placeholder: "Full name", required: true, half: true },
-        { type: "text", name: "designation", label: "Designation", placeholder: "e.g. HR Manager, CHRO", required: true, half: true },
+        { type: "select", name: "designation", label: "Designation", placeholder: "e.g. HR Manager, CHRO", required: true, half: true,
+          options: ["HR Manager", "CHRO", "HR Lead", "Other"]
+         },
         { type: "email", name: "email", label: "Email Address", placeholder: "you@company.com", required: true, half: true },
         { type: "tel", name: "mobile", label: "Mobile Number", placeholder: "10-digit number", required: true, half: true },
         { type: "number", name: "employeeCount", label: "Number of Employees", placeholder: "e.g. 150", required: true, half: true },
@@ -30,7 +32,7 @@ export const productsData = {
         },
         {
           type: "select", name: "state", label: "State", required: true, half: true,
-          options: ["Telangana", "Andhra Pradesh", "Karnataka", "Tamil Nadu", "Maharashtra", "Delhi", "Other"]
+          options: ["Telangana", "Andhra Pradesh"]
         },
         {
           type: "checkboxes", name: "modules", label: "Modules Interested In", required: false,
@@ -67,13 +69,13 @@ export const productsData = {
         { type: "tel", name: "mobile", label: "Mobile Number", placeholder: "10-digit number", required: true, half: true },
         {
           type: "select", name: "propertyType", label: "Property Type", required: true, half: true,
-          options: ["Hostel", "PG Accommodation", "Both Hostel & PG", "Co-living Space"]
+          options: ["PG Accommodation", "Co-living Space"]
         },
         { type: "number", name: "roomCount", label: "Total Rooms / Beds", placeholder: "e.g. 50", required: true, half: true },
         { type: "text", name: "city", label: "City", placeholder: "Enter city", required: true, half: true },
         {
           type: "select", name: "state", label: "State", required: true, half: true,
-          options: ["Telangana", "Andhra Pradesh", "Karnataka", "Tamil Nadu", "Maharashtra", "Delhi", "Other"]
+          options: ["Telangana", "Andhra Pradesh"]
         },
         {
           type: "checkboxes", name: "features", label: "Features You Need", required: false,
@@ -106,7 +108,9 @@ export const productsData = {
       formSchema: [
         { type: "text", name: "companyName", label: "Company Name", placeholder: "Enter company name", required: true, half: true },
         { type: "text", name: "contactName", label: "Contact Person Name", placeholder: "Full name", required: true, half: true },
-        { type: "text", name: "designation", label: "Designation", placeholder: "e.g. CTO, Sales Head", required: true, half: true },
+        { type: "select", name: "designation", label: "Designation", placeholder: "e.g. CTO, Sales Head", required: true, half: true, 
+          options: ["CTO", "Sales Head", "HR Head", "Other"]
+        },
         { type: "email", name: "email", label: "Email Address", placeholder: "you@company.com", required: true, half: true },
         { type: "tel", name: "mobile", label: "Mobile Number", placeholder: "10-digit number", required: true, half: true },
         {
@@ -116,10 +120,6 @@ export const productsData = {
         {
           type: "select", name: "teamSize", label: "Team Size", required: true, half: true,
           options: ["1–25", "26–100", "101–500", "500+"]
-        },
-        {
-          type: "select", name: "currentTool", label: "Current HR / CRM Tool", required: false, half: true,
-          options: ["None", "Salesforce", "Zoho", "HubSpot", "Workday", "SAP", "Custom Built", "Other"]
         },
         {
           type: "checkboxes", name: "useCases", label: "AI Use Cases You Need", required: false,
@@ -135,6 +135,7 @@ export const productsData = {
     id: 4,
     title: "DVSkillHub",
     subtitle: "Learning Management Platform",
+    logo: "/img/companylogo/dvskillhub.jpg",
     description: "Modern LMS for institutes and corporates with live classes.",
     fullDescription: "DVSkillHub is a state-of-the-art Learning Management System for schools, universities, training centers, and corporate L&D divisions.",
     image: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=600&auto=format&fit=crop&q=60",
@@ -152,7 +153,9 @@ export const productsData = {
       formSchema: [
         { type: "text", name: "collegeName", label: "College / Institute Name", placeholder: "Enter college name", required: true, half: true },
         { type: "text", name: "tpoName", label: "TPO / Contact Person Name", placeholder: "Full name", required: true, half: true },
-        { type: "text", name: "designation", label: "Designation", placeholder: "Training & Placement Officer", required: true, half: true },
+        { type: "select", name: "designation", label: "Designation", placeholder: "Training & Placement Officer", required: true, half: true,
+          options: ["Training & Placement Officer", "HOD", "Principal",]
+         },
         { type: "email", name: "email", label: "Email Address", placeholder: "Enter email address", required: true, half: true },
         { type: "tel", name: "mobile", label: "Mobile Number", placeholder: "10-digit number", required: true, half: true },
         {
@@ -190,7 +193,9 @@ export const productsData = {
       formSchema: [
         { type: "text", name: "facilityName", label: "Hospital / Clinic Name", placeholder: "Enter facility name", required: true, half: true },
         { type: "text", name: "adminName", label: "Administrator / Doctor Name", placeholder: "Full name", required: true, half: true },
-        { type: "text", name: "designation", label: "Designation", placeholder: "e.g. Medical Superintendent, Admin Head", required: true, half: true },
+        { type: "select", name: "designation", label: "Designation", placeholder: "e.g. Medical Superintendent, Admin Head", required: true, half: true,
+          options: ["Medical Superintendent", "Admin Head", "Other"]
+         },
         { type: "email", name: "email", label: "Email Address", placeholder: "you@hospital.com", required: true, half: true },
         { type: "tel", name: "mobile", label: "Mobile Number", placeholder: "10-digit number", required: true, half: true },
         {
@@ -215,12 +220,13 @@ export const productsData = {
   "levitica-connects-u": {
     id: 6,
     title: "Levitica Connects U",
+    logo: "/img/companylogo/leviticaConnect.png",
     subtitle: "Collaboration & Communication Platform",
     description: "A unified workspace for secure messaging, video meetings, and document sharing.",
     fullDescription: "Eliminate scattered communication channels. Levitica Connects U unifies team messaging, HD video conferencing, secure file sharing, and workflow automation in a fully white-labeled enterprise platform.",
     image: "https://images.unsplash.com/photo-1712904124132-857e6577aab9?w=600&auto=format&fit=crop&q=60",
     deployment: "SaaS / Private / On-Premise",
-    link: null,
+    link: "https://connectio-three.vercel.app/",
     features: ["Real-time Chat, Channels, and @Mentions", "HD Video Meetings & Screen Sharing", "Centralized Document Sharing & Co-editing", "Automated Meeting Transcripts & Summaries", "Cognitive Workflow Approvals", "Enterprise SSO & Multi-factor Auth"],
     benefits: ["Combines chat, video, and file sharing in a single app", "100% White-Label with your branding", "End-to-end message encryption", "Support for 100,000+ concurrent users"],
     enquiry: {
@@ -233,7 +239,9 @@ export const productsData = {
       formSchema: [
         { type: "text", name: "companyName", label: "Company Name", placeholder: "Enter company name", required: true, half: true },
         { type: "text", name: "contactName", label: "Contact Person", placeholder: "Full name", required: true, half: true },
-        { type: "text", name: "designation", label: "Designation", placeholder: "e.g. IT Head, CTO", required: true, half: true },
+        { type: "select", name: "designation", label: "Designation", placeholder: "e.g. IT Head, CTO", required: true, half: true,
+          options: ["IT Head", "CTO", "HR Head", "Sales Head", "Other"]
+         },
         { type: "email", name: "email", label: "Email Address", placeholder: "you@company.com", required: true, half: true },
         { type: "tel", name: "mobile", label: "Mobile Number", placeholder: "10-digit number", required: true, half: true },
         { type: "number", name: "teamSize", label: "Total Team / Users", placeholder: "e.g. 500", required: true, half: true },
@@ -340,14 +348,97 @@ export const productsData = {
       formTitle: "Register Your College / Institution",
       formSubtitle: "Our team will connect with you within 24 hours to discuss collaboration.",
       formSchema: [
-        { type: "text", name: "collegeName", label: "College / Institution Name", placeholder: "Enter college name", required: true, half: true },
+        {
+          type: "searchable-select", name: "collegeName", label: "College / Institution Name",
+          placeholder: "Search college name…", required: true, half: true,
+          options: [
+            "Others",
+            "Jawaharlal Nehru Technological University",
+            "Osmania University",
+            "University of Hyderabad",
+            "JNTU Hyderabad",
+            "JNTU Kakinada",
+            "JNTU Anantapur",
+            "Andhra University",
+            "Sri Venkateswara University",
+            "Acharya Nagarjuna University",
+            "Krishna University",
+            "Rayalaseema University",
+            "Vikrama Simhapuri University",
+            "Yogi Vemana University",
+            "RGUKT Basar (IIIT Basar)",
+            "RGUKT Nuzvid (IIIT Nuzvid)",
+            "RGUKT Srikakulam (IIIT Srikakulam)",
+            "RGUKT RK Valley (IIIT RK Valley)",
+            "NIT Warangal",
+            "NIT Andhra Pradesh",
+            "IIT Hyderabad",
+            "BITS Pilani - Hyderabad Campus",
+            "CBIT Hyderabad",
+            "VNR VJIET Hyderabad",
+            "MGIT Hyderabad",
+            "Vasavi College of Engineering",
+            "BVRIT Hyderabad",
+            "KITS Warangal",
+            "Kakatiya University",
+            "Mahatma Gandhi University Nalgonda",
+            "Palamuru University Mahabubnagar",
+            "Satavahana University Karimnagar",
+            "Telangana University Nizamabad",
+            "Jawaharlal Nehru Architecture and Fine Arts University",
+            "Hyderabad Central University",
+            "Maulana Azad National Urdu University",
+            "NALSAR University of Law",
+            "ICFAI University Hyderabad",
+            "GITAM University Hyderabad",
+            "Woxsen University",
+            "Mahindra University",
+            "Anurag University",
+            "Vardhaman College of Engineering",
+            "Sreenidhi Institute of Science and Technology",
+            "Chaitanya Bharathi Institute of Technology",
+            "Institute of Aeronautical Engineering",
+            "G. Narayanamma Institute of Technology and Science",
+            "Sri Indu College of Engineering",
+            "Kommuri Pratap Reddy Institute of Technology",
+            "Gokaraju Rangaraju Institute of Engineering and Technology",
+            "KL University",
+            "VIT-AP University",
+            "Amrita Vishwa Vidyapeetham (Amaravati)",
+            "SRM University AP",
+            "Vignan's Foundation for Science Technology and Research",
+            "Koneru Lakshmaiah Education Foundation (KLEF)",
+            "Anil Neerukonda Institute of Technology and Sciences",
+            "GMR Institute of Technology",
+            "Raghu Engineering College",
+            "Sri Vasavi Engineering College",
+            "SRKR Engineering College",
+            "St. Ann's College of Engineering and Technology",
+            "Lendi Institute of Engineering and Technology",
+            "Bonam Venkata Chalamayya Engineering College",
+            "Sri Sivani College of Engineering",
+            "Prasad V Potluri Siddhartha Institute of Technology",
+            "VR Siddhartha Engineering College",
+            "Gudlavalleru Engineering College",
+            "RVR and JC College of Engineering",
+            "Bapatla Engineering College",
+            "Narasaraopeta Engineering College",
+            "RISE Krishna Sai Prakasam Group of Institutions",
+            "Chirala Engineering College",
+            "Dadi Institute of Engineering and Technology",
+            "Shri Vishnu Engineering College for Women"
+          ]
+        },
         { type: "text", name: "tpoName", label: "TPO / Coordinator Name", placeholder: "Full name", required: true, half: true },
-        { type: "text", name: "designation", label: "Designation", placeholder: "e.g. Training & Placement Officer", required: true, half: true },
+        { type: "select", name: "designation", label: "Designation", placeholder: "e.g. Training & Placement Officer", required: true, half: true,
+          options: ["Training & Placement Officer", "HOD", "Principal",]
+         },
         { type: "email", name: "email", label: "Email Address", placeholder: "you@college.edu.in", required: true, half: true },
         { type: "tel", name: "mobile", label: "Mobile Number", placeholder: "10-digit number", required: true, half: true },
+        
         {
           type: "select", name: "state", label: "State", required: true, half: true,
-          options: ["Telangana", "Andhra Pradesh", "Karnataka", "Tamil Nadu", "Maharashtra", "Other"]
+          options: ["Telangana", "Andhra Pradesh"]
         },
         {
           type: "select", name: "internshipMode", label: "Internship Mode Preferred", required: true, half: true,
