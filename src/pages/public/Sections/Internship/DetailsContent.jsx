@@ -7,7 +7,7 @@ import { GiAchievement } from "react-icons/gi";
 const DetailsContent = ({ domains, isLoading, isError, showPaymentForm, setShowPaymentForm }) => {
   
   const formatDurations = (durations = []) =>
-    durations.map(d => d.label).join(" / ");
+    durations.map(d => `${d.days} Days`).join(" / ");
 
   const formatFees = (durations = []) =>
     durations.map(d => `₹${d.fee}`).join(" / ");

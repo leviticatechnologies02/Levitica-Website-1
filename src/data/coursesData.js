@@ -654,7 +654,7 @@ export const coursesData = {
     "mode": "Online Live Classes",
     "path": "/trainings/data-science/machine-learning"
   },
-  
+
   "artificial-intelligence": {
     "id": 2,
     "title": "Artificial Intelligence",
@@ -695,7 +695,7 @@ export const coursesData = {
     "mode": "Online Live Classes",
     "path": "/trainings/data-science/artificial-intelligence"
   },
-  
+
   "generative-ai": {
     "id": 3,
     "title": "Generative AI",
@@ -776,7 +776,7 @@ export const coursesData = {
     "mode": "Online Live Classes",
     "path": "/trainings/data-science/data-visualization"
   },
-  
+
   "big-data": {
     "id": 5,
     "title": "Big Data",
@@ -858,7 +858,7 @@ export const coursesData = {
     "mode": "Online Live Classes",
     "path": "/trainings/data-science/deep-learning"
   },
-  
+
   "data-analytics": {
     "id": 7,
     "title": "Data Analytics",
@@ -899,248 +899,248 @@ export const coursesData = {
     "mode": "Online Live Classes",
     "path": "/trainings/data-science/data-analytics"
   },
-  
+
   "ethical-hacking": {
-      "id": 1,
-      "title": "Ethical Hacking Fundamentals",
-      "image": "/img/application-security-svgrepo-com.svg",
-      "description": "Learn the basics of ethical hacking, penetration testing, and vulnerability assessment techniques.",
-      "fullDescription": [
-        "Master the fundamentals of ethical hacking and penetration testing methodologies",
-        "Learn vulnerability assessment techniques and security testing approaches",
-        "Understand legal and ethical considerations in security testing",
-        "Develop hands-on skills in identifying and mitigating security vulnerabilities"
-      ],
-      "features": [
-        "Penetration Testing Fundamentals",
-        "Vulnerability Assessment",
-        "Security Scanning Tools",
-        "Ethical Hacking Methodologies",
-        "Legal & Compliance Aspects",
-        "Security Reporting",
-        "Hands-on Lab Exercises",
-        "Certification Preparation"
-      ],
-      "faqs": [
-        {
-          "question": "Is this course legal?",
-          "answer": "Yes, we teach ethical hacking for defensive security purposes with proper legal guidance."
-        },
-        {
-          "question": "What tools will I learn?",
-          "answer": "Kali Linux, Metasploit, Nmap, Wireshark, and other industry-standard security tools."
-        },
-        {
-          "question": "Do I need programming knowledge?",
-          "answer": "Basic scripting knowledge is helpful but we cover the necessary fundamentals."
-        }
-      ],
-      "price": "₹20,000",
-      "duration": "3 months",
-      "mode": "Online Live Classes",
-      "path": "/trainings/cybersecurity/ethical-hacking"
+    "id": 1,
+    "title": "Ethical Hacking Fundamentals",
+    "image": "/img/application-security-svgrepo-com.svg",
+    "description": "Learn the basics of ethical hacking, penetration testing, and vulnerability assessment techniques.",
+    "fullDescription": [
+      "Master the fundamentals of ethical hacking and penetration testing methodologies",
+      "Learn vulnerability assessment techniques and security testing approaches",
+      "Understand legal and ethical considerations in security testing",
+      "Develop hands-on skills in identifying and mitigating security vulnerabilities"
+    ],
+    "features": [
+      "Penetration Testing Fundamentals",
+      "Vulnerability Assessment",
+      "Security Scanning Tools",
+      "Ethical Hacking Methodologies",
+      "Legal & Compliance Aspects",
+      "Security Reporting",
+      "Hands-on Lab Exercises",
+      "Certification Preparation"
+    ],
+    "faqs": [
+      {
+        "question": "Is this course legal?",
+        "answer": "Yes, we teach ethical hacking for defensive security purposes with proper legal guidance."
+      },
+      {
+        "question": "What tools will I learn?",
+        "answer": "Kali Linux, Metasploit, Nmap, Wireshark, and other industry-standard security tools."
+      },
+      {
+        "question": "Do I need programming knowledge?",
+        "answer": "Basic scripting knowledge is helpful but we cover the necessary fundamentals."
+      }
+    ],
+    "price": "₹20,000",
+    "duration": "3 months",
+    "mode": "Online Live Classes",
+    "path": "/trainings/cybersecurity/ethical-hacking"
   },
   "network-security": {
-      "id": 2,
-      "title": "Network Security",
-      "image": "/img/networking-monitor-svgrepo-com.svg",
-      "description": "Master network security protocols, firewalls, VPNs, and intrusion detection systems.",
-      "fullDescription": [
-        "Master network security protocols and infrastructure protection techniques",
-        "Learn to configure and manage firewalls, VPNs, and intrusion detection systems",
-        "Understand network architecture security and segmentation strategies",
-        "Develop skills in monitoring and defending network infrastructure"
-      ],
-      "features": [
-        "Firewall Configuration & Management",
-        "VPN Implementation",
-        "Intrusion Detection Systems",
-        "Network Protocol Security",
-        "Network Segmentation",
-        "Traffic Analysis",
-        "Wireless Security",
-        "Network Monitoring"
-      ],
-      "faqs": [
-        {
-          "question": "What networking knowledge is required?",
-          "answer": "Basic understanding of networking concepts like TCP/IP, DNS, and routing is recommended."
-        },
-        {
-          "question": "Will I work with real firewalls?",
-          "answer": "Yes, we provide virtual lab environments with enterprise firewall solutions."
-        },
-        {
-          "question": "Is this course vendor-specific?",
-          "answer": "We cover concepts applicable to all vendors, with hands-on on multiple platforms."
-        }
-      ],
-      "price": "₹18,000",
-      "duration": "2.5 months",
-      "mode": "Online Live Classes",
-      "path": "/trainings/cybersecurity/network-security"
+    "id": 2,
+    "title": "Network Security",
+    "image": "/img/networking-monitor-svgrepo-com.svg",
+    "description": "Master network security protocols, firewalls, VPNs, and intrusion detection systems.",
+    "fullDescription": [
+      "Master network security protocols and infrastructure protection techniques",
+      "Learn to configure and manage firewalls, VPNs, and intrusion detection systems",
+      "Understand network architecture security and segmentation strategies",
+      "Develop skills in monitoring and defending network infrastructure"
+    ],
+    "features": [
+      "Firewall Configuration & Management",
+      "VPN Implementation",
+      "Intrusion Detection Systems",
+      "Network Protocol Security",
+      "Network Segmentation",
+      "Traffic Analysis",
+      "Wireless Security",
+      "Network Monitoring"
+    ],
+    "faqs": [
+      {
+        "question": "What networking knowledge is required?",
+        "answer": "Basic understanding of networking concepts like TCP/IP, DNS, and routing is recommended."
+      },
+      {
+        "question": "Will I work with real firewalls?",
+        "answer": "Yes, we provide virtual lab environments with enterprise firewall solutions."
+      },
+      {
+        "question": "Is this course vendor-specific?",
+        "answer": "We cover concepts applicable to all vendors, with hands-on on multiple platforms."
+      }
+    ],
+    "price": "₹18,000",
+    "duration": "2.5 months",
+    "mode": "Online Live Classes",
+    "path": "/trainings/cybersecurity/network-security"
   },
   "incident-response": {
-      "id": 3,
-      "title": "Incident Response & Forensics",
-      "image": "/img/incident-maintenance-svgrepo-com.svg",
-      "description": "Learn digital forensics, incident response procedures, and cyber crime investigation techniques.",
-      "fullDescription": [
-        "Master digital forensics techniques and incident response procedures",
-        "Learn cyber crime investigation methodologies and evidence handling",
-        "Understand incident response lifecycle and crisis management",
-        "Develop skills in evidence preservation and forensic analysis"
-      ],
-      "features": [
-        "Digital Forensics Techniques",
-        "Incident Response Lifecycle",
-        "Evidence Collection & Preservation",
-        "Memory & Disk Forensics",
-        "Malware Analysis Basics",
-        "Legal Evidence Handling",
-        "Crisis Management",
-        "Reporting & Documentation"
-      ],
-      "faqs": [
-        {
-          "question": "What tools will I use?",
-          "answer": "FTK, Autopsy, Volatility, Wireshark, and other digital forensics tools."
-        },
-        {
-          "question": "Is this course technical?",
-          "answer": "Yes, it involves hands-on technical work with forensic tools and techniques."
-        },
-        {
-          "question": "Will I learn about legal aspects?",
-          "answer": "Yes, we cover legal considerations for evidence handling and courtroom testimony."
-        }
-      ],
-      "price": "₹22,000",
-      "duration": "3 months",
-      "mode": "Online Live Classes",
-      "path": "/trainings/cybersecurity/incident-response"
+    "id": 3,
+    "title": "Incident Response & Forensics",
+    "image": "/img/incident-maintenance-svgrepo-com.svg",
+    "description": "Learn digital forensics, incident response procedures, and cyber crime investigation techniques.",
+    "fullDescription": [
+      "Master digital forensics techniques and incident response procedures",
+      "Learn cyber crime investigation methodologies and evidence handling",
+      "Understand incident response lifecycle and crisis management",
+      "Develop skills in evidence preservation and forensic analysis"
+    ],
+    "features": [
+      "Digital Forensics Techniques",
+      "Incident Response Lifecycle",
+      "Evidence Collection & Preservation",
+      "Memory & Disk Forensics",
+      "Malware Analysis Basics",
+      "Legal Evidence Handling",
+      "Crisis Management",
+      "Reporting & Documentation"
+    ],
+    "faqs": [
+      {
+        "question": "What tools will I use?",
+        "answer": "FTK, Autopsy, Volatility, Wireshark, and other digital forensics tools."
+      },
+      {
+        "question": "Is this course technical?",
+        "answer": "Yes, it involves hands-on technical work with forensic tools and techniques."
+      },
+      {
+        "question": "Will I learn about legal aspects?",
+        "answer": "Yes, we cover legal considerations for evidence handling and courtroom testimony."
+      }
+    ],
+    "price": "₹22,000",
+    "duration": "3 months",
+    "mode": "Online Live Classes",
+    "path": "/trainings/cybersecurity/incident-response"
   },
   "risk-assessment": {
-      "id": 4,
-      "title": "Security Risk Assessment",
-      "image": "/img/security-shield-svgrepo-com.svg",
-      "description": "Understand risk assessment methodologies, compliance frameworks, and security auditing practices.",
-      "fullDescription": [
-        "Master security risk assessment methodologies and frameworks",
-        "Learn compliance requirements and regulatory frameworks",
-        "Understand security auditing practices and control validation",
-        "Develop skills in risk quantification and treatment planning"
-      ],
-      "features": [
-        "Risk Assessment Methodologies",
-        "Compliance Frameworks",
-        "Security Auditing Techniques",
-        "Control Validation",
-        "Risk Treatment Planning",
-        "Policy Development",
-        "Regulatory Requirements",
-        "Reporting & Documentation"
-      ],
-      "faqs": [
-        {
-          "question": "Is this course technical or managerial?",
-          "answer": "It's a blend of both - technical risk assessment and managerial decision-making."
-        },
-        {
-          "question": "Which frameworks will I learn?",
-          "answer": "NIST, ISO 27001, SOC 2, and other industry-standard risk frameworks."
-        },
-        {
-          "question": "Do I need prior security knowledge?",
-          "answer": "Basic security understanding is helpful but we cover necessary fundamentals."
-        }
-      ],
-      "price": "₹16,000",
-      "duration": "2 months",
-      "mode": "Online Live Classes",
-      "path": "/trainings/cybersecurity/risk-assessment"
+    "id": 4,
+    "title": "Security Risk Assessment",
+    "image": "/img/security-shield-svgrepo-com.svg",
+    "description": "Understand risk assessment methodologies, compliance frameworks, and security auditing practices.",
+    "fullDescription": [
+      "Master security risk assessment methodologies and frameworks",
+      "Learn compliance requirements and regulatory frameworks",
+      "Understand security auditing practices and control validation",
+      "Develop skills in risk quantification and treatment planning"
+    ],
+    "features": [
+      "Risk Assessment Methodologies",
+      "Compliance Frameworks",
+      "Security Auditing Techniques",
+      "Control Validation",
+      "Risk Treatment Planning",
+      "Policy Development",
+      "Regulatory Requirements",
+      "Reporting & Documentation"
+    ],
+    "faqs": [
+      {
+        "question": "Is this course technical or managerial?",
+        "answer": "It's a blend of both - technical risk assessment and managerial decision-making."
+      },
+      {
+        "question": "Which frameworks will I learn?",
+        "answer": "NIST, ISO 27001, SOC 2, and other industry-standard risk frameworks."
+      },
+      {
+        "question": "Do I need prior security knowledge?",
+        "answer": "Basic security understanding is helpful but we cover necessary fundamentals."
+      }
+    ],
+    "price": "₹16,000",
+    "duration": "2 months",
+    "mode": "Online Live Classes",
+    "path": "/trainings/cybersecurity/risk-assessment"
   },
   "malware-analysis": {
-      "id": 5,
-      "title": "Malware Analysis",
-      "image": "/img/virus-svgrepo-com.svg",
-      "description": "Analyze malware behavior, reverse engineering techniques, and threat intelligence gathering.",
-      "fullDescription": [
-        "Master malware analysis techniques and reverse engineering methodologies",
-        "Learn to analyze malware behavior and characteristics",
-        "Understand threat intelligence gathering and analysis",
-        "Develop skills in malware detection and mitigation strategies"
-      ],
-      "features": [
-        "Malware Behavior Analysis",
-        "Reverse Engineering Techniques",
-        "Static & Dynamic Analysis",
-        "Threat Intelligence",
-        "Sandbox Environments",
-        "Malware Detection",
-        "Incident Response Integration",
-        "Advanced Analysis Tools"
-      ],
-      "faqs": [
-        {
-          "question": "What programming knowledge is needed?",
-          "answer": "Assembly language and C/C++ knowledge is highly recommended for reverse engineering."
-        },
-        {
-          "question": "Is this course advanced?",
-          "answer": "Yes, it's designed for security professionals with prior experience."
-        },
-        {
-          "question": "What tools will I use?",
-          "answer": "IDA Pro, Ghidra, OllyDbg, and other malware analysis tools."
-        }
-      ],
-      "price": "₹25,000",
-      "duration": "3.5 months",
-      "mode": "Online Live Classes",
-      "path": "/trainings/cybersecurity/malware-analysis"
+    "id": 5,
+    "title": "Malware Analysis",
+    "image": "/img/virus-svgrepo-com.svg",
+    "description": "Analyze malware behavior, reverse engineering techniques, and threat intelligence gathering.",
+    "fullDescription": [
+      "Master malware analysis techniques and reverse engineering methodologies",
+      "Learn to analyze malware behavior and characteristics",
+      "Understand threat intelligence gathering and analysis",
+      "Develop skills in malware detection and mitigation strategies"
+    ],
+    "features": [
+      "Malware Behavior Analysis",
+      "Reverse Engineering Techniques",
+      "Static & Dynamic Analysis",
+      "Threat Intelligence",
+      "Sandbox Environments",
+      "Malware Detection",
+      "Incident Response Integration",
+      "Advanced Analysis Tools"
+    ],
+    "faqs": [
+      {
+        "question": "What programming knowledge is needed?",
+        "answer": "Assembly language and C/C++ knowledge is highly recommended for reverse engineering."
+      },
+      {
+        "question": "Is this course advanced?",
+        "answer": "Yes, it's designed for security professionals with prior experience."
+      },
+      {
+        "question": "What tools will I use?",
+        "answer": "IDA Pro, Ghidra, OllyDbg, and other malware analysis tools."
+      }
+    ],
+    "price": "₹25,000",
+    "duration": "3.5 months",
+    "mode": "Online Live Classes",
+    "path": "/trainings/cybersecurity/malware-analysis"
   },
   "cloud-security": {
-      "id": 6,
-      "title": "Cloud Security",
-      "image": "/img/cloud-computing-cloud-security-network-password-network-security-privacy-code-svgrepo-com.svg",
-      "description": "Secure cloud infrastructure, implement cloud security best practices, and manage cloud compliance.",
-      "fullDescription": [
-        "Master cloud security principles and infrastructure protection",
-        "Learn to implement cloud security best practices and controls",
-        "Understand cloud compliance requirements and governance",
-        "Develop skills in securing multi-cloud and hybrid environments"
-      ],
-      "features": [
-        "Cloud Security Architecture",
-        "Identity & Access Management",
-        "Data Protection in Cloud",
-        "Cloud Compliance Frameworks",
-        "Multi-cloud Security",
-        "Container & Serverless Security",
-        "Cloud Monitoring & Logging",
-        "Incident Response in Cloud"
-      ],
-      "faqs": [
-        {
-          "question": "Which cloud platforms are covered?",
-          "answer": "AWS, Azure, and GCP security concepts and implementations."
-        },
-        {
-          "question": "Do I need cloud experience?",
-          "answer": "Basic cloud computing knowledge is recommended but we cover fundamentals."
-        },
-        {
-          "question": "Will I get cloud certifications?",
-          "answer": "We prepare you for cloud security certifications but don't include exam fees."
-        }
-      ],
-      "price": "₹23,000",
-      "duration": "3 months",
-      "mode": "Online Live Classes",
-      "path": "/trainings/cybersecurity/cloud-security"
+    "id": 6,
+    "title": "Cloud Security",
+    "image": "/img/cloud-computing-cloud-security-network-password-network-security-privacy-code-svgrepo-com.svg",
+    "description": "Secure cloud infrastructure, implement cloud security best practices, and manage cloud compliance.",
+    "fullDescription": [
+      "Master cloud security principles and infrastructure protection",
+      "Learn to implement cloud security best practices and controls",
+      "Understand cloud compliance requirements and governance",
+      "Develop skills in securing multi-cloud and hybrid environments"
+    ],
+    "features": [
+      "Cloud Security Architecture",
+      "Identity & Access Management",
+      "Data Protection in Cloud",
+      "Cloud Compliance Frameworks",
+      "Multi-cloud Security",
+      "Container & Serverless Security",
+      "Cloud Monitoring & Logging",
+      "Incident Response in Cloud"
+    ],
+    "faqs": [
+      {
+        "question": "Which cloud platforms are covered?",
+        "answer": "AWS, Azure, and GCP security concepts and implementations."
+      },
+      {
+        "question": "Do I need cloud experience?",
+        "answer": "Basic cloud computing knowledge is recommended but we cover fundamentals."
+      },
+      {
+        "question": "Will I get cloud certifications?",
+        "answer": "We prepare you for cloud security certifications but don't include exam fees."
+      }
+    ],
+    "price": "₹23,000",
+    "duration": "3 months",
+    "mode": "Online Live Classes",
+    "path": "/trainings/cybersecurity/cloud-security"
   },
-  
+
   "group-discussion": {
     "id": 1,
     "title": "Group Discussion",
@@ -1176,7 +1176,7 @@ export const coursesData = {
         "answer": "Yes, regular practice sessions with feedback are integral to the program."
       }
     ],
-    "price": "₹15,000",
+    "price": "Free along with course",
     "duration": "6 weeks",
     "mode": "Online Live Classes",
     "path": "/trainings/soft-skills/group-discussion"
@@ -1216,7 +1216,7 @@ export const coursesData = {
         "answer": "You'll receive vocabulary books, flashcards, and access to our learning app."
       }
     ],
-    "price": "₹15,000",
+    "price": "Free along with course",
     "duration": "2 months",
     "mode": "Online Live Classes",
     "path": "/trainings/communication/vocabulary-building"
@@ -1256,7 +1256,7 @@ export const coursesData = {
         "answer": "Yes, we cover both in-person and virtual presentation techniques."
       }
     ],
-    "price": "₹15,000",
+    "price": "Free along with course",
     "duration": "8 weeks",
     "mode": "Online Live Classes",
     "path": "/trainings/communication/presentation-skills"
@@ -1296,13 +1296,92 @@ export const coursesData = {
         "answer": "We provide general techniques and can customize for specific industries upon request."
       }
     ],
-    "price": "₹15,000",
+    "price": "Free along with course",
     "duration": "6 weeks",
     "mode": "Online Live Classes",
     "path": "/trainings/communication/interview-techniques"
-  }
-  ,
- 
+  },
+  "quantitative-aptitude": {
+    "id": 5,
+    "title": "Quantitative Aptitude",
+    "image": "/img/stats-marketing-svgrepo-com.svg",
+    "description": "Master fundamental mathematical concepts, shortcuts, and problem-solving techniques. Build speed and accuracy for competitive exams and campus placement tests.",
+    "fullDescription": [
+      "Master mathematical shortcuts and calculation tricks to solve questions in seconds",
+      "Cover key topics: Arithmetic, Algebra, Geometry, and Data Interpretation",
+      "Develop high speed and accuracy for corporate recruitment tests and competitive exams",
+      "Practice with thousands of real exam questions and timed mock tests"
+    ],
+    "features": [
+      "Calculation Shortcuts & Tricks",
+      "Arithmetic Problem Solving",
+      "Algebra & Geometry Mastery",
+      "Data Interpretation & Analysis",
+      "Speed & Accuracy Worksheets",
+      "Mock Placement Test Series",
+      "Doubt-solving Live Sessions",
+      "Previous Year Corporate Questions"
+    ],
+    "faqs": [
+      {
+        "question": "Who is this course for?",
+        "answer": "It is designed for college graduates and students preparing for campus recruitment or competitive examinations."
+      },
+      {
+        "question": "Will I get worksheets?",
+        "answer": "Yes, you'll receive chapter-wise worksheets and practice sheets."
+      },
+      {
+        "question": "Is there any prerequisite?",
+        "answer": "No prerequisite is required; we start from basic mathematical concepts."
+      }
+    ],
+    "price": "Free along with course",
+    "duration": "8 weeks",
+    "mode": "Online Live Classes",
+    "path": "/trainings/soft-skills/quantitative-aptitude"
+  },
+  "logical-reasoning": {
+    "id": 6,
+    "title": "Logical Reasoning",
+    "image": "/img/networking-monitor-svgrepo-com.svg",
+    "description": "Develop analytical thinking, deduction, and pattern recognition skills. Learn logical problem-solving frameworks crucial for aptitude tests and interviews.",
+    "fullDescription": [
+      "Understand logical reasoning frameworks and deduction methodologies",
+      "Master coding-decoding, blood relations, syllogisms, and seating arrangements",
+      "Enhance pattern recognition, abstract thinking, and brain teaser skills",
+      "Prepare for analytical and puzzle rounds in top-tier tech interviews"
+    ],
+    "features": [
+      "Coding-Decoding & Relations",
+      "Syllogisms & Analytical Reasoning",
+      "Seating Arrangements & Puzzles",
+      "Visual & Pattern Recognition",
+      "Logical Venn Diagrams",
+      "Deductive Logic Frameworks",
+      "Timed Puzzle Practice Sheets",
+      "Mock Analytical Interview Rounds"
+    ],
+    "faqs": [
+      {
+        "question": "Does it cover IT company coding rounds?",
+        "answer": "Yes, it covers the analytical reasoning and puzzle rounds that companies like Infosys, TCS, Cognizant, and Wipro conduct."
+      },
+      {
+        "question": "Are the sessions recorded?",
+        "answer": "Yes, all live sessions are recorded and made available for lifetime access."
+      },
+      {
+        "question": "How are doubts resolved?",
+        "answer": "We have a dedicated discussion forum and weekly live doubt-solving sessions."
+      }
+    ],
+    "price": "Free along with course",
+    "duration": "6 weeks",
+    "mode": "Online Live Classes",
+    "path": "/trainings/soft-skills/logical-reasoning"
+  },
+
   "seo-fundamentals": {
     "id": 101,
     "title": "SEO Fundamentals",
@@ -1562,7 +1641,7 @@ export const coursesData = {
 
 
 
-  
+
 }
 export const allCoursesList = [
   { title: "Java Full Stack", slug: "web-development/java-full-stack" },

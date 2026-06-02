@@ -7,10 +7,10 @@ import { useGetAllInternshipsDomainsQuery } from '@/Services/paymentServices/int
 
 const Internships = () => {
   const [showPaymentForm, setShowPaymentForm] = useState(false);
-  const { data, isLoading, isError } = 
-  useGetAllInternshipsDomainsQuery({ isActive: true });
+  const { data, isLoading, isError } =
+    useGetAllInternshipsDomainsQuery({ isActive: true });
 
-const domains = data?.data || [];
+  const domains = data?.data || [];
 
 
 
@@ -87,7 +87,7 @@ const domains = data?.data || [];
             <div className="absolute bottom-0 left-0 right-0 bg-white rounded-t-3xl max-h-[90vh] flex flex-col animate-slide-up">
               {/* Header */}
               <div className="flex items-center justify-between p-5 border-b">
-                
+
                 <button
                   onClick={() => setShowPaymentForm(false)}
                   className="p-2 rounded-full hover:bg-gray-100 transition"

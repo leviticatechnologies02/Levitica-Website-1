@@ -97,10 +97,10 @@ const ProductDetails = () => {
     }
 
     return (
-        <div className="bg-white dark:bg-darkmode min-h-screen pt-10">
+        <div className="bg-white dark:bg-darkmode min-h-screen pt-5">
 
             {/* HERO BANNER */}
-            <section className="relative pt-20 md:pt-32 pb-12 bg-gradient-to-b from-white to-herobg dark:from-darkmode dark:to-darklight border-b border-lightgray dark:border-dark_border/20">
+            <section className="relative pt-16 md:pt-28 pb-12 bg-gradient-to-b from-white to-herobg dark:from-darkmode dark:to-darklight border-b border-lightgray dark:border-dark_border/20">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <Link to="/" className="inline-flex items-center gap-2 text-primary dark:text-cyan hover:underline mb-6 text-sm font-medium">
                         <FaArrowLeft /> Back to Products

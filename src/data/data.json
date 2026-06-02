@@ -178,6 +178,18 @@
       "description": "Prepare for job interviews with confidence. Learn body language, mock interview techniques, and strategies to answer technical and HR questions effectively.",
       "img": "/img/reunion-interview-svgrepo-com.svg",
       "path": "/trainings/soft-skills/interview-techniques"
+    },
+    {
+      "title": "Quantitative Aptitude",
+      "description": "Master fundamental mathematical concepts, shortcuts, and problem-solving techniques. Build speed and accuracy for competitive exams and campus placement tests.",
+      "img": "/img/stats-marketing-svgrepo-com.svg",
+      "path": "/trainings/soft-skills/quantitative-aptitude"
+    },
+    {
+      "title": "Logical Reasoning",
+      "description": "Develop analytical thinking, deduction, and pattern recognition skills. Learn logical problem-solving frameworks crucial for aptitude tests and interviews.",
+      "img": "/img/networking-monitor-svgrepo-com.svg",
+      "path": "/trainings/soft-skills/logical-reasoning"
     }
   ],
   "cyberSecurity": [

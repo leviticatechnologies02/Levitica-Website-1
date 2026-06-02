@@ -52,7 +52,7 @@ export const productsData = {
     fullDescription: "Designed for property managers, hostel owners, and PG operators, this system simplifies room bookings, rent collection, tenant onboarding, and operational management.",
     image: "/img/hostel.png",
     deployment: "Cloud Hosted",
-    link: null,
+    link: "https://hma-theta.vercel.app/",
     features: ["Real-time Room & Bed Occupancy Maps", "Automated Rent Invoicing & Digital Payments", "Tenant KYC & Digital Agreement Storage", "Maintenance Ticket Management System", "Visitor Logging & Gate Security Access", "Financial Reporting & Expense Audits"],
     benefits: ["Reduces manual rent collection overhead by 60%", "Provides instant insights on vacancy rates", "Streamlines maintenance logs", "Maintains detailed guest registers"],
     enquiry: {
@@ -180,7 +180,7 @@ export const productsData = {
     fullDescription: "A secure, HIPAA-compliant platform for managing clinics, laboratories, and large hospital groups.",
     image: "https://media.istockphoto.com/id/1134679866/photo/doctor-working-in-hospital-writing-prescription-clipboard-working-an-laptop-on-desk-in.webp?a=1&b=1&s=612x612&w=0&k=20&c=R-VFqH-naNMbAC4jJabJXNO9RYOq4CKgAcYtevXCtzk=",
     deployment: "Cloud / On-Premise",
-    link: null,
+    link: "https://hospital-management-12.vercel.app/",
     features: ["Electronic Health Records (EHR)", "Patient Appointment Scheduler", "Laboratory Information Management (LIMS)", "Automated Ward & Bed Allotment", "Insurance Claim Submission", "Pharmacy Inventory Management"],
     benefits: ["Reduces patient wait times up to 50%", "Secures sensitive health documents", "Accelerates billing & insurance workflows", "Streamlines medical supply inventory"],
     enquiry: {
@@ -268,11 +268,12 @@ export const productsData = {
     title: "Levitica Data Management",
     slug: "levitica-data-management",
     subtitle: "Enterprise Database Hub",
+    logo: "/img/companylogo/datamanagement.jpg",
     description: "A secure, centralized platform for organizational records across Sales, Finance, HR, and Admin.",
     fullDescription: "Safeguard and organize your enterprise records with departmental silos, strict security rules, and comprehensive audit logging.",
     image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&auto=format&fit=crop&q=60",
     deployment: "Cloud / Hybrid Secure Cloud",
-    link: null,
+    link: "https://levitica-data-management.vercel.app/",
     features: ["Secure Departmental Database Silos", "Sales Contracts & Account Records Hub", "Finance Compliance & Billing Archive", "HR Dossiers & Employee File Repositories", "Granular Role-Based Permissions", "Full Activity Log Audits"],
     benefits: ["Central search for corporate assets", "Maximum protection for sensitive data", "Minimizes compliance risk with automatic logging", "Secure hybrid backups with point-in-time recovery"],
     enquiry: {
