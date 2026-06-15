@@ -258,7 +258,7 @@ const ProductDetails = () => {
                                     {({ isSubmitting }) => (
                                         <Form className="space-y-4">
                                             <div>
-                                                <label className="block text-xs font-semibold text-gray dark:text-slate-400 mb-1.5 uppercase tracking-wider">
+                                                <label className="block text-xs font-semibold text-gray dark:text-slate-400 mb-1.5 tracking-wider">
                                                     Full Name
                                                 </label>
                                                 <Field
@@ -270,7 +270,7 @@ const ProductDetails = () => {
                                             </div>
 
                                             <div>
-                                                <label className="block text-xs font-semibold text-gray dark:text-slate-400 mb-1.5 uppercase tracking-wider">
+                                                <label className="block text-xs font-semibold text-gray dark:text-slate-400 mb-1.5 tracking-wider">
                                                     Email Address
                                                 </label>
                                                 <Field
@@ -283,7 +283,7 @@ const ProductDetails = () => {
                                             </div>
 
                                             <div>
-                                                <label className="block text-xs font-semibold text-gray dark:text-slate-400 mb-1.5 uppercase tracking-wider">
+                                                <label className="block text-xs font-semibold text-gray dark:text-slate-400 mb-1.5 tracking-wider">
                                                     Mobile Number
                                                 </label>
                                                 <Field
@@ -295,7 +295,7 @@ const ProductDetails = () => {
                                             </div>
 
                                             <div>
-                                                <label className="block text-xs font-semibold text-gray dark:text-slate-400 mb-1.5 uppercase tracking-wider">
+                                                <label className="block text-xs font-semibold text-gray dark:text-slate-400 mb-1.5 tracking-wider">
                                                     Message
                                                 </label>
                                                 <Field

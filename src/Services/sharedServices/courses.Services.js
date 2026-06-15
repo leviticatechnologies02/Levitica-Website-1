@@ -22,6 +22,7 @@ export const courseApi = api.injectEndpoints({
     }),
     // ✅ GET COURSE BY ID
     getCourseById: builder.query({
+
       query: (id) => ({
         url: `/api/courses/${id}`,
         method: "GET",
