@@ -20,9 +20,10 @@ export const productsData = {
       formSchema: [
         { type: "text", name: "companyName", label: "Company / Organization Name", placeholder: "Enter company name", required: true, half: true },
         { type: "text", name: "hrManager", label: "HR Manager / Contact Name", placeholder: "Full name", required: true, half: true },
-        { type: "select", name: "designation", label: "Designation", placeholder: "e.g. HR Manager, CHRO", required: true, half: true,
+        {
+          type: "select", name: "designation", label: "Designation", placeholder: "e.g. HR Manager, CHRO", required: true, half: true,
           options: ["HR Manager", "CHRO", "HR Lead", "Other"]
-         },
+        },
         { type: "email", name: "email", label: "Email Address", placeholder: "you@company.com", required: true, half: true },
         { type: "tel", name: "mobile", label: "Mobile Number", placeholder: "10-digit number", required: true, half: true },
         { type: "number", name: "employeeCount", label: "Number of Employees", placeholder: "e.g. 150", required: true, half: true },
@@ -108,7 +109,8 @@ export const productsData = {
       formSchema: [
         { type: "text", name: "companyName", label: "Company Name", placeholder: "Enter company name", required: true, half: true },
         { type: "text", name: "contactName", label: "Contact Person Name", placeholder: "Full name", required: true, half: true },
-        { type: "select", name: "designation", label: "Designation", placeholder: "e.g. CTO, Sales Head", required: true, half: true, 
+        {
+          type: "select", name: "designation", label: "Designation", placeholder: "e.g. CTO, Sales Head", required: true, half: true,
           options: ["CTO", "Sales Head", "HR Head", "Other"]
         },
         { type: "email", name: "email", label: "Email Address", placeholder: "you@company.com", required: true, half: true },
@@ -153,9 +155,10 @@ export const productsData = {
       formSchema: [
         { type: "text", name: "collegeName", label: "College / Institute Name", placeholder: "Enter college name", required: true, half: true },
         { type: "text", name: "tpoName", label: "TPO / Contact Person Name", placeholder: "Full name", required: true, half: true },
-        { type: "select", name: "designation", label: "Designation", placeholder: "Training & Placement Officer", required: true, half: true,
+        {
+          type: "select", name: "designation", label: "Designation", placeholder: "Training & Placement Officer", required: true, half: true,
           options: ["Training & Placement Officer", "HOD", "Principal",]
-         },
+        },
         { type: "email", name: "email", label: "Email Address", placeholder: "Enter email address", required: true, half: true },
         { type: "tel", name: "mobile", label: "Mobile Number", placeholder: "10-digit number", required: true, half: true },
         {
@@ -193,9 +196,10 @@ export const productsData = {
       formSchema: [
         { type: "text", name: "facilityName", label: "Hospital / Clinic Name", placeholder: "Enter facility name", required: true, half: true },
         { type: "text", name: "adminName", label: "Administrator / Doctor Name", placeholder: "Full name", required: true, half: true },
-        { type: "select", name: "designation", label: "Designation", placeholder: "e.g. Medical Superintendent, Admin Head", required: true, half: true,
+        {
+          type: "select", name: "designation", label: "Designation", placeholder: "e.g. Medical Superintendent, Admin Head", required: true, half: true,
           options: ["Medical Superintendent", "Admin Head", "Other"]
-         },
+        },
         { type: "email", name: "email", label: "Email Address", placeholder: "you@hospital.com", required: true, half: true },
         { type: "tel", name: "mobile", label: "Mobile Number", placeholder: "10-digit number", required: true, half: true },
         {
@@ -217,31 +221,32 @@ export const productsData = {
     }
   },
 
-  "levitica-connects-u": {
+  "levitica-connect": {
     id: 6,
-    title: "Levitica Connects U",
+    title: "Levitica Connect",
     logo: "/img/companylogo/leviticaConnect.png",
     subtitle: "Collaboration & Communication Platform",
     description: "A unified workspace for secure messaging, video meetings, and document sharing.",
-    fullDescription: "Eliminate scattered communication channels. Levitica Connects U unifies team messaging, HD video conferencing, secure file sharing, and workflow automation in a fully white-labeled enterprise platform.",
+    fullDescription: "Eliminate scattered communication channels. Levitica Connect unifies team messaging, HD video conferencing, secure file sharing, and workflow automation in a fully white-labeled enterprise platform.",
     image: "https://images.unsplash.com/photo-1712904124132-857e6577aab9?w=600&auto=format&fit=crop&q=60",
     deployment: "SaaS / Private / On-Premise",
-    link: "https://connectio-three.vercel.app/",
+    link: "https://leviticaconnect.com",
     features: ["Real-time Chat, Channels, and @Mentions", "HD Video Meetings & Screen Sharing", "Centralized Document Sharing & Co-editing", "Automated Meeting Transcripts & Summaries", "Cognitive Workflow Approvals", "Enterprise SSO & Multi-factor Auth"],
     benefits: ["Combines chat, video, and file sharing in a single app", "100% White-Label with your branding", "End-to-end message encryption", "Support for 100,000+ concurrent users"],
     enquiry: {
-      heading: "Enterprise Collaboration Platform Enquiry",
+      heading: "Levitica Connect Enquiry",
       tagline: "Unify your team communication in a secure, branded workspace.",
-      about: "Levitica Connects U is built for enterprises that need a secure, scalable, and fully branded collaboration workspace — combining messaging, video, and files in one place.",
+      about: "Levitica Connect is built for enterprises that need a secure, scalable, and fully branded collaboration workspace — combining messaging, video, and files in one place.",
       highlights: ["Real-time Chat & Team Channels", "HD Video Conferencing & Screen Sharing", "Secure Document Collaboration", "AI Meeting Summaries", "100% White-Label & Custom Domain", "Enterprise-grade SSO & MFA"],
       formTitle: "Request Collaboration Platform Demo",
       formSubtitle: "Our enterprise team will reach out within 24 hours.",
       formSchema: [
         { type: "text", name: "companyName", label: "Company Name", placeholder: "Enter company name", required: true, half: true },
         { type: "text", name: "contactName", label: "Contact Person", placeholder: "Full name", required: true, half: true },
-        { type: "select", name: "designation", label: "Designation", placeholder: "e.g. IT Head, CTO", required: true, half: true,
+        {
+          type: "select", name: "designation", label: "Designation", placeholder: "e.g. IT Head, CTO", required: true, half: true,
           options: ["IT Head", "CTO", "HR Head", "Sales Head", "Other"]
-         },
+        },
         { type: "email", name: "email", label: "Email Address", placeholder: "you@company.com", required: true, half: true },
         { type: "tel", name: "mobile", label: "Mobile Number", placeholder: "10-digit number", required: true, half: true },
         { type: "number", name: "teamSize", label: "Total Team / Users", placeholder: "e.g. 500", required: true, half: true },
@@ -263,12 +268,12 @@ export const productsData = {
     }
   },
 
-  "levitica-data-management": {
+  "levitica-core": {
     id: 7,
-    title: "Levitica Data Management",
-    slug: "levitica-data-management",
+    title: "Levitica Core",
+    slug: "levitica-core",
     subtitle: "Enterprise Database Hub",
-    logo: "/img/companylogo/datamanagement.jpg",
+    logo: "/img/companylogo/leviticacore.png",
     description: "A secure, centralized platform for organizational records across Sales, Finance, HR, and Admin.",
     fullDescription: "Safeguard and organize your enterprise records with departmental silos, strict security rules, and comprehensive audit logging.",
     image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&auto=format&fit=crop&q=60",
@@ -277,11 +282,11 @@ export const productsData = {
     features: ["Secure Departmental Database Silos", "Sales Contracts & Account Records Hub", "Finance Compliance & Billing Archive", "HR Dossiers & Employee File Repositories", "Granular Role-Based Permissions", "Full Activity Log Audits"],
     benefits: ["Central search for corporate assets", "Maximum protection for sensitive data", "Minimizes compliance risk with automatic logging", "Secure hybrid backups with point-in-time recovery"],
     enquiry: {
-      heading: "Data Management Platform Enquiry",
+      heading: "Levitica Core Enquiry",
       tagline: "Centralize and protect your enterprise records with role-based security.",
-      about: "Levitica Data Management helps enterprises securely store departmental records across Sales, Finance, HR, and Admin with fine-grained access controls and comprehensive audit logs.",
+      about: "Levitica Core helps enterprises securely store departmental records across Sales, Finance, HR, and Admin with fine-grained access controls and comprehensive audit logs.",
       highlights: ["Departmental Data Silos", "Sales & Finance Record Vaults", "HR Dossier & Document Storage", "Role-Based Access Controls", "Full Activity Audit Logging", "AES-256 Encrypted Backups"],
-      formTitle: "Data Management Enquiry",
+      formTitle: "Levitica Core Enquiry",
       formSubtitle: "Our specialists will understand your storage and compliance requirements.",
       formSchema: [
         { type: "text", name: "companyName", label: "Company / Organization Name", placeholder: "Enter company name", required: true, half: true },
@@ -431,12 +436,13 @@ export const productsData = {
           ]
         },
         { type: "text", name: "tpoName", label: "TPO / Coordinator Name", placeholder: "Full name", required: true, half: true },
-        { type: "select", name: "designation", label: "Designation", placeholder: "e.g. Training & Placement Officer", required: true, half: true,
+        {
+          type: "select", name: "designation", label: "Designation", placeholder: "e.g. Training & Placement Officer", required: true, half: true,
           options: ["Training & Placement Officer", "HOD", "Principal",]
-         },
+        },
         { type: "email", name: "email", label: "Email Address", placeholder: "you@college.edu.in", required: true, half: true },
         { type: "tel", name: "mobile", label: "Mobile Number", placeholder: "10-digit number", required: true, half: true },
-        
+
         {
           type: "select", name: "state", label: "State", required: true, half: true,
           options: ["Telangana", "Andhra Pradesh"]

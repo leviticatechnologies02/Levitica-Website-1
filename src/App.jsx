@@ -3,12 +3,8 @@ import { Routes, Route } from 'react-router-dom';
 import { Outlet } from 'react-router-dom';
 import './App.css'
 
-// Layouts
 import Navbar from '@/pages/public/Navbar';
 import Footer from '@/pages/public/Footer';
-
-
-// Public pages
 import HomePage from '@/pages/public/HomePage';
 import AboutUs from '@/pages/public/AboutUs';
 import ContactUs from '@/pages/public/Contact';
@@ -17,25 +13,20 @@ import Trainings from '@/pages/public/Trainings';
 import CourseDetail from '@/pages/public/CoursesDetails';
 import Services from '@/pages/public/Services';
 import ServiceDetails from '@/pages/public/ServicesDetails';
+import Products from '@/pages/public/Products';
 import ProductDetails from '@/pages/public/Sections/ProductDetails';
 import ProductEnquiry from '@/pages/public/Sections/ProductEnquiry';
 import GetApp from '@/pages/public/Get_App';
-
-
-// Auth
 import Login from '@/pages/public/Login';
 import Signup from '@/pages/public/Signup';
 import ForgotPassword from '@/pages/public/Forgotpassword';
 import ChangePassword from '@/pages/public/ChangePassword';
 import EmailVerification from '@/utils/EmailVerification';
 
-// Student
 import CourseCatalog from '@/dashboard/Student/CourseCatelog';
 import LiveClasses from '@/dashboard/Student/LiveClasses';
-
 import SettingsPage from '@/dashboard/Student/Settings';
 
-// Admin
 import AssignStudents from '@/dashboard/Admin/StudentManagement/StudentsManagement';
 import StudentsTable from '@/dashboard/Admin/StudentManagement/AllStudentTable';
 import UnassignedStudents from '@/dashboard/Admin/StudentManagement/UnassignedStudents';
@@ -63,8 +54,6 @@ import StudentEnrolledCourseDetails from '@/dashboard/Student/MyCourseDetails.js
 import PromoCodeManagement from '@/dashboard/Admin/promoCodeManagement/PromoCodeManagement.jsx';
 import MentorManagement from './dashboard/Admin/Mentor/MentorManagement';
 
-/* ---------------- Layout wrappers ---------------- */
-
 const AppLayout = () => (
   <>
     <Navbar />
@@ -86,20 +75,18 @@ const NoFooterLayout = () => (
   </>
 );
 
-/* ---------------- Router ---------------- */
-
 const AppRouter = () => {
   return (
     <>
       <AuthRestore />
       <Routes>
-        {/* Main public layout */}
         <Route element={<AppLayout />}>
           <Route index element={<HomePage />} />
           <Route path="trainings" element={<Trainings />} />
           <Route path="trainings/:category/:courseId?" element={<CourseDetail />} />
           <Route path="services" element={<Services />} />
           <Route path="services/:serviceName" element={<ServiceDetails />} />
+          <Route path="products" element={<Products />} />
           <Route path="products/:slug" element={<ProductDetails />} />
           <Route path="products/:slug/enquiry" element={<ProductEnquiry />} />
           <Route path="contact-us" element={<ContactUs />} />
@@ -114,13 +101,10 @@ const AppRouter = () => {
           <Route path="forums" element={<Forums />} />
         </Route>
 
-        {/* Login / Signup (navbar only) */}
         <Route element={<NoFooterLayout />}>
           <Route path="login" element={<Login />} />
           <Route path="sign-up" element={<Signup />} />
         </Route>
-
-        {/* Auth-only pages */}
         <Route element={<AuthLayout />}>
           <Route path="password-reset" element={<ForgotPassword />} />
           <Route path="reset-password" element={<ChangePassword />} />
@@ -129,17 +113,15 @@ const AppRouter = () => {
           <Route path="internships/payment-success" element={<PaymentSuccess />} />
         </Route>
 
-        {/* Dashboard Routes */}
         <Route path="dashboard" element={<ProtectedRoute />}>
           <Route index element={<DashboardIndex />} />
-          
+
           <Route element={<ProtectedRoute allowedRoles={["student", "admin", "superadmin"]} />}>
             <Route element={<DashboardLayout />}>
               <Route path="course/:id" element={<CommonCourseDetails />} />
             </Route>
           </Route>
 
-          {/* ================= STUDENT ================= */}
           <Route path="student" element={<ProtectedRoute allowedRoles={["student"]} />}>
             <Route element={<DashboardLayout />}>
               <Route index element={<StudentDashboard />} />
@@ -151,7 +133,6 @@ const AppRouter = () => {
             </Route>
           </Route>
 
-          {/* ================= ADMIN ================= */}
           <Route path="admin" element={<ProtectedRoute allowedRoles={["admin", "superadmin"]} />}>
             <Route element={<DashboardLayout />}>
               <Route index element={<AdminDashboard />} />

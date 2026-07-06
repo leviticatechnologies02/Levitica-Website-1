@@ -15,11 +15,33 @@ import {
 } from "react-icons/fa";
 import { productsData } from "@/data/productsData";
 
+const getProductLogo = (product) => {
+    if (product.logo) {
+        if (typeof product.logo === "string") {
+            return product.logo;
+        }
+        if (Array.isArray(product.logo)) {
+            for (const logoPath of product.logo) {
+                if (logoPath && logoPath !== "null" && logoPath !== "undefined") {
+                    return logoPath;
+                }
+            }
+        }
+    }
+
+    return "/img/leviticalogo.png";
+};
+
+const hasCustomLogo = (product) => {
+    return product.logo && product.logo !== "/img/leviticalogo.png";
+};
+
 const ProductDetails = () => {
     const { slug } = useParams();
     const navigate = useNavigate();
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [logoError, setLogoError] = useState(false);
 
     useEffect(() => {
         AOS.init({
@@ -31,7 +53,6 @@ const ProductDetails = () => {
     }, []);
 
     useEffect(() => {
-        // Find the product by slug (or match the lowercase title with spaces replaced by hyphens)
         const productKey = Object.keys(productsData).find(
             (key) => key === slug || productsData[key].title.toLowerCase().replace(/\s+/g, "-") === slug
         );
@@ -96,10 +117,13 @@ const ProductDetails = () => {
         );
     }
 
+    const productLogo = getProductLogo(product);
+    const hasProductLogo = hasCustomLogo(product);
+    const displayLogo = (!logoError && productLogo) ? productLogo : "/img/leviticalogo.png";
+
     return (
         <div className="bg-white dark:bg-darkmode min-h-screen pt-5">
 
-            {/* HERO BANNER */}
             <section className="relative pt-16 md:pt-28 pb-12 bg-gradient-to-b from-white to-herobg dark:from-darkmode dark:to-darklight border-b border-lightgray dark:border-dark_border/20">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <Link to="/" className="inline-flex items-center gap-2 text-primary dark:text-cyan hover:underline mb-6 text-sm font-medium">
@@ -117,29 +141,30 @@ const ProductDetails = () => {
                                 {product.subtitle}
                             </p>
                         </div>
-                        {product.image && (
-                            <div className="col-span-4 flex justify-center md:justify-end" data-aos="fade-left">
-                                <div className="w-24 h-24 md:w-32 md:h-32 rounded-2xl overflow-hidden shadow-lg border-2 border-white dark:border-dark_border bg-white p-2">
-                                    <img
-                                        src={product.image}
-                                        alt={product.title}
-                                        className="w-full h-full object-cover rounded-xl"
-                                    />
-                                </div>
+                        <div className="col-span-4 flex justify-center" data-aos="fade-left">
+                            <div className="w-24 h-24 md:w-32 md:h-32 rounded-2xl overflow-hidden shadow-lg border-2 border-white dark:border-dark_border bg-white p-2">
+                                <img
+                                    key={productLogo}
+                                    src={displayLogo}
+                                    alt={`${product.title} logo`}
+                                    className="w-full h-full object-contain rounded-xl"
+                                    onError={() => {
+                                        if (!logoError && hasProductLogo) {
+                                            console.warn(`Product logo failed to load: ${productLogo}`);
+                                            setLogoError(true);
+                                        }
+                                    }}
+                                />
                             </div>
-                        )}
+                        </div>
                     </div>
                 </div>
             </section>
 
-            {/* CONTENT & FORM CONTAINER */}
             <section className="py-16 bg-section dark:bg-darkmode">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="grid lg:grid-cols-12 gap-12">
-
-                        {/* LEFT: PRODUCT DETAILS */}
                         <div className="lg:col-span-7 xl:col-span-8">
-                            {/* Cover Image */}
                             {product.image && (
                                 <div className="mb-10 h-[300px] md:h-[400px] overflow-hidden rounded-2xl border border-lightgray dark:border-dark_border/20 shadow-sm" data-aos="zoom-in">
                                     <img
@@ -150,7 +175,6 @@ const ProductDetails = () => {
                                 </div>
                             )}
 
-                            {/* Description */}
                             <div className="prose dark:prose-invert max-w-none mb-10" data-aos="fade-up">
                                 <h3 className="text-2xl font-bold text-midnight_text dark:text-white mb-4">
                                     About {product.title}
@@ -160,7 +184,6 @@ const ProductDetails = () => {
                                 </p>
                             </div>
 
-                            {/* CTA Buttons */}
                             <div className="mb-12 flex flex-wrap gap-4" data-aos="fade-up">
                                 <Link
                                     to={`/products/${slug}/enquiry`}
@@ -180,7 +203,6 @@ const ProductDetails = () => {
                                 )}
                             </div>
 
-                            {/* Features Grid */}
                             <div className="mb-12" data-aos="fade-up">
                                 <h3 className="text-2xl font-bold text-midnight_text dark:text-white mb-6">
                                     Key Capabilities & Features
@@ -197,7 +219,6 @@ const ProductDetails = () => {
                                 </div>
                             </div>
 
-                            {/* Benefits */}
                             <div className="mb-8" data-aos="fade-up">
                                 <h3 className="text-2xl font-bold text-midnight_text dark:text-white mb-6">
                                     Value & Benefits
@@ -216,7 +237,6 @@ const ProductDetails = () => {
 
                         </div>
 
-                        {/* RIGHT: INQUIRY FORM */}
                         <div className="lg:col-span-5 xl:col-span-4">
                             <div
                                 className="sticky top-28 bg-white dark:bg-semidark p-6 md:p-8 rounded-2xl border border-lightgray dark:border-dark_border/20 shadow-property"

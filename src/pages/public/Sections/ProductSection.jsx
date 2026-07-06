@@ -49,8 +49,8 @@ const ProductsSection = () => {
     },
     {
       id: 6,
-      title: "Levitica Connects U",
-      slug: "levitica-connects-u",
+      title: "Levitica Connect",
+      slug: "levitica-connect",
       subtitle: "Collaboration & Communication Platform",
       description:
         "A unified workspace for secure instant messaging, high-quality video meetings, collaborative document sharing, and seamless corporate communication.",
@@ -157,8 +157,8 @@ const ProductsSection = () => {
     },
     {
       id: 7,
-      title: "Levitica Data Management",
-      slug: "levitica-data-management",
+      title: "Levitica Core",
+      slug: "levitica-core",
       subtitle: "Enterprise Database Hub",
       description:
         "A secure, centralized platform to store and manage critical organizational records across Sales, Finance, HR, and Admin departments.",
@@ -191,7 +191,6 @@ const ProductsSection = () => {
       ? products
       : products.filter((p) => p.category.includes(activeTab));
 
-  // Function to determine grid classes based on number of filtered items
   const getGridClasses = () => {
     const itemCount = filteredProducts.length;
 
@@ -206,7 +205,6 @@ const ProductsSection = () => {
     }
   };
 
-  // Function to get item width classes for flex layout
   const getItemWidthClass = () => {
     return "w-full sm:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.5rem)]";
   };
@@ -215,10 +213,11 @@ const ProductsSection = () => {
     const Icon = product.icon;
 
     return (
-      <div className="w-full bg-white dark:bg-darklight rounded-lg shadow-property overflow-hidden group transition h-full">
-
-        {/* IMAGE */}
-        <div className="relative overflow-hidden">
+      <Link
+        to={`/products/${product.slug}`}
+        className="w-full bg-white dark:bg-darklight rounded-lg shadow-property overflow-hidden group transition h-full flex flex-col cursor-pointer hover:shadow-lg"
+      >
+        <div className="relative overflow-hidden shrink-0">
           <img
             src={product.image}
             alt={product.title}
@@ -230,8 +229,7 @@ const ProductsSection = () => {
           </p>
         </div>
 
-        {/* CONTENT */}
-        <div className="p-6 flex flex-col h-[calc(100%-250px)]">
+        <div className="p-6 flex flex-col flex-grow">
 
           <h3 className="text-lg font-semibold text-midnight_text dark:text-white group-hover:text-primary transition">
             {product.title}
@@ -241,37 +239,33 @@ const ProductsSection = () => {
             {product.subtitle}
           </p>
 
-          <p className="text-sm text-gray mt-3">
+          <p className="text-sm text-gray mt-3 line-clamp-3">
             {product.description}
           </p>
 
-          <ul className="mt-4 space-y-1">
+          <ul className="mt-4 space-y-1 mb-6">
             {product.features.map((f, i) => (
               <li key={i} className="flex items-center gap-2 text-sm text-gray">
-                <FaCheckCircle className="text-primary text-xs" />
-                {f}
+                <FaCheckCircle className="text-primary text-xs shrink-0" />
+                <span className="line-clamp-1">{f}</span>
               </li>
             ))}
           </ul>
 
-          {/* PUSH CTA TO BOTTOM */}
-          <div className="flex-grow"></div>
-
-          <div className="mt-5 flex justify-between items-center">
-            <Link
-              to={`/products/${product.slug}`}
-              className="text-primary text-sm font-medium hover:underline"
+          <div className="mt-auto flex justify-between items-center pt-4 border-t border-lightgray dark:border-dark_border/20">
+            <span
+              className="text-primary text-sm font-medium group-hover:underline"
             >
               View Details →
-            </Link>
+            </span>
 
-            <div className="p-2 bg-primary/10 rounded-lg">
+            <div className="p-2 bg-primary/10 rounded-lg shrink-0">
               <Icon className="text-primary w-4 h-4" />
             </div>
           </div>
 
         </div>
-      </div>
+      </Link>
     );
   };
 
@@ -286,7 +280,6 @@ const ProductsSection = () => {
           Featured Products
         </h1>
 
-        {/* TABS */}
         <div className="flex flex-wrap justify-center gap-3 mb-10">
           {categories.map((c) => (
             <button
@@ -302,7 +295,6 @@ const ProductsSection = () => {
           ))}
         </div>
 
-        {/* GRID */}
         <div className={getGridClasses()}>
           {filteredProducts.length > 0 ? (
             filteredProducts.map((product, index) => (

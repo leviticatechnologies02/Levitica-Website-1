@@ -12,7 +12,6 @@ const Navbar = () => {
 
   const mobileMenuRef = useRef(null);
 
-  // Sticky effect
   useEffect(() => {
     const handleScroll = () => {
       setSticky(window.scrollY >= 80);
@@ -22,7 +21,6 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close on outside click
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (mobileMenuRef.current && !mobileMenuRef.current.contains(e.target)) {
@@ -41,10 +39,8 @@ const Navbar = () => {
         : "bg-transparent"
         }`}
     >
-      {/* MAIN CONTAINER */}
       <div className="container mx-auto lg:max-w-screen-xl md:max-w-screen-md h-20 flex items-center justify-between px-4">
 
-        {/* LOGO */}
         <Link to="/" className="flex items-center">
           <img
             src={isDarkMode ? "/img/leviticalogo.png" : "/img/leviticalogo-removebg.png"}
@@ -53,19 +49,17 @@ const Navbar = () => {
           />
         </Link>
 
-        {/* DESKTOP MENU */}
         <nav className="hidden lg:flex items-center justify-center space-x-8">
           <NavItem to="/" label="Home" />
           <NavItem to="/services" label="Services" />
           <NavItem to="/trainings" label="Trainings" />
+          <NavItem to="/products" label="Products" />
           <NavItem to="/about-us" label="About Us" />
           <NavItem to="/contact-us" label="Contact Us" />
         </nav>
 
-        {/* RIGHT BUTTONS */}
         <div className="hidden lg:flex items-center gap-4">
 
-          {/* LOGIN */}
           <Link
             to="/login"
             className="btn btn-white px-4 h-10 flex items-center rounded-lg transition duration-300"
@@ -73,7 +67,6 @@ const Navbar = () => {
             Log in
           </Link>
 
-          {/* SIGN UP */}
           <Link
             to="/sign-up"
             className="btn btn-primary px-4 h-10 flex items-center rounded-lg transition"
@@ -81,7 +74,6 @@ const Navbar = () => {
             Sign Up
           </Link>
 
-          {/* DOWNLOAD */}
           <Link
             to="/app"
             className="btn btn-white px-4 h-10 flex items-center rounded-lg transition duration-300"
@@ -91,7 +83,6 @@ const Navbar = () => {
 
         </div>
 
-        {/* MOBILE TOGGLE */}
         <button
           onClick={() => setNavbarOpen(!navbarOpen)}
           className="lg:hidden p-2"
@@ -102,12 +93,9 @@ const Navbar = () => {
         </button>
       </div>
 
-      {/* OVERLAY */}
       {navbarOpen && (
         <div className="fixed inset-0 bg-black/50 z-40" />
       )}
-
-      {/* MOBILE SIDEBAR */}
       <div
         ref={mobileMenuRef}
         className={`lg:hidden fixed top-0 right-0 h-full w-72 bg-white dark:bg-darkmode shadow-lg z-50 transform transition-transform duration-300 ${navbarOpen ? "translate-x-0" : "translate-x-full"
@@ -124,6 +112,7 @@ const Navbar = () => {
           <MobileNavItem to="/" label="Home" close={() => setNavbarOpen(false)} />
           <MobileNavItem to="/services" label="Services" close={() => setNavbarOpen(false)} />
           <MobileNavItem to="/trainings" label="Trainings" close={() => setNavbarOpen(false)} />
+          <MobileNavItem to="/products" label="Products" close={() => setNavbarOpen(false)} />
           <MobileNavItem to="/about-us" label="About Us" close={() => setNavbarOpen(false)} />
           <MobileNavItem to="/contact-us" label="Contact Us" close={() => setNavbarOpen(false)} />
 
@@ -138,7 +127,6 @@ const Navbar = () => {
   );
 };
 
-/* DESKTOP ITEM */
 const NavItem = ({ to, label }) => (
   <Link
     to={to}
@@ -148,7 +136,6 @@ const NavItem = ({ to, label }) => (
   </Link>
 );
 
-/* MOBILE ITEM */
 const MobileNavItem = ({ to, label, close }) => (
   <Link
     to={to}
