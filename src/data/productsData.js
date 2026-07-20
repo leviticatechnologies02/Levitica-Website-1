@@ -35,10 +35,6 @@ export const productsData = {
           type: "select", name: "state", label: "State", required: true, half: true,
           options: ["Telangana", "Andhra Pradesh"]
         },
-        {
-          type: "checkboxes", name: "modules", label: "Modules Interested In", required: false,
-          options: ["Payroll & Tax", "Attendance & Leaves", "Performance Management", "Recruitment & Onboarding", "Expense Management", "Employee Self-Service Portal"]
-        },
         { type: "food", name: "food", label: "Preferred Food", required: true },
         { type: "textarea", name: "message", label: "Additional Requirements", placeholder: "Describe your current HR challenges or specific needs…", required: false },
       ]
@@ -78,10 +74,6 @@ export const productsData = {
           type: "select", name: "state", label: "State", required: true, half: true,
           options: ["Telangana", "Andhra Pradesh"]
         },
-        {
-          type: "checkboxes", name: "features", label: "Features You Need", required: false,
-          options: ["Room Booking & Occupancy", "Automated Billing", "Tenant KYC", "Maintenance Tickets", "Visitor Log", "Financial Reports"]
-        },
         { type: "food", name: "food", label: "Preferred Food", required: true },
         { type: "textarea", name: "message", label: "Tell Us About Your Property", placeholder: "Describe your current challenges or management needs…", required: false },
       ]
@@ -90,7 +82,7 @@ export const productsData = {
 
   "ai-hr-crm": {
     id: 3,
-    title: "AI HR + CRM",
+    title: "Levitica One",
     subtitle: "AI Automation Platform",
     description: "AI-driven HR and CRM solution delivering predictive insights.",
     fullDescription: "A powerful combination of smart recruitment and automated client relations using NLP and predictive intelligence.",
@@ -100,7 +92,7 @@ export const productsData = {
     features: ["AI Resume Screening & Ranking Engine", "Interactive Candidate Matching Bots", "Predictive Deal Closure Forecasting", "Lead Source Attribution & Performance Audit", "Automated Multi-Channel Outreach Systems", "Unified HR & Client Dashboard View"],
     benefits: ["Cuts candidate screening time from days to minutes", "Increases CRM lead conversion rates", "Delivers data-driven recruitment and sales forecasts", "Consolidates critical business tools"],
     enquiry: {
-      heading: "AI HR + CRM Platform Enquiry",
+      heading: "Levitica One Platform Enquiry",
       tagline: "Supercharge hiring and sales pipelines with predictive AI.",
       about: "Our AI platform reduces candidate screening time by 90% and increases CRM conversion rates. Request a tailored demonstration for your team size and industry.",
       highlights: ["AI Resume Screening", "Candidate Ranking & Shortlisting", "CRM Lead Pipeline Management", "Predictive Sales Forecasting", "Automated Outreach Workflows", "Custom AI Model Integrations"],
@@ -122,10 +114,6 @@ export const productsData = {
         {
           type: "select", name: "teamSize", label: "Team Size", required: true, half: true,
           options: ["1–25", "26–100", "101–500", "500+"]
-        },
-        {
-          type: "checkboxes", name: "useCases", label: "AI Use Cases You Need", required: false,
-          options: ["Resume Screening", "Candidate Matching", "Predictive Hiring", "Lead Scoring", "Sales Forecasting", "Automated Outreach", "Custom AI Model"]
         },
         { type: "food", name: "food", label: "Preferred Food", required: true },
         { type: "textarea", name: "message", label: "Your AI Goals", placeholder: "Describe your recruitment or sales challenges…", required: false },
@@ -181,7 +169,7 @@ export const productsData = {
     subtitle: "Healthcare Platform",
     description: "Complete hospital digitization with records and billing.",
     fullDescription: "A secure, HIPAA-compliant platform for managing clinics, laboratories, and large hospital groups.",
-    image: "https://media.istockphoto.com/id/1134679866/photo/doctor-working-in-hospital-writing-prescription-clipboard-working-an-laptop-on-desk-in.webp?a=1&b=1&s=612x612&w=0&k=20&c=R-VFqH-naNMbAC4jJabJXNO9RYOq4CKgAcYtevXCtzk=",
+    image: "/img/companyimages/hospital.png",
     deployment: "Cloud / On-Premise",
     link: "https://hospital-management-12.vercel.app/",
     features: ["Electronic Health Records (EHR)", "Patient Appointment Scheduler", "Laboratory Information Management (LIMS)", "Automated Ward & Bed Allotment", "Insurance Claim Submission", "Pharmacy Inventory Management"],
@@ -210,10 +198,6 @@ export const productsData = {
         {
           type: "select", name: "deployment", label: "Preferred Deployment", required: true, half: true,
           options: ["Cloud (SaaS)", "On-Premise", "Hybrid"]
-        },
-        {
-          type: "checkboxes", name: "modules", label: "Modules Needed", required: false,
-          options: ["Patient Registration & EHR", "Appointment Scheduling", "Lab Management (LIMS)", "Ward & Bed Management", "Billing & Insurance Claims", "Pharmacy Inventory"]
         },
         { type: "food", name: "food", label: "Preferred Food", required: true },
         { type: "textarea", name: "message", label: "Specific Requirements", placeholder: "Describe your digitization goals or current challenges…", required: false },
@@ -258,10 +242,7 @@ export const productsData = {
           type: "select", name: "currentTool", label: "Current Communication Tool", required: false, half: true,
           options: ["None", "Email Only", "WhatsApp / Telegram", "Google Workspace", "Zoom", "Microsoft Teams", "Other"]
         },
-        {
-          type: "checkboxes", name: "features", label: "Features You Need", required: false,
-          options: ["Team Messaging & Channels", "HD Video Conferencing", "Document Sharing", "White-Label Branding", "Workflow Automation", "SSO / MFA Security", "AI Meeting Summaries"]
-        },
+
         { type: "food", name: "food", label: "Preferred Food", required: true },
         { type: "textarea", name: "message", label: "Your Collaboration Goals", placeholder: "Describe your communication challenges or security requirements…", required: false },
       ]
@@ -306,10 +287,6 @@ export const productsData = {
           type: "select", name: "compliance", label: "Compliance Requirement", required: false, half: true,
           options: ["GDPR", "HIPAA", "ISO 27001", "SOC 2", "None", "Multiple"]
         },
-        {
-          type: "checkboxes", name: "departments", label: "Departments to Manage", required: false,
-          options: ["Sales & CRM Records", "Finance & Accounting", "HR & Employee Files", "Admin & Operations", "Legal & Contracts", "IT Assets"]
-        },
         { type: "food", name: "food", label: "Preferred Food", required: true },
         { type: "textarea", name: "message", label: "Data & Security Requirements", placeholder: "Describe your current data management challenges or compliance needs…", required: false },
       ]
@@ -322,7 +299,7 @@ export const productsData = {
     subtitle: "Internship & Learning Platform",
     description: "Online and offline internship programs for colleges combined with a complete course learning platform featuring live sessions, mentorship, and certifications.",
     fullDescription: "Levitica Academy bridges the gap between education and industry. We offer structured online and offline internship programs for colleges across Telangana and Andhra Pradesh, paired with a full-featured course learning platform that includes live instructor-led sessions, self-paced modules, industry mentorship, project-based learning, and recognized certifications. Whether a student wants to learn a skill or gain real work experience, Levitica Academy delivers both in one place.",
-    image: "https://images.unsplash.com/photo-1610484826625-ac2be7f1c8c1?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fG9ubGluZSUyMGFjYWRlbXl8ZW58MHx8MHx8fDA%3D",
+    image: "/img/companylogo/academy.png",
     deployment: "Cloud (SaaS)",
     link: null,
     features: [
@@ -454,10 +431,6 @@ export const productsData = {
         {
           type: "select", name: "studentCount", label: "Approx. Students per Batch", required: false, half: true,
           options: ["< 50", "50 – 100", "100 – 300", "300+"]
-        },
-        {
-          type: "checkboxes", name: "programs", label: "Programs Interested In", required: false,
-          options: ["Internship Programs", "Live Course Training", "Self-Paced Modules", "Industry Mentorship", "Project-Based Learning", "Placement Assistance", "Campus Certification Drive"]
         },
         { type: "food", name: "food", label: "Preferred Food", required: true },
         { type: "textarea", name: "message", label: "Message / Requirements", placeholder: "Tell us about your students' skill gaps or placement goals…", required: false },

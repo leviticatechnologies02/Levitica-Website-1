@@ -1,16 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import toast from "react-hot-toast";
-import * as Yup from "yup";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import {
     FaCheckCircle,
     FaGlobe,
     FaArrowLeft,
-    FaServer,
-    FaPaperPlane,
     FaCheck
 } from "react-icons/fa";
 import { productsData } from "@/data/productsData";
@@ -65,42 +60,6 @@ const ProductDetails = () => {
         setLoading(false);
     }, [slug]);
 
-    const sendInquiry = async (values, actions) => {
-        const env = import.meta.env.VITE_ENV;
-        const baseURL =
-            env === "production"
-                ? import.meta.env.VITE_PROD_API_URL
-                : import.meta.env.VITE_LOCAL_API_URL;
-
-        try {
-            const payload = {
-                name: values.name,
-                email: values.email,
-                mobile: values.mobile,
-                message: `[Product Inquiry for ${product.title}] - ${values.message}`,
-            };
-
-            const res = await fetch(`${baseURL}/contact`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload),
-            });
-
-            const data = await res.json();
-
-            if (data.success) {
-                toast.success("Inquiry submitted successfully! Admin has been notified.");
-                actions.resetForm();
-            } else {
-                toast.error(data.message || "Failed to submit inquiry.");
-            }
-        } catch (err) {
-            toast.error("Failed to connect to the server.");
-        } finally {
-            actions.setSubmitting(false);
-        }
-    };
-
     if (loading) {
         return <div className="text-center py-24 text-gray dark:text-white">Loading product details...</div>;
     }
@@ -126,7 +85,7 @@ const ProductDetails = () => {
 
             <section className="relative pt-16 md:pt-28 pb-12 bg-gradient-to-b from-white to-herobg dark:from-darkmode dark:to-darklight border-b border-lightgray dark:border-dark_border/20">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <Link to="/" className="inline-flex items-center gap-2 text-primary dark:text-cyan hover:underline mb-6 text-sm font-medium">
+                    <Link to="/products" className="inline-flex items-center gap-2 text-primary dark:text-cyan hover:underline mb-6 text-sm font-medium">
                         <FaArrowLeft /> Back to Products
                     </Link>
                     <div className="grid md:grid-cols-12 gap-8 items-center">
@@ -184,25 +143,6 @@ const ProductDetails = () => {
                                 </p>
                             </div>
 
-                            <div className="mb-12 flex flex-wrap gap-4" data-aos="fade-up">
-                                <Link
-                                    to={`/products/${slug}/enquiry`}
-                                    className="inline-flex items-center gap-2 bg-primary hover:bg-primary-hover dark:bg-cyan dark:hover:bg-cyan-hover text-white dark:text-midnight_text font-semibold px-6 py-3 rounded-lg shadow-md hover:shadow-lg transition duration-300"
-                                >
-                                    Register Now →
-                                </Link>
-                                {product.link && (
-                                    <a
-                                        href={product.link}
-                                        target="_blank"
-                                        rel="noreferrer"
-                                        className="inline-flex items-center gap-2 border border-primary dark:border-cyan text-primary dark:text-cyan hover:bg-primary/5 dark:hover:bg-cyan/10 font-semibold px-6 py-3 rounded-lg transition duration-300"
-                                    >
-                                        <FaGlobe /> Visit Website
-                                    </a>
-                                )}
-                            </div>
-
                             <div className="mb-12" data-aos="fade-up">
                                 <h3 className="text-2xl font-bold text-midnight_text dark:text-white mb-6">
                                     Key Capabilities & Features
@@ -239,112 +179,28 @@ const ProductDetails = () => {
 
                         <div className="lg:col-span-5 xl:col-span-4">
                             <div
-                                className="sticky top-28 bg-white dark:bg-semidark p-6 md:p-8 rounded-2xl border border-lightgray dark:border-dark_border/20 shadow-property"
+                                className="sticky top-28 bg-white dark:bg-semidark p-6 md:p-8 rounded-2xl border border-lightgray dark:border-dark_border/20 shadow-property flex flex-col gap-4"
                                 data-aos="fade-left"
                             >
-                                <div className="flex items-center gap-3 mb-4">
-                                    <div className="p-2.5 bg-primary/10 dark:bg-cyan/10 rounded-xl">
-                                        <FaServer className="text-primary dark:text-cyan text-lg" />
-                                    </div>
-                                    <div>
-                                        <h4 className="font-bold text-lg md:text-xl text-midnight_text dark:text-white">
-                                            Request Demo / Inquiry
-                                        </h4>
-                                        <p className="text-xs text-gray">Response within 24 business hours</p>
-                                    </div>
-                                </div>
-
-                                <p className="text-sm text-gray dark:text-slate-300 mb-6 leading-relaxed">
-                                    Interested in deploying <strong>{product.title}</strong> for your organization? Complete the form below and our technical consultants will set up a customized demo.
-                                </p>
-
-                                <Formik
-                                    initialValues={{
-                                        name: "",
-                                        email: "",
-                                        mobile: "",
-                                        message: `I'm interested in a live demo and custom consultation for ${product.title}.`
-                                    }}
-                                    validationSchema={Yup.object({
-                                        name: Yup.string().required("Full Name is required"),
-                                        email: Yup.string().email("Invalid email address").required("Email address is required"),
-                                        mobile: Yup.string()
-                                            .matches(/^[0-9]{10}$/, "Mobile number must be 10 digits")
-                                            .required("Mobile number is required"),
-                                        message: Yup.string().required("Please enter your message or query")
-                                    })}
-                                    onSubmit={sendInquiry}
+                                <h3 className="text-xl font-bold text-midnight_text dark:text-white mb-2">
+                                    Get Started
+                                </h3>
+                                <Link
+                                    to={`/products/${slug}/enquiry`}
+                                    className="flex items-center justify-center gap-2 bg-primary hover:bg-primary-hover dark:bg-cyan dark:hover:bg-cyan-hover text-white dark:text-midnight_text font-semibold px-6 py-3 rounded-lg shadow-md hover:shadow-lg transition duration-300 w-full"
                                 >
-                                    {({ isSubmitting }) => (
-                                        <Form className="space-y-4">
-                                            <div>
-                                                <label className="block text-xs font-semibold text-gray dark:text-slate-400 mb-1.5 tracking-wider">
-                                                    Full Name
-                                                </label>
-                                                <Field
-                                                    name="name"
-                                                    placeholder="Your full name"
-                                                    className="w-full border border-gray-300 dark:border-dark_border/30 rounded-lg px-4 py-2 bg-white dark:bg-semidark text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-cyan text-sm"
-                                                />
-                                                <ErrorMessage name="name" component="p" className="text-red-500 text-xs mt-1 font-medium" />
-                                            </div>
-
-                                            <div>
-                                                <label className="block text-xs font-semibold text-gray dark:text-slate-400 mb-1.5 tracking-wider">
-                                                    Email Address
-                                                </label>
-                                                <Field
-                                                    name="email"
-                                                    type="email"
-                                                    placeholder="you@company.com"
-                                                    className="w-full border border-gray-300 dark:border-dark_border/30 rounded-lg px-4 py-2 bg-white dark:bg-semidark text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-cyan text-sm"
-                                                />
-                                                <ErrorMessage name="email" component="p" className="text-red-500 text-xs mt-1 font-medium" />
-                                            </div>
-
-                                            <div>
-                                                <label className="block text-xs font-semibold text-gray dark:text-slate-400 mb-1.5 tracking-wider">
-                                                    Mobile Number
-                                                </label>
-                                                <Field
-                                                    name="mobile"
-                                                    placeholder="10-digit mobile number"
-                                                    className="w-full border border-gray-300 dark:border-dark_border/30 rounded-lg px-4 py-2 bg-white dark:bg-semidark text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-cyan text-sm"
-                                                />
-                                                <ErrorMessage name="mobile" component="p" className="text-red-500 text-xs mt-1 font-medium" />
-                                            </div>
-
-                                            <div>
-                                                <label className="block text-xs font-semibold text-gray dark:text-slate-400 mb-1.5 tracking-wider">
-                                                    Message
-                                                </label>
-                                                <Field
-                                                    as="textarea"
-                                                    name="message"
-                                                    rows="4"
-                                                    placeholder="How can we help you?"
-                                                    className="w-full border border-gray-300 dark:border-dark_border/30 rounded-lg px-4 py-2 bg-white dark:bg-semidark text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-cyan text-sm"
-                                                />
-                                                <ErrorMessage name="message" component="p" className="text-red-500 text-xs mt-1 font-medium" />
-                                            </div>
-
-                                            <button
-                                                type="submit"
-                                                disabled={isSubmitting}
-                                                className="w-full bg-primary hover:bg-primary-hover dark:bg-cyan dark:hover:bg-cyan-hover text-white dark:text-midnight_text font-semibold py-2.5 rounded-lg flex items-center justify-center gap-2 transition duration-300 text-sm shadow-sm hover:shadow cursor-pointer"
-                                            >
-                                                {isSubmitting ? (
-                                                    "Submitting..."
-                                                ) : (
-                                                    <>
-                                                        <FaPaperPlane size={12} /> Submit Request
-                                                    </>
-                                                )}
-                                            </button>
-                                        </Form>
-                                    )}
-                                </Formik>
-
+                                    Register Now →
+                                </Link>
+                                {product.link && (
+                                    <a
+                                        href={product.link}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="flex items-center justify-center gap-2 border border-primary dark:border-cyan text-primary dark:text-cyan hover:bg-primary/5 dark:hover:bg-cyan/10 font-semibold px-6 py-3 rounded-lg transition duration-300 w-full"
+                                    >
+                                        <FaGlobe /> Visit Website
+                                    </a>
+                                )}
                             </div>
                         </div>
 

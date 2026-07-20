@@ -45,7 +45,7 @@ const Products = () => {
             category: ["education"],
             deployment: "Cloud",
             image:
-                "https://images.unsplash.com/photo-1610484826625-ac2be7f1c8c1?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fG9ubGluZSUyMGFjYWRlbXl8ZW58MHx8MHx8fDA%3D"
+                "/img/companyimages/academy.png",
         },
         {
             id: 6,
@@ -63,7 +63,7 @@ const Products = () => {
             category: ["enterprise"],
             deployment: "SaaS",
             image:
-                "https://images.unsplash.com/photo-1712904124132-857e6577aab9?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Y29sbGFib3JhdGlvbiUyMG1lZXRpbmdzJTIwb25saW5lfGVufDB8fDB8fHww"
+                "/img/companyimages/connect.png",
         },
         {
             id: 2,
@@ -83,42 +83,6 @@ const Products = () => {
             image: "/img/hostel.png"
         },
         {
-            id: 1,
-            title: "HRMS",
-            slug: "hrms",
-            subtitle: "Human Resource Management System",
-            description:
-                "Cloud-based HR platform covering the complete employee lifecycle with automation and compliance.",
-            features: [
-                "HR lifecycle automation",
-                "Payroll & compliance",
-                "Performance tracking",
-            ],
-            icon: FaUsersCog,
-            category: ["hr", "enterprise"],
-            deployment: "Cloud",
-            image:
-                "https://images.unsplash.com/photo-1531403009284-440f080d1e12"
-        },
-        {
-            id: 3,
-            title: "AI HR + CRM",
-            slug: "ai-hr-crm",
-            subtitle: "AI Automation",
-            description:
-                "AI-driven HR and CRM solution delivering predictive insights.",
-            features: [
-                "AI resume screening",
-                "CRM pipelines",
-                "Predictive analytics",
-            ],
-            icon: FaBrain,
-            category: ["ai", "enterprise"],
-            deployment: "SaaS",
-            image:
-                "https://media.istockphoto.com/id/2078574728/photo/employee-profile-dashboard-advisor-using-employee-kpi-dashboard-on-screen-hr-attrition.webp?a=1&b=1&s=612x612&w=0&k=20&c=lnL3-5wLncOFhPpTO1IB8l2c9g6NbjqOY2E8kJ3qJ_k="
-        },
-        {
             id: 4,
             title: "DVSkillHub",
             slug: "dvskillhub",
@@ -134,26 +98,8 @@ const Products = () => {
             category: ["education"],
             deployment: "Cloud",
             image:
-                "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8b25saW5lJTIwZWR1Y2F0aW9ufGVufDB8fDB8fHww",
+                "/img/companyimages/dvskillhub.png",
             link: "https://dvskillhub.leviticatechnologies.com/"
-        },
-        {
-            id: 5,
-            title: "Hospital System",
-            slug: "hospital-system",
-            subtitle: "Healthcare Platform",
-            description:
-                "Complete hospital digitization with records and billing.",
-            features: [
-                "Patient records",
-                "Appointments",
-                "Billing",
-            ],
-            icon: FaHospital,
-            category: ["healthcare"],
-            deployment: "Cloud",
-            image:
-                "https://media.istockphoto.com/id/1134679866/photo/doctor-working-in-hospital-writing-prescription-clipboard-working-an-laptop-on-desk-in.webp?a=1&b=1&s=612x612&w=0&k=20&c=R-VFqH-naNMbAC4jJabJXNO9RYOq4CKgAcYtevXCtzk="
         },
         {
             id: 7,
@@ -171,8 +117,63 @@ const Products = () => {
             category: ["enterprise", "hr"],
             deployment: "Cloud",
             image:
-                "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8ZGF0YSUyMG1hbmFnZW1lbnR8ZW58MHx8MHx8fDA%3D"
+                "img/companyimages/core.png"
+        },
+        {
+            id: 1,
+            title: "HRMS",
+            slug: "hrms",
+            subtitle: "Human Resource Management System",
+            description:
+                "Cloud-based HR platform covering the complete employee lifecycle with automation and compliance.",
+            features: [
+                "HR lifecycle automation",
+                "Payroll & compliance",
+                "Performance tracking",
+            ],
+            icon: FaUsersCog,
+            category: ["hr", "enterprise"],
+            deployment: "Cloud",
+            image:
+                "/img/companyimages/hrms.png"
+        },
+        {
+            id: 3,
+            title: "AI HR + CRM",
+            slug: "ai-hr-crm",
+            subtitle: "AI Automation",
+            description:
+                "AI-driven HR and CRM solution delivering predictive insights.",
+            features: [
+                "AI resume screening",
+                "CRM pipelines",
+                "Predictive analytics",
+            ],
+            icon: FaBrain,
+            category: ["ai", "enterprise"],
+            deployment: "SaaS",
+            image:
+                "img/companyimages/hr-ai.png"
+        },
+        {
+            id: 5,
+            title: "Hospital System",
+            slug: "hospital-system",
+            subtitle: "Healthcare Platform",
+            description:
+                "Complete hospital digitization with records and billing.",
+            features: [
+                "Patient records",
+                "Appointments",
+                "Billing",
+            ],
+            icon: FaHospital,
+            category: ["healthcare"],
+            deployment: "Cloud",
+            image:
+                "/img/companyimages/hospital.png"
         }
+        
     ];
 
     const categories = [
