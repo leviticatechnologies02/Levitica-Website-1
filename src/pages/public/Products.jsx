@@ -139,7 +139,7 @@ const Products = () => {
         },
         {
             id: 3,
-            title: "AI HR + CRM",
+            title: "Levitica One",
             slug: "ai-hr-crm",
             subtitle: "AI Automation",
             description:

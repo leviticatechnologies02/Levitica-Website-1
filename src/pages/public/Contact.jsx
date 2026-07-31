@@ -15,9 +15,6 @@ const ContactUs = () => {
             Contact Us
           </h1>
 
-          <p className="mt-4 text-gray dark:text-slate-300 max-w-xl mx-auto">
-            Letraset sheets containing Lorem Ipsum passages and more recently with desktop publishing
-          </p>
 
           <div className="mt-6 text-midnight_text dark:text-white">
             Home <span className="mx-2">›</span> Contact
