@@ -36,7 +36,7 @@ export const usePayment = () => {
 
       // 2️⃣ Razorpay options
       const options = {
-        key: process.env.RAZORPAY_KEY_ID,
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID || orderResponse.key,
         amount: order.amount,
         currency: order.currency,
         name: 'Levitica Technologies',
