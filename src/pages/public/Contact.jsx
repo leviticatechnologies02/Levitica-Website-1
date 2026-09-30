@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import ContactUsForm from "./ContactForm";
-import { FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
+import { FaEnvelope, FaMapMarkerAlt, FaPhoneAlt } from "react-icons/fa";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 const ContactUs = () => {
@@ -55,7 +55,7 @@ const ContactUs = () => {
               </h4>
 
               <p className="text-gray dark:text-slate-300 mt-2 text-sm max-w-xs">
-                5th Floor, S2, C9WP+P68 Techno Park, Capital Pk Rd, VIP Hills, Hyderabad, Telangana – 500081
+                4th Floor, Jain Sadguru Images Capital Park, 408, Capital Pk Rd, VIP Hills, Silicon Valley, Madhapur, Hyderabad, Telangana 500081
               </p>
             </div>
 
@@ -107,31 +107,51 @@ const ContactUs = () => {
       </section>
 
       {/* ================= OFFICE SECTION ================= */}
-      <section className="bg-darkmode lg:py-10 py-10 px-4">
+      <section className="bg-darkmode lg:py-12 py-10 px-4 border-t border-white/10">
         <div className="max-w-6xl mx-auto">
 
-          <div className="grid md:grid-cols-6 lg:grid-cols-9 gap-7 pb-2">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
 
-            <div className="col-span-3">
-              <h2 className="text-white text-4xl font-bold">
+            <div className="md:col-span-4">
+              <h2 className="text-white text-2xl md:text-3xl font-bold tracking-tight">
                 Hyderabad Office
               </h2>
             </div>
 
-            <div className="col-span-3">
-              <p className="text-white/70 text-xl">
-                Techno Park, Capital Pk Rd, <br/> Hyderabad, Telangana
-              </p>
+            <div className="md:col-span-5">
+              <div className="flex items-start gap-3">
+                <FaMapMarkerAlt className="text-cyan text-base mt-1 flex-shrink-0" />
+                <p className="text-white/80 text-sm md:text-base leading-relaxed">
+                  4th Floor, Jain Sadguru Images Capital Park, 408, <br className="hidden sm:inline" />
+                  Capital Pk Rd, VIP Hills, Silicon Valley, <br className="hidden sm:inline" />
+                  Madhapur, Hyderabad, Telangana 500081
+                </p>
+              </div>
             </div>
 
-            <div className="col-span-3">
-              <a href="mailto:hr@leviticatechnologies.com" className="text-white underline">
-                hr@leviticatechnologies.com
+            <div className="md:col-span-3 space-y-2.5 text-sm md:text-base">
+              <a
+                href="mailto:hr@leviticatechnologies.com"
+                className="text-white hover:text-cyan transition duration-300 flex items-center gap-2.5 group"
+              >
+                <FaEnvelope className="text-cyan text-sm flex-shrink-0" />
+                <span className="underline underline-offset-4 group-hover:text-cyan">
+                  hr@leviticatechnologies.com
+                </span>
               </a>
 
-              <p className="text-white/80 mt-2">
-                Call: +91 9032503559
-              </p>
+              <div className="flex items-center gap-2.5 text-white/80">
+                <FaPhoneAlt className="text-cyan text-sm flex-shrink-0" />
+                <span>
+                  Call:{" "}
+                  <a
+                    href="tel:+919032503559"
+                    className="text-white hover:text-cyan transition duration-300 font-medium"
+                  >
+                    +91 9032503559
+                  </a>
+                </span>
+              </div>
             </div>
 
           </div>

@@ -85,8 +85,8 @@ const selectedDomain = domains.find(
 // Build program options dynamically
 const programOptions =
   selectedDomain?.durations?.map((duration) => ({
-   id: String(duration.days),
-    name: duration.label,
+    id: String(duration.days),
+    name: duration.label || `${duration.days} Days`,
     days: duration.days,
     amount: duration.fee,
   })) || [];

@@ -3,6 +3,7 @@ import DetailsContent from "./DetailsContent";
 import InternshipPaymentForm from "./InternshipsPaymentForm";
 import { X } from "lucide-react";
 import { useGetAllInternshipsDomainsQuery } from '@/Services/paymentServices/internshipsServices';
+import { dummyInternshipDomains } from "./dummyDomains";
 
 
 const Internships = () => {
@@ -10,7 +11,13 @@ const Internships = () => {
   const { data, isLoading, isError } =
     useGetAllInternshipsDomainsQuery({ isActive: true });
 
-  const domains = data?.data || [];
+  const apiDomains = data?.data;
+  const domains =
+    Array.isArray(apiDomains) && apiDomains.length > 0
+      ? apiDomains
+      : dummyInternshipDomains;
+
+  const hasData = Boolean(domains && domains.length > 0);
 
 
 
@@ -48,8 +55,8 @@ const Internships = () => {
           <div className="w-full lg:max-w-5xl bg-white md:mx-auto lg:mx-1">
             <DetailsContent
               domains={domains}
-              isLoading={isLoading}
-              isError={isError}
+              isLoading={isLoading && !hasData}
+              isError={isError && !hasData}
               showPaymentForm={showPaymentForm}
               setShowPaymentForm={setShowPaymentForm}
             />
@@ -62,7 +69,7 @@ const Internships = () => {
               <div className="max-w-lg mx-auto">
                 <InternshipPaymentForm
                   domains={domains}
-                  isLoading={isLoading}
+                  isLoading={isLoading && !hasData}
                 />
 
               </div>
@@ -102,7 +109,7 @@ const Internships = () => {
                 <div className="max-w-lg mx-auto">
                   <InternshipPaymentForm
                     domains={domains}
-                    isLoading={isLoading}
+                    isLoading={isLoading && !hasData}
                   />
 
                 </div>

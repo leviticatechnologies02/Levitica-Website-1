@@ -3,16 +3,17 @@ import { FaEnvelope, FaPhone } from "react-icons/fa";
 import { HiDesktopComputer, HiPlus } from "react-icons/hi";
 import { MdOutlineWork } from "react-icons/md";
 import { GiAchievement } from "react-icons/gi";
+import { Link } from "react-router-dom";
 
 const DetailsContent = ({ domains, isLoading, isError, showPaymentForm, setShowPaymentForm }) => {
-  
+
   const formatDurations = (durations = []) =>
     durations.map(d => `${d.days} Days`).join(" / ");
 
   const formatFees = (durations = []) =>
     durations.map(d => `₹${d.fee}`).join(" / ");
 
- 
+
   const learningOutcomes = [
     "Build and deploy real-time mini projects",
     "Strengthen core technical and problem-solving skills",
@@ -22,7 +23,7 @@ const DetailsContent = ({ domains, isLoading, isError, showPaymentForm, setShowP
     "Participate in career guidance and placement sessions"
   ];
 
-  if (isLoading) {
+  if (isLoading && (!domains || domains.length === 0)) {
     return (
       <div className="text-center p-6 text-gray-600">
         Loading internship domains...
@@ -30,7 +31,7 @@ const DetailsContent = ({ domains, isLoading, isError, showPaymentForm, setShowP
     );
   }
 
-  if (isError) {
+  if (isError && (!domains || domains.length === 0)) {
     return (
       <div className="text-center p-6 text-red-500">
         Failed to load internship domains.
@@ -44,14 +45,16 @@ const DetailsContent = ({ domains, isLoading, isError, showPaymentForm, setShowP
       {/* Header - Minimalist */}
       <div className="text-center mb-2">
         <div className="flex flex-col items-center">
-          <div className="mb-3">
-            <img
-              src="/img/leviticalogo.png"
-              alt="Levitica Logo"
-              className="w-40 h-30 mx-auto"
-            />
-          </div>
-          
+          <Link to="/">
+            <div className="mb-3">
+              <img
+                src="/img/leviticalogo.png"
+                alt="Levitica Logo"
+                className="w-40 h-30 mx-auto"
+              />
+            </div>
+          </Link>
+
         </div>
       </div>
 
@@ -212,7 +215,7 @@ const DetailsContent = ({ domains, isLoading, isError, showPaymentForm, setShowP
               Certificate will be provided upon successful completion by{"  "}
               <a href="https://leviticatechnologies.com" target="_blank" rel="noopener noreferrer"
                 className="text-blue-600 hover:text-blue-800 ms-1">
-                 Levitica Technologies Pvt Ltd
+                Levitica Technologies Pvt Ltd
               </a>
             </p>
             <p className="flex items-start">
@@ -248,7 +251,7 @@ const DetailsContent = ({ domains, isLoading, isError, showPaymentForm, setShowP
               />
             </div>
           </div>
-          
+
           <p className="text-sm text-black/70 text-center">
             © {new Date().getFullYear()}{" "}
             <a
