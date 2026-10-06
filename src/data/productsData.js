@@ -49,7 +49,7 @@ export const productsData = {
     fullDescription: "Designed for property managers, hostel owners, and PG operators, this system simplifies room bookings, rent collection, tenant onboarding, and operational management.",
     image: "/img/hostel.png",
     deployment: "Cloud Hosted",
-    link: "https://hma-theta.vercel.app/",
+    link: "https://leviticanestora.com/",
     features: ["Real-time Room & Bed Occupancy Maps", "Automated Rent Invoicing & Digital Payments", "Tenant KYC & Digital Agreement Storage", "Maintenance Ticket Management System", "Visitor Logging & Gate Security Access", "Financial Reporting & Expense Audits"],
     benefits: ["Reduces manual rent collection overhead by 60%", "Provides instant insights on vacancy rates", "Streamlines maintenance logs", "Maintains detailed guest registers"],
     enquiry: {

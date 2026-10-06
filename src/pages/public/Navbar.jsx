@@ -12,6 +12,8 @@ const Navbar = () => {
 
   const mobileMenuRef = useRef(null);
 
+  const showAuthButtons = location.pathname.startsWith("/trainings");
+
   useEffect(() => {
     const handleScroll = () => {
       setSticky(window.scrollY >= 80);
@@ -60,19 +62,23 @@ const Navbar = () => {
 
         <div className="hidden lg:flex items-center gap-4">
 
-          <Link
-            to="/login"
-            className="btn btn-white px-4 h-10 flex items-center rounded-lg transition duration-300"
-          >
-            Log in
-          </Link>
+          {showAuthButtons && (
+            <>
+              <Link
+                to="/login"
+                className="btn btn-white px-4 h-10 flex items-center rounded-lg transition duration-300"
+              >
+                Log in
+              </Link>
 
-          <Link
-            to="/sign-up"
-            className="btn btn-primary px-4 h-10 flex items-center rounded-lg transition"
-          >
-            Sign Up
-          </Link>
+              <Link
+                to="/sign-up"
+                className="btn btn-primary px-4 h-10 flex items-center rounded-lg transition"
+              >
+                Sign Up
+              </Link>
+            </>
+          )}
 
           <Link
             to="/app"
@@ -118,8 +124,12 @@ const Navbar = () => {
 
           <hr />
 
-          <MobileNavItem to="/login" label="Log in" close={() => setNavbarOpen(false)} />
-          <MobileNavItem to="/sign-up" label="Sign Up" close={() => setNavbarOpen(false)} />
+          {showAuthButtons && (
+            <>
+              <MobileNavItem to="/login" label="Log in" close={() => setNavbarOpen(false)} />
+              <MobileNavItem to="/sign-up" label="Sign Up" close={() => setNavbarOpen(false)} />
+            </>
+          )}
           <MobileNavItem to="/app" label="Download App" close={() => setNavbarOpen(false)} />
         </div>
       </div>
