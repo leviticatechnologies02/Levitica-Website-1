@@ -82,7 +82,7 @@ const ContactUsForm = () => {
               as="textarea"
               name="message"
               rows="5"
-              placeholder="Your Message"
+              placeholder="Your Messages"
               className="w-full border border-gray-300 dark:border-dark_border/30 rounded-lg px-4 py-2 bg-white dark:bg-semidark text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-cyan"
             />
             <ErrorMessage name="message" component="p" className="text-red-500 text-sm" />
