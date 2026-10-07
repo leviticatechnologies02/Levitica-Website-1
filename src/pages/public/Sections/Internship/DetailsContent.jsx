@@ -1,5 +1,5 @@
 // DetailsContent.jsx
-import { FaEnvelope, FaPhone } from "react-icons/fa";
+import { FaEnvelope, FaPhone, FaBriefcase } from "react-icons/fa";
 import { HiDesktopComputer, HiPlus } from "react-icons/hi";
 import { MdOutlineWork } from "react-icons/md";
 import { GiAchievement } from "react-icons/gi";
@@ -45,7 +45,7 @@ const DetailsContent = ({ domains, isLoading, isError, showPaymentForm, setShowP
   return (
     <div className="w-full max-w-6xl mx-auto pb-4 lg:pb-6">
       {/* Page Header Banner */}
-      <div className="w-[100vw] relative left-1/2 -translate-x-1/2 bg-gradient-to-b from-[#eaf4fc] to-white pt-6 pb-12 mb-10 border-b border-blue-50">
+      <div className="w-[100vw] relative left-1/2 -translate-x-1/2 py-12 bg-gradient-to-b from-white from-10% dark:from-darkmode to-herobg to-90% dark:to-darklight text-center border-b border-lightgray dark:border-dark_border/20 mb-10">
         <div className="max-w-7xl mx-auto px-4 relative">
           <button
             onClick={() => navigate(-1)}
@@ -64,7 +64,7 @@ const DetailsContent = ({ domains, isLoading, isError, showPaymentForm, setShowP
             />
           </Link>
  */}
-          <h1 className="text-3xl md:text-[2.25rem] font-extrabold text-[#112340] mb-4 leading-tight ">
+          <h1 className="text-3xl md:text-[2.25rem] font-bold text-[#112340] mb-4 leading-tight ">
             Industrial Internship Workshops <br className="hidden md:block" /> For B.Tech & Degree Students
           </h1>
           <p className="text-gray-600 text-sm md:text-[15px] leading-relaxed mb-6 max-w-2xl mx-auto">
@@ -87,10 +87,10 @@ const DetailsContent = ({ domains, isLoading, isError, showPaymentForm, setShowP
 
         {/* Internship Domains */}
         <div className="p-4 bg-gray-50 rounded-lg">
-          <h4 className="font-semibold text-base md:text-lg text-gray-900 mb-3 flex items-center align-center justify-center ">
+          <h4 className="font-bold text-base md:text-xl text-gray-900 mb-3 flex items-center align-center justify-center ">
             <HiDesktopComputer className="mr-2 text-blue-600" /> Internship Domains Offered
           </h4>
-          <p className="text-sm text-gray-600 mb-8 relative z-10 align-center justify-center text-center">
+          <p className="text-md text-gray-600 mb-8 relative z-10 align-center justify-center text-center">
             Each college can choose one or more domains based on student interest
           </p>
 
@@ -113,13 +113,13 @@ const DetailsContent = ({ domains, isLoading, isError, showPaymentForm, setShowP
                     <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors">
                       <HiDesktopComputer size={20} />
                     </div>
-                    <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                    <span className="text-xs font-semibold text-gray-400 tracking-wider">
                       Internship
                     </span>
                   </div>
 
                   {/* Card Title & Desc */}
-                  <h4 className="font-extrabold text-black-600 text-[1.15rem] leading-tight mb-2 group-hover:text-blue-600 transition-colors line-clamp-2">
+                  <h4 className="font-bold text-black-600 text-[1.15rem] leading-tight mb-2 group-hover:text-blue-600 transition-colors line-clamp-2">
                     {domain.name}
                   </h4>
                   <p className="text-gray-500 text-sm mb-6 line-clamp-3 leading-relaxed flex-grow">
@@ -140,12 +140,11 @@ const DetailsContent = ({ domains, isLoading, isError, showPaymentForm, setShowP
                   {/* Footer */}
                   <div className="mt-auto pt-5 border-t border-gray-900/5 flex items-center justify-between">
                     <div className="flex flex-col">
-                      <span className="text-xs text-gray-500 font-medium tracking-wide uppercase">Fee</span>
-                      <span className="text-gray-900 font-black text-xl">
+                      <span className="text-gray-900 text-lg font-semibold ">
                         {formatFees(domain.durations)}
                       </span>
                     </div>
-                    <button className="text-sm font-bold text-gray-700 bg-gray-300 px-5 py-2.5 rounded-xl group-hover:bg-blue-600 group-hover:text-white group-hover:scale-105 transition-all flex items-center shadow-md">
+                    <button className="text-sm font-semibold text-gray-700 bg-gray-300 px-5 py-2.5 rounded-xl group-hover:bg-blue-600 group-hover:text-white group-hover:scale-105 transition-all flex items-center shadow-md">
                       Apply <HiArrowRight className="ml-1.5 w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </button>
                   </div>
@@ -162,41 +161,55 @@ const DetailsContent = ({ domains, isLoading, isError, showPaymentForm, setShowP
         </div>
 
         {/* About the Internship */}
-        <div className="p-4 " >
-          <h3 className="font-semibold text-base md:text-lg text-gray-900 mb-3 flex items-center text-align-center align-center justify-center ">
-            <MdOutlineWork className="mr-2 text-blue-600" /> About the Internship Workshops
-          </h3>
-          <div className="space-y-2 text-gray-700 text-sm align-center justify-center text-center">
-            <p className="flex items-start">
-              <span className="text-blue-500 mr-2 mt-0.5">•</span>
-              Our Internship-Based Workshops are designed to help B.Tech and Degree students gain hands-on exposure to the latest industry technologies.
-            </p>
-            <p className="flex items-start">
-              <span className="text-blue-500 mr-2 mt-0.5">•</span>
-              These workshops are conducted either directly on your campus or through online live sessions, based on your college's preference.
-            </p>
-            <p className="flex items-start">
-              <span className="text-blue-500 mr-2 mt-0.5">•</span>
-              Every participant receives an Internship Certificate jointly issued by Levitica Technologies Pvt Ltd and Levitica Technologies Pvt Ltd upon successful completion.
-            </p>
+        <div className="pt-2 pb-1">
+          <div className="max-w-5xl mx-auto">
+            <h3 className="font-bold text-base md:text-xl text-gray-900 mb-3.5 flex items-center justify-center gap-2">
+              <FaBriefcase className="text-blue-600 text-base md:text-lg shrink-0" />
+              <span>About the Internship Workshops</span>
+            </h3>
+
+            <div className="space-y-2.5 max-w-5xl mx-auto text-gray-800 text-[15px] md:text-md leading-normal">
+              <p className="flex items-start">
+                <span className="text-blue-500 font-bold mr-2 select-none shrink-0">•</span>
+                <span>
+                  Our Internship-Based Workshops are designed to help B.Tech and Degree students gain hands-on exposure to the latest industry technologies.
+                </span>
+              </p>
+              <p className="flex items-start">
+                <span className="text-blue-500 font-bold mr-2 select-none shrink-0">•</span>
+                <span>
+                  These workshops are conducted either directly on your campus or through online live sessions, based on your college&apos;s preference.
+                </span>
+              </p>
+              <p className="flex items-start">
+                <span className="text-blue-500 font-bold mr-2 select-none shrink-0">•</span>
+                <span>
+                  Every participant receives an Internship Certificate jointly issued by Levitica Technologies Pvt Ltd and Levitica Technologies Pvt Ltd upon successful completion.
+                </span>
+              </p>
+            </div>
           </div>
         </div>
 
         {/* Learning Outcomes */}
-        <div className="text-center">
-          <h3 className="font-semibold text-base md:text-lg text-gray-900 mb-3 flex items-center align-center justify-center">
-            <GiAchievement className="mr-2 text-blue-600" /> What You'll Learn
-          </h3>
+        <div className="pt-6 pb-2">
+          <div className="max-w-5xl mx-auto">
+            <h3 className="font-bold text-base md:text-xl text-gray-900 mb-4 flex items-center justify-center gap-2">
+              <GiAchievement className="text-blue-600 text-lg md:text-xl shrink-0" />
+              <span>What You&apos;ll Learn</span>
+            </h3>
 
-          <div className="p-4 bg-blue-50 rounded-lg">
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-center">
-              {learningOutcomes.map((outcome, index) => (
-                <div key={index} className="flex items-start">
-                  <div className="flex-shrink-0 w-1.5 h-1.5 bg-blue-500 rounded-full mt-1 mr-2"></div>
-                  <span className="text-gray-700 text-sm">{outcome}</span>
-                </div>
-              ))}
+            <div className="bg-[#edf5fd] rounded-2xl p-6 sm:p-7 md:px-10 md:py-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 lg:gap-x-12 gap-y-3 md:gap-y-3.5">
+                {learningOutcomes.map((outcome, index) => (
+                  <div key={index} className="flex items-center gap-2.5">
+                    <span className="w-2 h-2 rounded-full bg-blue-500 shrink-0"></span>
+                    <span className="text-gray-800 text-[15px] md:text-md md:whitespace-nowrap leading-normal">
+                      {outcome}
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
@@ -204,7 +217,7 @@ const DetailsContent = ({ domains, isLoading, isError, showPaymentForm, setShowP
 
         {/* Contact Details */}
         <div className="p-4 bg-gray-50 rounded-lg">
-          <h3 className="font-semibold text-base text-gray-900 mb-3">
+          <h3 className="font-bold text-base text-gray-900 mb-3">
             Contact Us
           </h3>
           <div className="w-12 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 mb-3 rounded-full"></div>
