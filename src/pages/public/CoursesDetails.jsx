@@ -33,9 +33,9 @@ const CourseDetail = () => {
 
   const selectedCourse = courseId
     ? selectedCourses?.find((course) => {
-        const slug = course.path.split("/").pop().toLowerCase();
-        return slug === courseId;
-      })
+      const slug = course.path.split("/").pop().toLowerCase();
+      return slug === courseId;
+    })
     : null;
 
   /* ✅ AOS INIT */

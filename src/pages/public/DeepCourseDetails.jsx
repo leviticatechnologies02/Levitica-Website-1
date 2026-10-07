@@ -85,9 +85,9 @@ const CourseDetails = () => {
         <div className="max-w-7xl mx-auto px-4">
 
           {/* COVER IMAGE */}
-          <div data-aos="zoom-in" className="mb-16 h-[350px] overflow-hidden rounded-2xl border border-lightgray dark:border-dark_border/20">
+          {/* <div data-aos="zoom-in" className="mb-16 h-[350px] overflow-hidden rounded-2xl border border-lightgray dark:border-dark_border/20">
             <img src={course.image} className="w-full h-full object-cover" alt={course.title} />
-          </div>
+          </div> */}
 
           <div className="flex flex-wrap -mx-4">
 
@@ -184,7 +184,7 @@ const CourseDetails = () => {
                   {course.price}
                 </p>
 
-                <button 
+                <button
                   onClick={handleEnroll}
                   className="btn btn-primary w-full mt-4 py-3 rounded-lg transition-colors"
                 >
@@ -197,17 +197,17 @@ const CourseDetails = () => {
 
                 <div className="space-y-3 text-sm text-gray dark:text-slate-300">
                   <div className="flex gap-2 items-center">
-                    <FaMapMarkerAlt className="text-primary dark:text-cyan" /> 
+                    <FaMapMarkerAlt className="text-primary dark:text-cyan" />
                     <span>Hyderabad, India</span>
                   </div>
                   <div className="flex gap-2 items-center">
-                    <FaPhoneAlt className="text-primary dark:text-cyan" /> 
+                    <FaPhoneAlt className="text-primary dark:text-cyan" />
                     <a href="tel:+919032503559" className="hover:text-primary dark:hover:text-cyan transition">
                       +91 9032503559
                     </a>
                   </div>
                   <div className="flex gap-2 items-center">
-                    <FaEnvelope className="text-primary dark:text-cyan" /> 
+                    <FaEnvelope className="text-primary dark:text-cyan" />
                     <a href="mailto:hr@leviticatechnologies.com" className="hover:text-primary dark:hover:text-cyan transition break-all">
                       hr@leviticatechnologies.com
                     </a>

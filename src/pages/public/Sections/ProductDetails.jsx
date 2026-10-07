@@ -182,9 +182,13 @@ const ProductDetails = () => {
                                 className="sticky top-28 bg-white dark:bg-semidark p-6 md:p-8 rounded-2xl border border-lightgray dark:border-dark_border/20 shadow-property flex flex-col gap-4"
                                 data-aos="fade-left"
                             >
-                                <h3 className="text-xl font-bold text-midnight_text dark:text-white mb-2">
-                                    Get Started
+                                <h3 className="text-xl font-bold text-midnight_text dark:text-white mb-1">
+                                    For Enquiry
+                                    
                                 </h3>
+                                <div className="text-gray dark:text-slate-300 text-sm mb-5">
+                                    For any queries or support related to this product, feel free to reach out to us:
+                                </div>
                                 <Link
                                     to={`/products/${slug}/enquiry`}
                                     className="flex items-center justify-center gap-2 bg-primary hover:bg-primary-hover dark:bg-cyan dark:hover:bg-cyan-hover text-white dark:text-midnight_text font-semibold px-6 py-3 rounded-lg shadow-md hover:shadow-lg transition duration-300 w-full"

@@ -22,7 +22,7 @@ import {
 
 import AOS from "aos";
 import "aos/dist/aos.css";
-import { FaXTwitter } from "react-icons/fa6";
+import { FaInstagram, FaXTwitter } from "react-icons/fa6";
 
 const iconMap = {
   Code: FaCode,
@@ -92,31 +92,12 @@ const ServiceDetails = () => {
       {/* MAIN */}
       <section className="py-20 bg-section dark:bg-darkmode">
         <div className="max-w-7xl mx-auto px-4">
-
-          {/* COVER IMAGE */}
-          <div
-            className="mb-16 h-[350px] md:h-[450px] overflow-hidden rounded-2xl border border-lightgray dark:border-dark_border/20"
-            data-aos="zoom-in"
-          >
-            <img
-              src={service.image}
-              alt={service.title}
-              className="w-full h-full object-cover"
-            />
-          </div>
-
           <div className="flex flex-wrap -mx-4">
-
-            {/* LEFT CONTENT */}
             <div className="w-full lg:w-8/12 px-4">
               <div className="xl:pr-10">
-
-                {/* DESCRIPTION */}
                 <p className="text-base md:text-md text-gray-600 dark:text-slate-300 leading-relaxed mb-10" data-aos="fade-up">
                   {service.description}
                 </p>
-
-                {/* OFFERINGS */}
                 <h3 className="text-xl md:text-3xl font-bold text-midnight_text dark:text-white mb-6" data-aos="fade-up">
                   Our Service Offerings
                 </h3>
@@ -146,8 +127,6 @@ const ServiceDetails = () => {
                     );
                   })}
                 </div>
-
-                {/* BENEFITS + INDUSTRIES */}
                 <div className="grid md:grid-cols-2 gap-10 mt-14">
 
                   <div data-aos="fade-right">
@@ -173,10 +152,7 @@ const ServiceDetails = () => {
                       </div>
                     ))}
                   </div>
-
                 </div>
-
-                {/* FAQ */}
                 <h3 className="mt-16 text-2xl md:text-3xl font-bold text-midnight_text dark:text-white" data-aos="fade-up">
                   Frequently Asked Questions
                 </h3>
@@ -208,30 +184,41 @@ const ServiceDetails = () => {
 
               </div>
             </div>
-
-            {/* SIDEBAR */}
             <div className="w-full lg:w-4/12 px-4 mt-12 lg:mt-0">
 
-              {/* SHARE */}
               <div data-aos="fade-left" className="bg-white dark:bg-semidark p-6 md:p-8 rounded-xl border border-slate-100 dark:border-dark_border/20 shadow-property mb-8">
                 <h3 className="text-xl md:text-2xl font-bold text-midnight_text dark:text-white mb-5">Share This Service</h3>
                 <div className="flex flex-col gap-3 text-white text-sm md:text-base">
-                  <button className="bg-[#526fa3] hover:bg-[#3b5998] p-3 rounded-lg flex items-center gap-2 transition cursor-pointer">
+                  <a
+                    href="https://www.facebook.com/people/Levitica-Technologies/61556544303087/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-[#526fa3] hover:bg-[#3b5998] p-3 rounded-lg flex items-center gap-2 transition cursor-pointer"
+                  >
                     <FaFacebook size={18} />
                     <span>Facebook</span>
-                  </button>
-                  <button className="bg-[#46C4FF] hover:bg-[#1DA1F2] p-3 rounded-lg flex items-center gap-2 transition cursor-pointer">
-                    <FaXTwitter size={18} />
-                    <span>Twitter</span>
-                  </button>
-                  <button className="bg-[#3C86AD] hover:bg-[#0077B5] p-3 rounded-lg flex items-center gap-2 transition cursor-pointer">
+                  </a>
+                  <a
+                    href="https://www.instagram.com/life_at_levitica/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-[#46C4FF] hover:bg-[#1DA1F2] p-3 rounded-lg flex items-center gap-2 transition cursor-pointer"
+                  >
+                    <FaInstagram size={18} />
+                    <span>Instagram</span>
+                  </a>
+                  <a
+                    href="https://www.linkedin.com/company/levitica-technologies-pvt-ltd/posts/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-[#3C86AD] hover:bg-[#0077B5] p-3 rounded-lg flex items-center gap-2 transition cursor-pointer"
+                  >
                     <FaLinkedinIn size={18} />
                     <span>LinkedIn</span>
-                  </button>
+                  </a>
                 </div>
               </div>
 
-              {/* CONTACT */}
               <div data-aos="fade-left" data-aos-delay="250" className="bg-light dark:bg-semidark p-6 md:p-8 rounded-xl border border-slate-100 dark:border-dark_border/20 shadow-property">
                 <h4 className="font-bold text-xl md:text-2xl text-midnight_text dark:text-white mb-5">
                   Need Help?
