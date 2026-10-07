@@ -9,7 +9,8 @@ import {
   FaArrowLeft,
   FaLaptopCode,
   FaCertificate,
-  FaTasks
+  FaTasks,
+  FaBook
 } from 'react-icons/fa';
 
 const MyInternshipDetails = () => {
@@ -18,6 +19,13 @@ const MyInternshipDetails = () => {
   const { internshipId } = useParams();
   
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [expandedWeeks, setExpandedWeeks] = useState([0]);
+
+  const toggleWeek = (index) => {
+    setExpandedWeeks((prev) =>
+      prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]
+    );
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -142,6 +150,79 @@ const MyInternshipDetails = () => {
         {/* Main Content Area */}
         <div className="lg:col-span-2 space-y-8">
           
+          {/* ===== Curriculum Section ===== */}
+          {internship.domainDetails?.curriculum && internship.domainDetails.curriculum.length > 0 && (
+            <motion.div
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.05 }}
+              className={`p-6 rounded-3xl ${isDark ? 'bg-semidark' : 'bg-white border'} shadow-lg mb-6`}
+            >
+              <div className="flex items-center justify-between mb-5">
+                <h2 className="text-xl sm:text-2xl font-bold flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-amber-500/10 text-amber-500">
+                    <FaBook />
+                  </div>
+                  <span>Internship Curriculum</span>
+                </h2>
+                <span className="text-xs font-semibold px-3 py-1 rounded-full bg-primary/10 text-primary">
+                  {internship.domainDetails.curriculum.length} Weeks
+                </span>
+              </div>
+
+              <div className="space-y-3">
+                {internship.domainDetails.curriculum.map((week, weekIndex) => (
+                  <div
+                    key={week._id || week.id || weekIndex}
+                    className={`border rounded-2xl overflow-hidden transition ${
+                      isDark ? 'border-dark_border bg-darkmode' : 'border-border bg-slate-50'
+                    }`}
+                  >
+                    <button
+                      onClick={() => toggleWeek(weekIndex)}
+                      className="w-full px-4 py-3.5 flex items-center justify-between text-left transition-colors"
+                    >
+                      <div className="flex items-center gap-3">
+                        <span className={`text-xs font-bold px-2.5 py-1 rounded-lg ${
+                          isDark ? 'bg-primary/20 text-primary' : 'bg-primary/10 text-primary'
+                        }`}>
+                          Week {week.week || weekIndex + 1}
+                        </span>
+                        <span className={`font-semibold text-sm sm:text-base ${isDark ? 'text-white' : 'text-midnight_text'}`}>
+                          {week.title}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2 text-xs text-gray">
+                        <span>{week.sessions?.length || 0} sessions</span>
+                        <span className={`transform transition-transform duration-200 ${expandedWeeks.includes(weekIndex) ? 'rotate-180' : ''}`}>
+                          ▼
+                        </span>
+                      </div>
+                    </button>
+
+                    {expandedWeeks.includes(weekIndex) && (
+                      <div className="px-4 pb-4 pt-1 space-y-2">
+                        {week.sessions?.map((session, sIdx) => (
+                          <div
+                            key={session._id || session.id || sIdx}
+                            className={`flex items-center gap-3 p-2.5 rounded-xl text-xs sm:text-sm ${
+                              isDark ? 'bg-semidark text-gray' : 'bg-white text-midnight_text border border-border/50'
+                            }`}
+                          >
+                            <span className="w-5 h-5 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold shrink-0">
+                              {sIdx + 1}
+                            </span>
+                            <span>{session.title}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          )}
+
           <motion.div 
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
