@@ -10,6 +10,7 @@ import { toast } from "react-hot-toast";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import { useGetBatchesByCourseQuery } from '@/Services/admin/batchdetailsService';
+import { useGetAllInternshipsDomainsQuery } from '@/Services/paymentServices/internshipsServices';
 import { FiX, FiBookOpen, FiUsers, FiClock, FiMail, FiPlay, FiEdit2, FiRotateCw, FiType, FiCheckCircle, FiVideo, FiCalendar } from "react-icons/fi";
 
 /* ---------------- Validation ---------------- */
@@ -23,8 +24,22 @@ const validationSchema = Yup.object({
     .min(15, "Minimum 15 minutes")
     .max(180, "Maximum 180 minutes")
     .required("Required"),
-  courseId: Yup.string().required("Required"),
-  batchId: Yup.string().required("Required"),
+  classType: Yup.string().oneOf(["course", "internship"]),
+  courseId: Yup.string().when('classType', {
+    is: 'course',
+    then: () => Yup.string().required("Required"),
+    otherwise: () => Yup.string().notRequired(),
+  }),
+  batchId: Yup.string().when('classType', {
+    is: 'course',
+    then: () => Yup.string().required("Required"),
+    otherwise: () => Yup.string().notRequired(),
+  }),
+  internshipDomainId: Yup.string().when('classType', {
+    is: 'internship',
+    then: () => Yup.string().required("Required"),
+    otherwise: () => Yup.string().notRequired(),
+  }),
   hostEmail: Yup.string()
     .email("Invalid email")
     .required("Host email is required"),
@@ -53,6 +68,8 @@ const LiveClassForm = ({ onSuccess, initialData, mode = "create" }) => {
   const { theme } = useTheme();
   const isDark = theme === 'dark';
   const { courses } = useCourses();
+  const { data: internshipDomainsData } = useGetAllInternshipsDomainsQuery();
+  const internshipDomains = internshipDomainsData?.data || [];
 
   const toLocalInput = (utc) => {
     const d = new Date(utc);
@@ -82,22 +99,26 @@ const LiveClassForm = ({ onSuccess, initialData, mode = "create" }) => {
   const initialValues = isEditMode
     ? {
       title: initialData.title || "",
+      classType: initialData.classType || (initialData.internshipDomain ? "internship" : "course"),
       startTime: initialData.startTime
         ? toLocalInput(initialData.startTime)
         : "",
       duration: initialData.duration || 60,
       courseId: initialData.course?._id || "",
       batchId: initialData.batch?._id || "",
+      internshipDomainId: initialData.internshipDomain?._id || "",
       hostEmail: initialData.hostEmail || "",
       recurrence: initialData.recurrence || "once",
       endDate: initialData.endDate || "",
     }
     : {
       title: "",
+      classType: "course",
       startTime: "",
       duration: 60,
       courseId: "",
       batchId: "",
+      internshipDomainId: "",
       hostEmail: "",
       recurrence: "once",
       endDate: "",
@@ -246,8 +267,22 @@ const LiveClassForm = ({ onSuccess, initialData, mode = "create" }) => {
                     </motion.div>
                   )}
 
-                  {/* Course & Batch */}
+                  <FieldSelect
+                    isDark={isDark}
+                    name="classType"
+                    label={<div className="flex items-center gap-2"><FiBookOpen className="w-4 h-4 text-primary" /> Target Audience</div>}
+                    options={[
+                      { value: "course", label: "Course Students" },
+                      { value: "internship", label: "Internship Students" },
+                    ]}
+                    errors={errors}
+                    touched={touched}
+                  />
+
+                  {/* Course / Internship Selector */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+                    {values.classType === "course" ? (
+                    <>
                     {/* Course */}
                     <div>
                       <label className={`text-sm font-semibold mb-2 flex items-center gap-2 ${
@@ -314,6 +349,35 @@ const LiveClassForm = ({ onSuccess, initialData, mode = "create" }) => {
                         <p className={`text-xs mt-1 text-rose-500`}>{errors.batchId}</p>
                       )}
                     </div>
+                    </>
+                    ) : (
+                    <div className="sm:col-span-2">
+                      <label className={`text-sm font-semibold mb-2 flex items-center gap-2 ${
+                        isDark ? 'text-gray' : 'text-midnight_text'
+                      }`}>
+                        <FiBookOpen className="w-4 h-4 text-primary" /> Internship Domain
+                      </label>
+                      <Field
+                        as="select"
+                        name="internshipDomainId"
+                        className={`w-full rounded-xl border px-3 py-2.5 text-sm focus:outline-none focus:ring-2 transition ${
+                          isDark
+                            ? 'border-dark_border bg-darklight text-white focus:border-primary focus:ring-primary/30'
+                            : 'border-border bg-light text-midnight_text focus:border-primary focus:ring-primary/20'
+                        }`}
+                      >
+                        <option value="">Select Internship</option>
+                        {internshipDomains?.map((domain) => (
+                          <option key={domain._id} value={domain._id}>
+                            {domain.name}
+                          </option>
+                        ))}
+                      </Field>
+                      {errors.internshipDomainId && touched.internshipDomainId && (
+                        <p className={`text-xs mt-1 text-rose-500`}>{errors.internshipDomainId}</p>
+                      )}
+                    </div>
+                    )}
                   </div>
 
                   <FieldInput

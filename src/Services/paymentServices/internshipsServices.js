@@ -48,6 +48,22 @@ export const internshipsApi = api.injectEndpoints({
       }),
     }),
 
+    /* ================= GET MY INTERNSHIPS ================= */
+    getMyInternships: builder.query({
+      query: () => ({
+        url: "/internship/my-internships",
+        method: "GET",
+      }),
+    }),
+
+    /* ================= GET SINGLE INTERNSHIP DETAILS ================= */
+    getMyInternshipDetails: builder.query({
+      query: (id) => ({
+        url: `/internship/my-internships/${id}`,
+        method: "GET",
+      }),
+    }),
+
   }),
 
   overrideExisting: false,
@@ -58,5 +74,6 @@ export const {
   useCreateInternshipOrderMutation,
   useVerifyInternshipPaymentMutation,
   useSaveInternshipPaymentMutation,
-  
+  useGetMyInternshipsQuery,
+  useGetMyInternshipDetailsQuery,
 } = internshipsApi;

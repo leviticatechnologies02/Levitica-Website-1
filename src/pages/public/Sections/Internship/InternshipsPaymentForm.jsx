@@ -6,7 +6,7 @@ import { FaCode, FaLaptopCode, FaCalendarAlt } from "react-icons/fa";
 import { MdEmail, MdPhone, MdSchool, MdAssignment } from "react-icons/md";
 import { HiAcademicCap, HiUser } from "react-icons/hi";
 
-const InternshipPaymentForm = ({ domains }) => {
+const InternshipPaymentForm = ({ domains, initialDomainId = '' }) => {
   const { handlePayment, isLoading } = usePayment();
 
   const domainOptions = domains.map((domain) => ({
@@ -60,7 +60,7 @@ const InternshipPaymentForm = ({ domains }) => {
       semester: '',
       rollNumber: '',
       program: '',
-      domain: '',
+      domain: initialDomainId,
       amount: 0,
       collegeName: '',
       collegeCode: ''

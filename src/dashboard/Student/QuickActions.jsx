@@ -30,8 +30,8 @@ const quickActions = [
     cardBorder: "border-purple-400 hover:border-purple-600",
   },
   {
-    title: "My Courses",
-    desc: "Access and manage all your enrolled courses",
+    title: "My Learnings",
+    desc: "Access your enrolled courses and internships",
     icon: FaBookOpen,
     action: () => navigate("/dashboard/student/mycourses"),
 

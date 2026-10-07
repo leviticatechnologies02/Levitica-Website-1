@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FiPlus, FiEdit2, FiTrash2, FiAlertCircle, FiCheckCircle, FiTrendingUp } from "react-icons/fi";
+import { FiPlus, FiEdit2, FiTrash2, FiAlertCircle, FiCheckCircle, FiTrendingUp, FiBook } from "react-icons/fi";
 import {
   useDeleteInternshipsDomainMutation,
 } from '@/Services/admin/internshipsDomainService';
@@ -246,6 +246,24 @@ const InternshipsDomainManagement = () => {
                     {/* ACTIONS */}
                     <td className="px-4 py-3">
                       <div className="flex justify-end gap-2">
+                        
+                        <button
+                          onClick={() =>
+                            openModal(
+                              MODAL_TYPES.MANAGE_INTERNSHIP_CONTENT,
+                              { domain }
+                            )
+                          }
+                          className={`p-1.5 rounded-lg transition-colors ${
+                            isDark
+                              ? 'text-primary bg-primary/10 hover:bg-primary/20'
+                              : 'text-primary bg-primary/5 hover:bg-primary/10'
+                          }`}
+                          title="Manage Content"
+                        >
+                          <FiBook className="h-4 w-4" />
+                        </button>
+
                         <button
                           onClick={() =>
                             openModal(

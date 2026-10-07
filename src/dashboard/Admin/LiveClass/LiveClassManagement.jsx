@@ -101,7 +101,8 @@ const AdminLiveClasses = () => {
       !searchTerm ||
       m.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       m.course?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      m.batch?.batchName?.toLowerCase().includes(searchTerm.toLowerCase());
+      m.batch?.batchName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      m.internshipDomain?.name?.toLowerCase().includes(searchTerm.toLowerCase());
 
     const matchStatus =
       statusFilter === "all" || m.status === statusFilter;

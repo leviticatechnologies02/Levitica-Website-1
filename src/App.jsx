@@ -51,6 +51,7 @@ import AuthRestore from '@/protectedRoutes/AuthRestore';
 import InternshipsDomainManagement from '@/dashboard/Admin/Internships/InternshipsManagement.jsx';
 import PaymentOverview from '@/dashboard/Admin/Payments/PaymentOverview.jsx';
 import StudentEnrolledCourseDetails from '@/dashboard/Student/MyCourseDetails.jsx';
+import MyInternshipDetails from '@/dashboard/Student/MyInternshipDetails.jsx';
 import PromoCodeManagement from '@/dashboard/Admin/promoCodeManagement/PromoCodeManagement.jsx';
 import MentorManagement from './dashboard/Admin/Mentor/MentorManagement';
 
@@ -128,6 +129,7 @@ const AppRouter = () => {
               <Route path="browsercourses" element={<CourseCatalog />} />
               <Route path="mycourses" element={<MyCourseList />} />
               <Route path="mycourses/:courseId" element={<StudentEnrolledCourseDetails />} />
+              <Route path="myinternships/:internshipId" element={<MyInternshipDetails />} />
               <Route path="live-session" element={<LiveClasses />} />
               <Route path="settings" element={<SettingsPage />} />
             </Route>

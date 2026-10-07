@@ -8,6 +8,7 @@ import {
   TrendingUp,
 } from "lucide-react";
 import { useGetStudentEnrolledCoursesQuery } from '@/Services/student/enrollFormServices';
+import { useGetMyInternshipsQuery } from '@/Services/paymentServices/internshipsServices';
 import { Link } from "react-router-dom";
 import { useTheme } from '@/context/ThemeContext';
 
@@ -113,10 +114,10 @@ const EnrolledCourseCard = ({ course, index }) => {
         {/* Button */}
         <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
           <Link
-            to={`${course._id}`}
+            to={course.isInternship ? `/dashboard/student/myinternships/${course._id}` : `${course._id}`}
             className="w-full flex items-center justify-center gap-2 text-sm font-semibold py-2.5 rounded-lg transition shadow-property hover:shadow-deatail_shadow btn-primary"
           >
-            Go to Course
+            Go to {course.isInternship ? "Internship" : "Course"}
             <ArrowRight size={16} />
           </Link>
         </motion.div>
@@ -148,10 +149,19 @@ const MyCourseList = () => {
 
   const {
     data: enrolledSummaryData,
-    isLoading,
+    isLoading: isCoursesLoading,
   } = useGetStudentEnrolledCoursesQuery({ type: "summary" });
 
+  const {
+    data: internshipsData,
+    isLoading: isInternshipsLoading,
+  } = useGetMyInternshipsQuery();
+
   const enrolledCourses = enrolledSummaryData?.data || [];
+  const internships = internshipsData?.data || [];
+  
+  const allLearnings = [...enrolledCourses, ...internships];
+  const isLoading = isCoursesLoading || isInternshipsLoading;
 
   return (
     <div className={`min-h-screen py-6 px-4 space-y-6 sm:space-y-8 `}>
@@ -172,7 +182,7 @@ const MyCourseList = () => {
             </h1>
 
             <p className="text-sm sm:text-base text-gray">
-              Access all your enrolled courses
+              Access all your enrolled courses and internships
             </p>
           </div>
 
@@ -190,14 +200,14 @@ const MyCourseList = () => {
       )}
 
       {/* Empty */}
-      {!isLoading && enrolledCourses.length === 0 && (
+      {!isLoading && allLearnings.length === 0 && (
         <div className="flex flex-col items-center mt-16">
           <div className="w-16 h-16 rounded-full flex items-center justify-center bg-light dark:bg-darklight">
             <BookOpen size={28} className="text-primary" />
           </div>
 
           <h3 className="mt-4 font-semibold text-lg text-midnight_text dark:text-white">
-            No courses enrolled yet
+            No courses or internships enrolled yet
           </h3>
 
           <p className="text-sm mt-1 text-gray">
@@ -207,8 +217,8 @@ const MyCourseList = () => {
       )}
 
       {/* Grid */}
-      {!isLoading && enrolledCourses.length > 0 && (
-        <EnrolledCoursesGrid courses={enrolledCourses} />
+      {!isLoading && allLearnings.length > 0 && (
+        <EnrolledCoursesGrid courses={allLearnings} />
       )}
 
     </div>

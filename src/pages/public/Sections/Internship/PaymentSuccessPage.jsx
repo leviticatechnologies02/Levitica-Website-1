@@ -39,7 +39,7 @@ const PaymentSuccess = () => {
       const signature = params.get("signature");
       if (!orderId || !paymentId) {
         setIsValidAccess(false);
-        setTimeout(() => navigate("/"), 2000);
+        setTimeout(() => navigate("/login"), 2000);
         return;
       }
 
@@ -52,6 +52,9 @@ const PaymentSuccess = () => {
         }).unwrap();
 
         if (!res.success) throw new Error("Verification failed");
+        
+        // Safeguard: Ensure student data exists so React doesn't crash
+        if (!res.student) throw new Error("Verification successful but missing student data payload");
 
         setPaymentData({
           paymentId: res.paymentId,
@@ -70,7 +73,7 @@ const PaymentSuccess = () => {
 
         console.error("Payment verification failed", error);
         setIsValidAccess(false);
-        setTimeout(() => navigate("/"), 8000);
+        setTimeout(() => navigate("/login"), 8000);
 
       }
 
@@ -88,12 +91,12 @@ const PaymentSuccess = () => {
     const timer = setInterval(() => {
       setCountdown((c) => {
         if (c <= 1) {
-          navigate("/");
+          navigate("/login");
           return 0;
         }
         return c - 1;
       });
-    }, 6000);
+    }, 1000);
 
     return () => clearInterval(timer);
   }, [navigate, isValidAccess]);
@@ -256,9 +259,12 @@ const PaymentSuccess = () => {
           Payment Successful 🎉
         </h1>
 
-        <p className="text-gray-600 mb-6">
+        <p className="text-gray-600 mb-2">
           Your internship registration is confirmed.
         </p>
+        <div className="bg-blue-50 border border-blue-100 text-blue-800 p-3 rounded-lg text-sm mb-6">
+          <strong>Next Step:</strong> We've sent your login credentials to your email. Please check your inbox (and spam) to access your Student Dashboard.
+        </div>
 
         {/* Payment Details */}
 
@@ -286,11 +292,11 @@ const PaymentSuccess = () => {
           </button>
 
           <button
-            onClick={() => navigate("/internships")}
+            onClick={() => navigate("/login")}
             className="bg-blue-600 text-white px-6 py-3 rounded-lg flex items-center justify-center gap-2 hover:bg-blue-700"
           >
-            <FaHome />
-            Back to Internships
+            <FaUser />
+            Go to Login
           </button>
 
         </div>
@@ -298,7 +304,7 @@ const PaymentSuccess = () => {
         {/* Countdown */}
 
         <p className="text-sm text-gray-500 mt-6">
-          Redirecting to homepage in {countdown}s
+          Redirecting to login page in {countdown}s
         </p>
 
       </div>

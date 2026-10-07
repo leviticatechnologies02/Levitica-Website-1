@@ -5,6 +5,7 @@ import CourseModal from '@/dashboard/Admin/CourseManagement/CoursesModal';
 import BatchModal from '@/dashboard/Admin/Batchs/BatchModal';
 import CourseDetailsModal from '@/dashboard/Admin/CourseManagement/CoursesDetailsModal';
 import InternshipsDomainModal from '@/dashboard/Admin/Internships/InternshipsDomainModal';
+import ManageInternshipContentModal from '@/dashboard/Admin/Internships/ManageInternshipContentModal';
 import BatchStudentsModal from '@/dashboard/Admin/Batchs/BatchStudentsModal';
 import StudentDetailsModal from '@/dashboard/Student/StudentDetailsModal';
 import PromoModal from '@/dashboard/Admin/promoCodeManagement/promocodeForm';
@@ -24,6 +25,7 @@ export const MODAL_TYPES = {
   EDIT_COURSE_DETAILS: "EDIT_COURSE_DETAILS",
   ADD_INTERNSHIP_DOMAIN: "ADD_INTERNSHIPS_DOMAIN",
   EDIT_INTERNSHIP_DOMAIN: "EDIT_INTERNSHIP_DOMAIN",
+  MANAGE_INTERNSHIP_CONTENT: "MANAGE_INTERNSHIP_CONTENT",
   VIEW_BATCH_STUDENTS: "VIEW_BATCH_STUDENTS",
   VIEW_STUDENT_DETAILS: "VIEW_STUDENT_DETAILS",
   ADD_PROMO: "ADD_PROMO",
@@ -156,6 +158,14 @@ export const ModalProvider = ({ children }) => {
                 <InternshipsDomainModal
                   handleClose={closeModal}
                   mode="edit"
+                  domain={modalProps.domain}
+                />
+              )}
+
+              
+              {modalType === MODAL_TYPES.MANAGE_INTERNSHIP_CONTENT && (
+                <ManageInternshipContentModal
+                  handleClose={closeModal}
                   domain={modalProps.domain}
                 />
               )}

@@ -8,6 +8,7 @@ import { dummyInternshipDomains } from "./dummyDomains";
 
 const Internships = () => {
   const [showPaymentForm, setShowPaymentForm] = useState(false);
+  const [selectedDomainId, setSelectedDomainId] = useState("");
   const { data, isLoading, isError } =
     useGetAllInternshipsDomainsQuery({ isActive: true });
 
@@ -49,52 +50,41 @@ const Internships = () => {
         className="min-h-screen relative "
 
       >
-        {/* ================= Desktop Layout ================= */}
-        <div className="flex min-h-screen">
-          {/* Left: Details */}
-          <div className="w-full lg:max-w-5xl bg-white md:mx-auto lg:mx-1">
+        {/* ================= Main Layout ================= */}
+        <div className="w-full max-w-7xl mx-auto bg-white flex min-h-screen justify-center">
+          <div className="w-full lg:px-8">
             <DetailsContent
               domains={domains}
               isLoading={isLoading && !hasData}
               isError={isError && !hasData}
               showPaymentForm={showPaymentForm}
               setShowPaymentForm={setShowPaymentForm}
+              onInternshipClick={(id) => {
+                setSelectedDomainId(id);
+                setShowPaymentForm(true);
+              }}
             />
-
           </div>
-
-          {/* Right: Payment Form (Desktop only) */}
-          <aside className="hidden lg:flex lg:w-2/5  lg:bg-gradient-to-r from-[#162e66] to-[#162e66] lg:p-8 lg:relative">
-            <div className="absolute top-32 right-28  w-full">
-              <div className="max-w-lg mx-auto">
-                <InternshipPaymentForm
-                  domains={domains}
-                  isLoading={isLoading && !hasData}
-                />
-
-              </div>
-            </div>
-          </aside>
         </div>
 
-        {/* ================= Mobile Payment Drawer ================= */}
+        {/* ================= Payment Modal ================= */}
         {showPaymentForm && (
           <div
-            className="fixed inset-0 z-50 lg:hidden"
+            className="fixed inset-0 z-50 flex items-end md:items-center justify-center"
             aria-modal="true"
             role="dialog"
           >
             {/* Backdrop */}
             <div
-              className="absolute inset-0 bg-black/50"
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
               onClick={() => setShowPaymentForm(false)}
             />
 
-            {/* Bottom Sheet */}
-            <div className="absolute bottom-0 left-0 right-0 bg-white rounded-t-3xl max-h-[90vh] flex flex-col animate-slide-up">
+            {/* Modal Content */}
+            <div className="relative w-full md:w-auto md:min-w-[500px] bg-white rounded-t-3xl md:rounded-2xl max-h-[90vh] flex flex-col animate-slide-up md:animate-none md:shadow-2xl">
               {/* Header */}
-              <div className="flex items-center justify-between p-5 border-b">
-
+              <div className="flex items-center justify-between p-4 border-b">
+                <h3 className="font-bold text-lg text-gray-800">Complete Payment</h3>
                 <button
                   onClick={() => setShowPaymentForm(false)}
                   className="p-2 rounded-full hover:bg-gray-100 transition"
@@ -105,13 +95,13 @@ const Internships = () => {
               </div>
 
               {/* Content */}
-              <div className="flex-1 overflow-y-auto p-4">
+              <div className="flex-1 overflow-y-auto p-4 md:p-6">
                 <div className="max-w-lg mx-auto">
                   <InternshipPaymentForm
                     domains={domains}
                     isLoading={isLoading && !hasData}
+                    initialDomainId={selectedDomainId}
                   />
-
                 </div>
               </div>
             </div>
