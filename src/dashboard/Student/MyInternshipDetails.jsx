@@ -154,7 +154,7 @@ const MyInternshipDetails = () => {
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto shrink-0">
+          <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto shrink-0 self-end">
             <div className="p-3 sm:p-4 rounded-xl flex items-center gap-3 min-w-[140px] bg-white/10 backdrop-blur-md border border-white/10 shadow-lg">
               <div className="w-10 h-10 rounded-lg bg-emerald-500/20 flex items-center justify-center text-emerald-400 shrink-0">
                 <FaCheckCircle size={18} />
