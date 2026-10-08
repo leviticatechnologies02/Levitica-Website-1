@@ -70,27 +70,46 @@ const LiveClasses = () => {
 
   const shouldShowJoinButton = (startTime, duration) => {
     const classTime = new Date(startTime);
-    const nowMinutes =
-      currentTime.getHours() * 60 + currentTime.getMinutes();
-    const startMinutes =
-      classTime.getHours() * 60 + classTime.getMinutes();
+    const now = currentTime;
+    
+    // Must be exactly the same day
+    if (classTime.getFullYear() !== now.getFullYear() ||
+        classTime.getMonth() !== now.getMonth() ||
+        classTime.getDate() !== now.getDate()) {
+      return false;
+    }
+
+    const nowMinutes = now.getHours() * 60 + now.getMinutes();
+    const startMinutes = classTime.getHours() * 60 + classTime.getMinutes();
     const endMinutes = startMinutes + duration;
 
     return nowMinutes >= startMinutes && nowMinutes <= endMinutes;
   };
 
-  const isUpcomingToday = startTime => {
-    const classTime = new Date(startTime);
-    const nowMinutes =
-      currentTime.getHours() * 60 + currentTime.getMinutes();
-    const startMinutes =
-      classTime.getHours() * 60 + classTime.getMinutes();
-    return nowMinutes < startMinutes;
-  };
-
   const getDailyStatus = (startTime, duration) => {
+    const classTime = new Date(startTime);
+    const now = currentTime;
+    
+    // Check if the class date is in the past
+    const isPastDate = classTime.getFullYear() < now.getFullYear() ||
+      (classTime.getFullYear() === now.getFullYear() && classTime.getMonth() < now.getMonth()) ||
+      (classTime.getFullYear() === now.getFullYear() && classTime.getMonth() === now.getMonth() && classTime.getDate() < now.getDate());
+
+    // Check if the class date is in the future
+    const isFutureDate = classTime.getFullYear() > now.getFullYear() ||
+      (classTime.getFullYear() === now.getFullYear() && classTime.getMonth() > now.getMonth()) ||
+      (classTime.getFullYear() === now.getFullYear() && classTime.getMonth() === now.getMonth() && classTime.getDate() > now.getDate());
+
+    if (isPastDate) return 'completed';
+    if (isFutureDate) return 'upcoming';
+
+    // If it's today, rely on our accurate time-based logic
     if (shouldShowJoinButton(startTime, duration)) return 'live';
-    if (isUpcomingToday(startTime)) return 'upcoming';
+    
+    const nowMinutes = now.getHours() * 60 + now.getMinutes();
+    const startMinutes = classTime.getHours() * 60 + classTime.getMinutes();
+    
+    if (nowMinutes < startMinutes) return 'upcoming';
     return 'completed';
   };
 
