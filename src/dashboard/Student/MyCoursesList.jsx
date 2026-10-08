@@ -29,30 +29,32 @@ const EnrolledCourseCard = ({ course, index }) => {
         }`}
     >
       {/* Thumbnail */}
-      <div className={`h-48 overflow-hidden relative ${isDark ? 'bg-darklight' : 'bg-light'
-        }`}>
-        {course.thumbnail ? (
-          <img
-            src={course.thumbnail}
-            alt={course.courseName}
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-          />
-        ) : (
-          <div className="flex items-center justify-center h-full text-gray">
-            <BookOpen size={40} />
-          </div>
-        )}
+      {!course.isInternship && (
+        <div className={`h-48 overflow-hidden relative ${isDark ? 'bg-darklight' : 'bg-light'
+          }`}>
+          {course.thumbnail ? (
+            <img
+              src={course.thumbnail}
+              alt={course.courseName}
+              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+            />
+          ) : (
+            <div className="flex items-center justify-center h-full text-gray">
+              <BookOpen size={40} />
+            </div>
+          )}
 
-        {/* Completed Badge */}
-        {course.completed && (
-          <div className="absolute top-3 right-3">
-            <span className="flex items-center gap-1 bg-primary text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-property">
-              <CheckCircle size={14} className="fill-current" />
-              Completed
-            </span>
-          </div>
-        )}
-      </div>
+          {/* Completed Badge */}
+          {course.completed && (
+            <div className="absolute top-3 right-3">
+              <span className="flex items-center gap-1 bg-primary text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-property">
+                <CheckCircle size={14} className="fill-current" />
+                Completed
+              </span>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Content */}
       <div className="p-4 sm:p-5 flex-1 flex flex-col">
@@ -128,7 +130,7 @@ const EnrolledCourseCard = ({ course, index }) => {
 /* ================= GRID ================= */
 const EnrolledCoursesGrid = ({ courses }) => {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
       {courses.map((course, index) => (
         <EnrolledCourseCard
           key={index}
