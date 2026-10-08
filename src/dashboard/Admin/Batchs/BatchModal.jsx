@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { motion, AnimatePresence } from "framer-motion";
@@ -9,6 +9,7 @@ import {
   FiCheckCircle,
 } from "react-icons/fi";
 import { useGetCoursesQuery } from '@/Services/sharedServices/courses.Services';
+import { useGetAllInternshipsDomainsQuery } from '@/Services/paymentServices/internshipsServices';
 import toast from "react-hot-toast";
 
 const BatchModal = ({ handleClose, mode = "add", batch = {} }) => {
@@ -24,21 +25,27 @@ const BatchModal = ({ handleClose, mode = "add", batch = {} }) => {
   } = useBatchHandlers();
 
   const { data: courses } = useGetCoursesQuery();
+  const { data: internshipsResp } = useGetAllInternshipsDomainsQuery({all: true});
+  const internships = internshipsResp?.data || [];
 
   /* ================= INITIAL VALUES ================= */
   const initialValues = isEdit
     ? {
+      type: batch.internshipDomainId ? "internship" : "course",
       batchId: batch._id,
       batchName: batch.batchName || "",
       courseId: batch.courseId?._id || "",
+      internshipDomainId: batch.internshipDomainId?._id || "",
       startDate: batch.startDate?.slice(0, 10) || "",
       endDate: batch.endDate?.slice(0, 10) || "",
       status: batch.status || "active",
       completedAt: batch.completedAt?.slice(0, 10) || "",
     }
     : {
+      type: "course",
       batchName: "",
       courseId: "",
+      internshipDomainId: "",
       startDate: "",
       endDate: "",
       status: "active",
@@ -47,8 +54,18 @@ const BatchModal = ({ handleClose, mode = "add", batch = {} }) => {
 
   /* ================= VALIDATION ================= */
   const validationSchema = Yup.object({
+    type: Yup.string().required(),
     batchName: Yup.string().required("Batch name is required"),
-    courseId: Yup.string().required("Course is required"),
+    courseId: Yup.string().when('type', {
+      is: 'course',
+      then: (schema) => schema.required("Course is required"),
+      otherwise: (schema) => schema.nullable(),
+    }),
+    internshipDomainId: Yup.string().when('type', {
+      is: 'internship',
+      then: (schema) => schema.required("Internship is required"),
+      otherwise: (schema) => schema.nullable(),
+    }),
     startDate: Yup.date().required("Start date is required"),
     endDate: Yup.date()
       .min(Yup.ref("startDate"), "End date must be after start date")
@@ -67,10 +84,19 @@ const BatchModal = ({ handleClose, mode = "add", batch = {} }) => {
   /* ================= SUBMIT ================= */
   const onSubmit = async (values, { resetForm }) => {
     try {
-      if (isEdit) {
-        await handleUpdateBatchSubmit(values);
+      const payload = { ...values };
+      if (payload.type === 'course') {
+        payload.internshipDomainId = null;
       } else {
-        await handleAddBatchSubmit(values);
+        payload.courseId = null;
+      }
+      delete payload.type;
+
+      if (isEdit) {
+        payload.batchId = batch._id;
+        await handleUpdateBatchSubmit(payload);
+      } else {
+        await handleAddBatchSubmit(payload);
         resetForm();
       }
       handleClose();
@@ -148,6 +174,18 @@ const BatchModal = ({ handleClose, mode = "add", batch = {} }) => {
             >
               {({ values, setFieldValue }) => (
                 <Form className="space-y-3 sm:space-y-3.5">
+                  {/* Type Toggle */}
+                  <div className="flex gap-4">
+                    <label className={`flex items-center gap-2 text-sm ${isDark ? 'text-light' : 'text-midnight_text'}`}>
+                      <Field type="radio" name="type" value="course" />
+                      Course
+                    </label>
+                    <label className={`flex items-center gap-2 text-sm ${isDark ? 'text-light' : 'text-midnight_text'}`}>
+                      <Field type="radio" name="type" value="internship" />
+                      Internship
+                    </label>
+                  </div>
+
                   {/* Batch Name */}
                   <div>
                     <label className={`block text-xs font-medium mb-1 transition-colors duration-150 ${
@@ -168,35 +206,66 @@ const BatchModal = ({ handleClose, mode = "add", batch = {} }) => {
                     <ErrorMessage name="batchName" component="p" className={`mt-1 text-xs transition-colors duration-150 ${isDark ? 'text-rose-500' : 'text-rose-600'}`} />
                   </div>
 
-                  {/* Course */}
-                  <div>
-                    <label className={`block text-xs font-medium mb-1 transition-colors duration-150 ${
-                      isDark
-                        ? 'text-light'
-                        : 'text-midnight_text'
-                    }`}>
-                      Course
-                    </label>
-                    <div className="relative">
-                      <Field 
-                        as="select" 
-                        name="courseId" 
-                        className={`w-full px-3 py-1.5 rounded-lg border text-sm transition-all duration-150 focus:outline-none focus:ring-2 ${
-                          isDark
-                            ? 'bg-semidark border-dark_border text-light focus:border-primary focus:ring-primary/30'
-                            : 'bg-white border-border text-midnight_text focus:border-primary focus:ring-primary/20'
-                        }`}
-                      >
-                        <option value="">Select course</option>
-                        {courses?.map((c) => (
-                          <option key={c._id} value={c._id}>
-                            {c.name}
-                          </option>
-                        ))}
-                      </Field>
+                  {/* Target (Course or Internship) */}
+                  {values.type === 'course' ? (
+                    <div>
+                      <label className={`block text-xs font-medium mb-1 transition-colors duration-150 ${
+                        isDark
+                          ? 'text-light'
+                          : 'text-midnight_text'
+                      }`}>
+                        Course
+                      </label>
+                      <div className="relative">
+                        <Field 
+                          as="select" 
+                          name="courseId" 
+                          className={`w-full px-3 py-1.5 rounded-lg border text-sm transition-all duration-150 focus:outline-none focus:ring-2 ${
+                            isDark
+                              ? 'bg-semidark border-dark_border text-light focus:border-primary focus:ring-primary/30'
+                              : 'bg-white border-border text-midnight_text focus:border-primary focus:ring-primary/20'
+                          }`}
+                        >
+                          <option value="">Select course</option>
+                          {courses?.map((c) => (
+                            <option key={c._id} value={c._id}>
+                              {c.name}
+                            </option>
+                          ))}
+                        </Field>
+                      </div>
+                      <ErrorMessage name="courseId" component="p" className={`mt-1 text-xs transition-colors duration-150 ${isDark ? 'text-rose-500' : 'text-rose-600'}`} />
                     </div>
-                    <ErrorMessage name="courseId" component="p" className={`mt-1 text-xs transition-colors duration-150 ${isDark ? 'text-rose-500' : 'text-rose-600'}`} />
-                  </div>
+                  ) : (
+                    <div>
+                      <label className={`block text-xs font-medium mb-1 transition-colors duration-150 ${
+                        isDark
+                          ? 'text-light'
+                          : 'text-midnight_text'
+                      }`}>
+                        Internship
+                      </label>
+                      <div className="relative">
+                        <Field 
+                          as="select" 
+                          name="internshipDomainId" 
+                          className={`w-full px-3 py-1.5 rounded-lg border text-sm transition-all duration-150 focus:outline-none focus:ring-2 ${
+                            isDark
+                              ? 'bg-semidark border-dark_border text-light focus:border-primary focus:ring-primary/30'
+                              : 'bg-white border-border text-midnight_text focus:border-primary focus:ring-primary/20'
+                          }`}
+                        >
+                          <option value="">Select internship</option>
+                          {internships.map((i) => (
+                            <option key={i._id} value={i._id}>
+                              {i.name}
+                            </option>
+                          ))}
+                        </Field>
+                      </div>
+                      <ErrorMessage name="internshipDomainId" component="p" className={`mt-1 text-xs transition-colors duration-150 ${isDark ? 'text-rose-500' : 'text-rose-600'}`} />
+                    </div>
+                  )}
 
                   {/* Dates */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">

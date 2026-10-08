@@ -10,55 +10,93 @@ import { useTheme } from '@/context/ThemeContext';
 import {
   useAssignStudentsToBatchMutation,
   useLazyGetUnassignedEnrollmentsQuery,
+  useLazyGetUnassignedInternshipsQuery,
+  useAssignStudentsToInternshipBatchMutation,
 } from '@/Services/admin/assignService';
 
 import { useCourses } from '@/hooks/useCourses';
-import { useGetBatchesByCourseQuery, } from '@/Services/admin/batchdetailsService';
+import { useGetBatchesByCourseQuery, useGetBatchesByInternshipQuery } from '@/Services/admin/batchdetailsService';
+import { useGetAllInternshipsDomainsQuery } from '@/Services/paymentServices/internshipsServices';
 
 import {
   flattenEnrollments,
+  flattenInternshipEnrollments,
   transformAssignmentPayload,
+  transformInternshipAssignmentPayload
 } from '@/utils/formatchange';
 
 const UnassignedStudents = () => {
   const { theme } = useTheme();
   const isDark = theme === 'dark';
+  const [type, setType] = useState('course'); // 'course' | 'internship'
+
   const { courses = [], isLoading: isCoursesLoading } = useCourses();
+  
+  const { data: internshipDomainsResp, isLoading: isInternshipsLoading } = useGetAllInternshipsDomainsQuery({all: true});
+  const internships = internshipDomainsResp?.data || [];
+
   const [selectedCourseId, setSelectedCourseId] = useState("");
 
   const {
     data: courseBatches,
   } = useGetBatchesByCourseQuery(selectedCourseId, {
-    skip: !selectedCourseId,
+    skip: type !== 'course' || !selectedCourseId,
   });
 
-  const [assignStudents, { isLoading: isAssigning }] =
+  const {
+    data: internshipBatches,
+  } = useGetBatchesByInternshipQuery(selectedCourseId, {
+    skip: type !== 'internship' || !selectedCourseId,
+  });
+
+  const [assignStudents, { isLoading: isAssigningCourse }] =
     useAssignStudentsToBatchMutation();
+  const [assignInternships, { isLoading: isAssigningInternship }] =
+    useAssignStudentsToInternshipBatchMutation();
+
+  const isAssigning = type === 'course' ? isAssigningCourse : isAssigningInternship;
 
   const [
-    fetchUnassigned,
+    fetchUnassignedCourses,
     {
-      data: unassignedData,
-      isLoading: isUnassignedLoading,
-      isError,
-      error,
-      isSuccess,
+      data: unassignedCourseData,
+      isLoading: isUnassignedCourseLoading,
+      isError: isCourseError,
+      error: courseError,
+      isSuccess: isCourseSuccess,
     },
   ] = useLazyGetUnassignedEnrollmentsQuery();
 
+  const [
+    fetchUnassignedInternships,
+    {
+      data: unassignedInternshipData,
+      isLoading: isUnassignedInternshipLoading,
+      isError: isInternshipError,
+      error: internshipError,
+      isSuccess: isInternshipSuccess,
+    },
+  ] = useLazyGetUnassignedInternshipsQuery();
+
   useEffect(() => {
-    fetchUnassigned();
-  }, [fetchUnassigned]);
+    if (type === 'course') {
+      fetchUnassignedCourses();
+    } else {
+      fetchUnassignedInternships();
+    }
+  }, [type, fetchUnassignedCourses, fetchUnassignedInternships]);
 
-  const results = flattenEnrollments(unassignedData?.enrollments || []);
+  const results = type === 'course' 
+    ? flattenEnrollments(unassignedCourseData?.enrollments || [])
+    : flattenInternshipEnrollments(unassignedInternshipData?.internships || unassignedInternshipData?.enrollments || unassignedInternshipData?.data || []);
 
-  const availableCourses = courses.map((c) => ({
-    title: c.name,
-    _id: c._id,
-  }));
+  const availableItems = type === 'course'
+    ? courses.map((c) => ({ title: c.name, _id: c._id }))
+    : internships.map((i) => ({ title: i.name, _id: i._id }));
 
+  const currentBatches = type === 'course' ? courseBatches : internshipBatches;
   const availableBatches = selectedCourseId
-    ? courseBatches?.data?.map((b) => ({
+    ? currentBatches?.data?.map((b) => ({
       title: b.batchName,
       _id: b._id,
     })) || []
@@ -66,21 +104,31 @@ const UnassignedStudents = () => {
 
   const handleAssign = async (payload) => {
     try {
-      const formatted = transformAssignmentPayload(payload);
-      await assignStudents(formatted).unwrap();
+      if (type === 'course') {
+        const formatted = transformAssignmentPayload(payload);
+        await assignStudents(formatted).unwrap();
+        fetchUnassignedCourses();
+      } else {
+        const formatted = transformInternshipAssignmentPayload(payload);
+        await assignInternships(formatted).unwrap();
+        fetchUnassignedInternships();
+      }
       toast.success("Students assigned successfully");
-      fetchUnassigned();
     } catch (err) {
       toast.error("Failed to assign students");
     }
   };
 
-  if (isUnassignedLoading || isCoursesLoading) {
-    return <Loader message="Loading unassigned students..." />;
-  }
+  const isLoading = type === 'course' ? (isUnassignedCourseLoading || isCoursesLoading) : (isUnassignedInternshipLoading || isInternshipsLoading);
+  const isError = type === 'course' ? isCourseError : isInternshipError;
+  const error = type === 'course' ? courseError : internshipError;
+  const isSuccess = type === 'course' ? isCourseSuccess : isInternshipSuccess;
 
-  if (isError) {
-    return (
+
+  const renderContent = () => {
+    if (isLoading) return <Loader message="Loading unassigned students..." />;
+    
+    if (isError) return (
       <div className={`rounded-xl p-10 text-center border ${
         isDark
           ? 'bg-rose-500/10 border-rose-500/20'
@@ -109,10 +157,8 @@ const UnassignedStudents = () => {
         </button>
       </div>
     );
-  }
 
-  if (isSuccess && results.length === 0) {
-    return (
+    if (isSuccess && results.length === 0) return (
       <div className={`rounded-xl p-12 text-center border ${
         isDark
           ? 'bg-emerald-500/10 border-emerald-500/20'
@@ -135,10 +181,153 @@ const UnassignedStudents = () => {
         </p>
       </div>
     );
-  }
+
+    return (
+      <>
+        {/* ================= HEADER ================= */}
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <h2 className={`text-xl md:text-2xl font-bold flex items-center gap-2 ${
+              isDark ? 'text-white' : 'text-midnight_text'
+            }`}>
+              <FiUsers className="text-primary" />
+              Unassigned Students
+            </h2>
+            <p className={`text-sm mt-1 ${isDark ? 'text-gray' : 'text-gray'}`}>
+              Students pending batch assignment
+            </p>
+          </div>
+        </div>
+
+        {/* ================= ACTIONS ================= */}
+        <div className={`rounded-xl p-4 sm:p-5 flex flex-col md:flex-row gap-4 border ${
+          isDark ? 'bg-semidark border-dark_border' : 'bg-white border-border'
+        }`}>
+          {type === 'course' ? (
+            <div className="flex-1">
+              <label className={`block text-sm font-semibold mb-2 ${isDark ? 'text-white' : 'text-midnight_text'}`}>
+                Select Course to View Students
+              </label>
+              <select
+                value={selectedCourseId}
+                onChange={(e) => setSelectedCourseId(e.target.value)}
+                className={`w-full max-w-md px-4 py-2.5 rounded-lg border focus:ring-2 focus:ring-primary/20 outline-none transition ${
+                  isDark 
+                    ? 'bg-darklight border-dark_border text-white' 
+                    : 'bg-light border-border text-midnight_text'
+                }`}
+              >
+                <option value="">-- All Unassigned Courses --</option>
+                {availableItems.map(c => (
+                  <option key={c._id} value={c._id}>{c.name || c.domainName || c.title}</option>
+                ))}
+              </select>
+            </div>
+          ) : (
+            <div className="flex-1">
+              <label className={`block text-sm font-semibold mb-2 ${isDark ? 'text-white' : 'text-midnight_text'}`}>
+                Select Internship to View Students
+              </label>
+              <select
+                value={selectedCourseId}
+                onChange={(e) => setSelectedCourseId(e.target.value)}
+                className={`w-full max-w-md px-4 py-2.5 rounded-lg border focus:ring-2 focus:ring-primary/20 outline-none transition ${
+                  isDark 
+                    ? 'bg-darklight border-dark_border text-white' 
+                    : 'bg-light border-border text-midnight_text'
+                }`}
+              >
+                <option value="">-- All Unassigned Internships --</option>
+                {availableItems.map(c => (
+                  <option key={c._id} value={c._id}>{c.name || c.domainName || c.title}</option>
+                ))}
+              </select>
+            </div>
+          )}
+
+          <div className="flex flex-col md:flex-row items-stretch md:items-end gap-3 min-w-[300px]">
+            <div className="flex-1">
+              <label className={`block text-sm font-semibold mb-2 ${isDark ? 'text-white' : 'text-midnight_text'}`}>
+                Assign Selected To Batch
+              </label>
+              <select
+                value={selectedBatchId}
+                onChange={(e) => setSelectedBatchId(e.target.value)}
+                className={`w-full px-4 py-2.5 rounded-lg border focus:ring-2 focus:ring-primary/20 outline-none transition ${
+                  isDark 
+                    ? 'bg-darklight border-dark_border text-white' 
+                    : 'bg-light border-border text-midnight_text'
+                }`}
+                disabled={selectedRows.length === 0 || !selectedCourseId}
+              >
+                <option value="">Select Target Batch</option>
+                {type === 'course' 
+                  ? batchesData?.batches?.map(b => (
+                      <option key={b._id} value={b._id}>{b.batchName}</option>
+                    ))
+                  : internshipBatchesData?.batches?.map(b => (
+                      <option key={b._id} value={b._id}>{b.batchName}</option>
+                    ))
+                }
+              </select>
+            </div>
+            <button
+              onClick={handleAssign}
+              disabled={selectedRows.length === 0 || !selectedBatchId || isAssigning || isAssigningInterns}
+              className={`px-6 py-2.5 rounded-lg font-semibold transition whitespace-nowrap ${
+                selectedRows.length > 0 && selectedBatchId
+                  ? 'bg-primary text-white hover:bg-skyBlue shadow-md hover:shadow-lg'
+                  : isDark 
+                    ? 'bg-darklight text-gray cursor-not-allowed'
+                    : 'bg-light text-gray cursor-not-allowed'
+              }`}
+            >
+              {isAssigning || isAssigningInterns ? "Assigning..." : `Assign (${selectedRows.length})`}
+            </button>
+          </div>
+        </div>
+
+        {/* ================= TABLE ================= */}
+        <div className={`rounded-xl border overflow-hidden ${
+          isDark ? 'bg-semidark border-dark_border' : 'bg-white border-border'
+        }`}>
+          <GenericTable
+            data={filteredResults}
+            columns={columns}
+            loading={isLoading}
+          />
+        </div>
+      </>
+    );
+  };
+
 
   return (
     <div className="space-y-6">
+      {/* ================= TYPE TOGGLE ================= */}
+      <div className="flex gap-2">
+        <button
+          onClick={() => { setType('course'); setSelectedCourseId(''); }}
+          className={`px-4 py-2 rounded-lg font-semibold transition ${
+            type === 'course' 
+              ? 'bg-primary text-white shadow-md' 
+              : isDark ? 'bg-darklight text-gray hover:text-white' : 'bg-light text-gray hover:text-midnight_text'
+          }`}
+        >
+          Courses
+        </button>
+        <button
+          onClick={() => { setType('internship'); setSelectedCourseId(''); }}
+          className={`px-4 py-2 rounded-lg font-semibold transition ${
+            type === 'internship' 
+              ? 'bg-primary text-white shadow-md' 
+              : isDark ? 'bg-darklight text-gray hover:text-white' : 'bg-light text-gray hover:text-midnight_text'
+          }`}
+        >
+          Internships
+        </button>
+      </div>
+
       {/* ================= HEADER ================= */}
       <div>
         <h2 className={`text-2xl font-bold ${
@@ -177,7 +366,7 @@ const UnassignedStudents = () => {
         <div className="p-4">
           <GenericTable
             data={results}
-            availableCourses={availableCourses}
+            availableCourses={availableItems}
             availableBatches={availableBatches}
             showAssignControls
             isAssignedView={false}

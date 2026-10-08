@@ -8,16 +8,6 @@ const ChatBot = ({ userId }) => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
 
-  // Floating icon position — clamped to viewport
-  const [iconPosition, setIconPosition] = useState({
-    x: window.innerWidth - 80,
-    y: window.innerHeight - 80,
-  });
-
-  const isDragging = useRef(false);
-  const hasDragged = useRef(false);
-  const dragOffset = useRef({ x: 0, y: 0 });
-
   const [sendMessage, { isLoading }] = useSendMessageMutation();
   const bottomRef = useRef(null);
   const inputRef = useRef(null);
@@ -31,84 +21,6 @@ const ChatBot = ({ userId }) => {
   useEffect(() => {
     if (isOpen) inputRef.current?.focus();
   }, [isOpen]);
-
-  // Keep icon inside viewport on resize
-  useEffect(() => {
-    const handleResize = () => {
-      setIconPosition((prev) => ({
-        x: Math.min(prev.x, window.innerWidth - 64),
-        y: Math.min(prev.y, window.innerHeight - 64),
-      }));
-    };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  // ── Clamp helper ──────────────────────────────────────
-  const clampIcon = (x, y) => ({
-    x: Math.max(0, Math.min(x, window.innerWidth - 64)),
-    y: Math.max(0, Math.min(y, window.innerHeight - 64)),
-  });
-
-  // ── Mouse drag ────────────────────────────────────────
-  const handleMouseDown = (e) => {
-    e.preventDefault();
-    isDragging.current = true;
-    hasDragged.current = false;
-    dragOffset.current = {
-      x: e.clientX - iconPosition.x,
-      y: e.clientY - iconPosition.y,
-    };
-
-    const onMove = (e) => {
-      if (!isDragging.current) return;
-      hasDragged.current = true;
-      setIconPosition(
-        clampIcon(
-          e.clientX - dragOffset.current.x,
-          e.clientY - dragOffset.current.y
-        )
-      );
-    };
-
-    const onUp = () => {
-      isDragging.current = false;
-      document.removeEventListener("mousemove", onMove);
-      document.removeEventListener("mouseup", onUp);
-    };
-
-    document.addEventListener("mousemove", onMove);
-    document.addEventListener("mouseup", onUp);
-  };
-
-  // ── Touch drag ────────────────────────────────────────
-  const handleTouchStart = (e) => {
-    const touch = e.touches[0];
-    isDragging.current = true;
-    hasDragged.current = false;
-    dragOffset.current = {
-      x: touch.clientX - iconPosition.x,
-      y: touch.clientY - iconPosition.y,
-    };
-  };
-
-  const handleTouchMove = (e) => {
-    if (!isDragging.current) return;
-    hasDragged.current = true;
-    const touch = e.touches[0];
-    setIconPosition(
-      clampIcon(
-        touch.clientX - dragOffset.current.x,
-        touch.clientY - dragOffset.current.y
-      )
-    );
-  };
-
-  const handleTouchEnd = () => {
-    isDragging.current = false;
-    // Only open if it was a tap, not a drag
-    if (!hasDragged.current) setIsOpen(true);
-  };
 
   // ── Send message ──────────────────────────────────────
   const handleSend = async () => {
@@ -141,40 +53,23 @@ const ChatBot = ({ userId }) => {
   const chatWindowClasses = isFullScreen
     ? "fixed inset-0 z-[9999] flex flex-col bg-white shadow-2xl"
     : [
-        "fixed z-[9999] flex flex-col bg-white shadow-2xl rounded-2xl",
-        // Responsive width & height
-        "w-[calc(100vw-32px)] sm:w-[380px] md:w-[420px] lg:w-[460px]",
-        "h-[70vh] max-h-[600px] min-h-[320px]",
-        // Position: bottom-right, safe distance from edges
-        "bottom-4 right-4 sm:bottom-6 sm:right-6",
-      ].join(" ");
+      "fixed z-[9999] flex flex-col bg-white shadow-2xl rounded-2xl",
+      // Responsive width & height
+      "w-[calc(100vw-32px)] sm:w-[380px] md:w-[420px] lg:w-[460px]",
+      "h-[70vh] max-h-[600px] min-h-[320px]",
+      // Position: bottom-right, safe distance from edges
+      "bottom-4 right-4 sm:bottom-6 sm:right-6",
+    ].join(" ");
 
   return (
     <>
-      {/* ── Floating Chat Icon (draggable, hidden when open) ── */}
+      {/* ── Fixed Chat Icon (hidden when open) ── */}
       {!isOpen && (
         <button
           aria-label="Open chat"
-          onMouseDown={handleMouseDown}
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-          onClick={() => {
-            // Only open on click if it wasn't a drag
-            if (!hasDragged.current) setIsOpen(true);
-          }}
-          className="fixed z-[9999] bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-xl transition-colors"
-          style={{
-            left: iconPosition.x,
-            top: iconPosition.y,
-            width: 56,
-            height: 56,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            cursor: "grab",
-            touchAction: "none",
-          }}
+          onClick={() => setIsOpen(true)}
+          className="fixed bottom-6 right-6 z-[9999] bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-xl transition-colors flex items-center justify-center cursor-pointer"
+          style={{ width: 56, height: 56 }}
         >
           <MessageCircle size={26} />
         </button>
@@ -231,16 +126,14 @@ const ChatBot = ({ userId }) => {
             {messages.map((msg, index) => (
               <div
                 key={index}
-                className={`flex ${
-                  msg.role === "user" ? "justify-end" : "justify-start"
-                }`}
+                className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"
+                  }`}
               >
                 <div
-                  className={`p-3 rounded-2xl text-sm leading-relaxed ${
-                    msg.role === "user"
+                  className={`p-3 rounded-2xl text-sm leading-relaxed ${msg.role === "user"
                       ? "bg-blue-600 text-white rounded-br-sm max-w-[78%]"
                       : "bg-white text-gray-800 shadow-sm border border-gray-100 rounded-bl-sm max-w-[82%]"
-                  }`}
+                    }`}
                 >
                   {msg.content}
                 </div>

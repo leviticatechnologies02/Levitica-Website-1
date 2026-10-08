@@ -23,16 +23,14 @@ const EnrolledCourseCard = ({ course, index }) => {
       animate={{ y: 0, opacity: 1 }}
       transition={{ delay: index * 0.08, duration: 0.4 }}
       whileHover={{ y: -8 }}
-      className={`rounded-2xl border shadow-property hover:shadow-deatail_shadow transition overflow-hidden flex flex-col group ${
-        isDark
-          ? 'bg-semidark border-dark_border'
-          : 'bg-white border-border'
-      }`}
+      className={`rounded-2xl border shadow-property hover:shadow-deatail_shadow transition overflow-hidden flex flex-col group ${isDark
+        ? 'bg-semidark border-dark_border'
+        : 'bg-white border-border'
+        }`}
     >
       {/* Thumbnail */}
-      <div className={`h-48 overflow-hidden relative ${
-        isDark ? 'bg-darklight' : 'bg-light'
-      }`}>
+      <div className={`h-48 overflow-hidden relative ${isDark ? 'bg-darklight' : 'bg-light'
+        }`}>
         {course.thumbnail ? (
           <img
             src={course.thumbnail}
@@ -159,7 +157,7 @@ const MyCourseList = () => {
 
   const enrolledCourses = enrolledSummaryData?.data || [];
   const internships = internshipsData?.data || [];
-  
+
   const allLearnings = [...enrolledCourses, ...internships];
   const isLoading = isCoursesLoading || isInternshipsLoading;
 

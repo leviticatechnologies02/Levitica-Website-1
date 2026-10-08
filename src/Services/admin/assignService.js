@@ -26,6 +26,31 @@ export const assignApi = api.injectEndpoints({
       }),
       providesTags: ["Enrollments"],
     }),
+
+    getUnassignedInternships: builder.query({
+      query: () => ({
+        url: "/admin/enroll/internships/unassigned",
+        method: "GET",
+      }),
+      providesTags: ["InternshipEnrollments"],
+    }),
+
+    assignStudentsToInternshipBatch: builder.mutation({
+      query: (payload) => ({
+        url: "/admin/enroll/internships/assign",
+        method: "POST",
+        body: payload,
+      }),
+      invalidatesTags: ["InternshipEnrollments"],
+    }),
+
+    getAssignedInternships: builder.query({
+      query: () => ({
+        url: "/admin/enroll/internships/assigned",
+        method: "GET",
+      }),
+      providesTags: ["InternshipEnrollments"],
+    }),
     getStudentEnrollments: builder.query({
       query: (userId) => ({
         url: `/student/enrollments/${userId}`,
@@ -43,4 +68,7 @@ export const {
   useLazyGetUnassignedEnrollmentsQuery,
   useAssignStudentsToBatchMutation,
   useGetAssignedEnrollmentsQuery,
+  useLazyGetUnassignedInternshipsQuery,
+  useAssignStudentsToInternshipBatchMutation,
+  useGetAssignedInternshipsQuery,
 } = assignApi;

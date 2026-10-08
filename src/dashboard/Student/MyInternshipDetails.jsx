@@ -10,7 +10,10 @@ import {
   FaLaptopCode,
   FaCertificate,
   FaTasks,
-  FaBook
+  FaBook,
+  FaRocket,
+  FaCheck,
+  FaListUl
 } from 'react-icons/fa';
 
 const MyInternshipDetails = () => {
@@ -101,43 +104,43 @@ const MyInternshipDetails = () => {
       <motion.div 
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        className={`relative overflow-hidden rounded-3xl p-8 sm:p-10 ${isDark ? 'bg-semidark' : 'bg-white border'} shadow-lg`}
+        className={`relative overflow-hidden rounded-3xl p-8 sm:p-10 ${isDark ? 'bg-darkmode border border-dark_border' : 'bg-gradient-to-br from-midnight_text via-blue-950 to-indigo-950'} shadow-2xl`}
       >
         {/* Abstract Background Shapes */}
-        <div className="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 rounded-full bg-primary/10 blur-3xl"></div>
-        <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-64 h-64 rounded-full bg-blue-500/10 blur-3xl"></div>
+        <div className="absolute top-0 right-0 -mr-20 -mt-20 w-[400px] h-[400px] rounded-full bg-primary/20 blur-[80px] pointer-events-none"></div>
+        <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-[300px] h-[300px] rounded-full bg-blue-500/20 blur-[60px] pointer-events-none"></div>
 
-        <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-          <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 text-primary font-bold text-xs uppercase tracking-wider mb-4">
-              <FaLaptopCode /> Industrial Internship
+        <div className="relative z-10 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-10">
+          <div className="flex-1">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/10 text-white font-bold text-xs uppercase tracking-widest mb-6 backdrop-blur-md border border-white/10">
+              <FaLaptopCode className="text-sm" /> Industrial Internship
             </div>
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-midnight_text dark:text-white leading-tight mb-4">
-              {internship.domain} <span className="text-primary">Internship</span>
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-[1.2] mb-5 drop-shadow-md">
+              {internship.domain} <span className="text-primary-light text-blue-400">Internship</span>
             </h1>
-            <p className="text-gray text-lg max-w-2xl">
-              Welcome to your {durationText} industrial training program. Prepare to gain hands-on experience and industry-standard skills!
+            <p className="text-blue-100 text-base md:text-lg max-w-2xl leading-relaxed">
+              Welcome to your <span className="font-bold text-white">{durationText}</span> industrial training program. Prepare to gain hands-on experience and industry-standard skills!
             </p>
           </div>
           
-          <div className="flex flex-col gap-3 min-w-[200px]">
-             <div className={`p-4 rounded-2xl flex items-center gap-4 ${isDark ? 'bg-darkmode border border-dark_border' : 'bg-light border border-border'}`}>
-                <div className="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500">
-                  <FaCheckCircle size={20} />
+          <div className="flex flex-col sm:flex-row gap-4 w-full lg:w-auto shrink-0">
+             <div className="p-5 rounded-2xl flex items-center gap-4 min-w-[200px] bg-white/10 backdrop-blur-md border border-white/10 shadow-xl">
+                <div className="w-12 h-12 rounded-xl bg-emerald-500/20 flex items-center justify-center text-emerald-400 shrink-0">
+                  <FaCheckCircle size={22} />
                 </div>
                 <div>
-                  <p className="text-xs text-gray uppercase font-semibold tracking-wider">Status</p>
-                  <p className="font-bold text-midnight_text dark:text-white">Active</p>
+                  <p className="text-[11px] text-blue-200 uppercase font-bold tracking-widest mb-1">Status</p>
+                  <p className="font-extrabold text-lg text-white leading-none">Active</p>
                 </div>
              </div>
              
-             <div className={`p-4 rounded-2xl flex items-center gap-4 ${isDark ? 'bg-darkmode border border-dark_border' : 'bg-light border border-border'}`}>
-                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-                  <FaCalendarAlt size={20} />
+             <div className="p-5 rounded-2xl flex items-center gap-4 min-w-[200px] bg-white/10 backdrop-blur-md border border-white/10 shadow-xl">
+                <div className="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center text-blue-400 shrink-0">
+                  <FaCalendarAlt size={22} />
                 </div>
                 <div>
-                  <p className="text-xs text-gray uppercase font-semibold tracking-wider">Duration</p>
-                  <p className="font-bold text-midnight_text dark:text-white">{durationText}</p>
+                  <p className="text-[11px] text-blue-200 uppercase font-bold tracking-widest mb-1">Duration</p>
+                  <p className="font-extrabold text-lg text-white leading-none">{durationText}</p>
                 </div>
              </div>
           </div>
@@ -150,201 +153,208 @@ const MyInternshipDetails = () => {
         {/* Main Content Area */}
         <div className="lg:col-span-2 space-y-8">
           
+          
+          {/* ===== Internship Objectives ===== */}
+          {internship.domainDetails?.objectives && internship.domainDetails.objectives.length > 0 && (
+            <motion.div 
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className={`rounded-3xl border p-6 md:p-8 mb-6 shadow-sm hover:shadow-md transition ${
+                isDark
+                  ? 'bg-semidark border-dark_border'
+                  : 'bg-white border-slate-200'
+              }`}
+            >
+              <div className="h-0.5 rounded-full mb-6 bg-gradient-to-r from-purple-500 to-pink-500" />
+              <h2 className={`text-xl sm:text-2xl font-extrabold mb-6 flex items-center gap-3 text-midnight_text dark:text-white`}>
+                <div className="p-2.5 rounded-xl bg-purple-500/10 text-purple-500 shrink-0">
+                  <FaRocket className="text-xl" />
+                </div>
+                What You'll Learn
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {internship.domainDetails.objectives.map((objective, index) => (
+                  <motion.div 
+                    key={index}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.2 + index * 0.05 }}
+                    className={`flex items-start gap-4 p-4 rounded-xl transition ${
+                      isDark
+                        ? 'bg-darklight hover:bg-darklight/80'
+                        : 'bg-slate-50 hover:bg-slate-100'
+                    }`}
+                  >
+                    <FaCheck className="text-purple-500 mt-1 flex-shrink-0 text-base" />
+                    <span className={`text-sm sm:text-base text-gray leading-relaxed`}>{objective}</span>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          )}
+
+          {/* ===== Internship Requirements ===== */}
+          {internship.domainDetails?.requirements && internship.domainDetails.requirements.length > 0 && (
+            <motion.div 
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className={`rounded-3xl border p-6 md:p-8 mb-6 shadow-sm hover:shadow-md transition ${
+                isDark
+                  ? 'bg-semidark border-dark_border'
+                  : 'bg-white border-slate-200'
+              }`}
+            >
+              <div className="h-0.5 rounded-full mb-6 bg-gradient-to-r from-orange-500 to-amber-500" />
+              <h2 className={`text-xl sm:text-2xl font-extrabold mb-6 flex items-center gap-3 text-midnight_text dark:text-white`}>
+                <div className="p-2.5 rounded-xl bg-orange-500/10 text-orange-500 shrink-0">
+                  <FaListUl className="text-xl" />
+                </div>
+                Prerequisites
+              </h2>
+              <ul className="space-y-3">
+                {internship.domainDetails.requirements.map((requirement, index) => (
+                  <motion.li 
+                    key={index}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.3 + index * 0.05 }}
+                    className={`flex items-start gap-4 p-4 rounded-xl transition ${
+                      isDark
+                        ? 'bg-darklight hover:bg-darklight/80'
+                        : 'bg-slate-50 hover:bg-slate-100'
+                    }`}
+                  >
+                    <span className={`font-bold text-xl flex-shrink-0 text-orange-500 leading-none`}>•</span>
+                    <span className={`text-sm sm:text-base text-gray leading-relaxed`}>{requirement}</span>
+                  </motion.li>
+                ))}
+              </ul>
+            </motion.div>
+          )}
+
+          {/* ===== Internship Description ===== */}
+          {internship.domainDetails?.description && (
+            <motion.div 
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+              className={`rounded-3xl border p-6 md:p-8 mb-6 shadow-sm hover:shadow-md transition ${
+                isDark
+                  ? 'bg-semidark border-dark_border'
+                  : 'bg-white border-slate-200'
+              }`}
+            >
+              <div className="h-0.5 rounded-full mb-6 bg-gradient-to-r from-primary to-skyBlue" />
+              <h2 className={`text-xl sm:text-2xl font-extrabold mb-6 flex items-center gap-3 text-midnight_text dark:text-white`}>
+                <div className="p-2.5 rounded-xl bg-primary/10 text-primary shrink-0">
+                  <FaBook className="text-xl" />
+                </div>
+                Internship Overview
+              </h2>
+              <p className={`text-sm sm:text-base leading-relaxed whitespace-pre-line text-gray`}>
+                {internship.domainDetails.description}
+              </p>
+            </motion.div>
+          )}
+
           {/* ===== Curriculum Section ===== */}
           {internship.domainDetails?.curriculum && internship.domainDetails.curriculum.length > 0 && (
             <motion.div
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.05 }}
-              className={`p-6 rounded-3xl ${isDark ? 'bg-semidark' : 'bg-white border'} shadow-lg mb-6`}
+              className={`p-6 md:p-8 rounded-3xl ${isDark ? 'bg-semidark border border-dark_border' : 'bg-white border shadow-sm'} mb-6`}
             >
-              <div className="flex items-center justify-between mb-5">
-                <h2 className="text-xl sm:text-2xl font-bold flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-amber-500/10 text-amber-500">
-                    <FaBook />
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+                <h2 className="text-2xl sm:text-3xl font-extrabold flex items-center gap-3 text-midnight_text dark:text-white">
+                  <div className="p-2.5 rounded-xl bg-amber-500/10 text-amber-500 shrink-0">
+                    <FaBook className="text-xl" />
                   </div>
                   <span>Internship Curriculum</span>
                 </h2>
-                <span className="text-xs font-semibold px-3 py-1 rounded-full bg-primary/10 text-primary">
+                <span className="text-xs font-bold px-4 py-1.5 rounded-full bg-primary/10 text-primary uppercase tracking-widest shrink-0 self-start sm:self-auto">
                   {internship.domainDetails.curriculum.length} Weeks
                 </span>
               </div>
 
-              <div className="space-y-3">
+              <div className="space-y-4">
                 {internship.domainDetails.curriculum.map((week, weekIndex) => (
                   <div
                     key={week._id || week.id || weekIndex}
-                    className={`border rounded-2xl overflow-hidden transition ${
-                      isDark ? 'border-dark_border bg-darkmode' : 'border-border bg-slate-50'
+                    className={`border rounded-2xl overflow-hidden transition-all duration-300 ${
+                      isDark ? 'border-dark_border bg-darkmode' : 'border-slate-200 bg-white hover:border-primary/30 hover:shadow-md'
                     }`}
                   >
                     <button
                       onClick={() => toggleWeek(weekIndex)}
-                      className="w-full px-4 py-3.5 flex items-center justify-between text-left transition-colors"
+                      className="w-full px-5 py-4 flex items-center justify-between text-left transition-colors focus:outline-none"
                     >
-                      <div className="flex items-center gap-3">
-                        <span className={`text-xs font-bold px-2.5 py-1 rounded-lg ${
+                      <div className="flex items-center gap-4">
+                        <span className={`text-xs font-black px-3 py-1.5 rounded-lg shrink-0 uppercase tracking-widest ${
                           isDark ? 'bg-primary/20 text-primary' : 'bg-primary/10 text-primary'
                         }`}>
                           Week {week.week || weekIndex + 1}
                         </span>
-                        <span className={`font-semibold text-sm sm:text-base ${isDark ? 'text-white' : 'text-midnight_text'}`}>
+                        <span className={`font-bold text-base md:text-lg leading-tight ${isDark ? 'text-white' : 'text-midnight_text'}`}>
                           {week.title}
                         </span>
                       </div>
-                      <div className="flex items-center gap-2 text-xs text-gray">
-                        <span>{week.sessions?.length || 0} sessions</span>
-                        <span className={`transform transition-transform duration-200 ${expandedWeeks.includes(weekIndex) ? 'rotate-180' : ''}`}>
+                      <div className="flex items-center gap-3 text-xs font-bold text-gray uppercase tracking-widest shrink-0">
+                        <span className="hidden sm:inline-block">{week.sessions?.length || 0} sessions</span>
+                        <span className={`w-8 h-8 rounded-full flex items-center justify-center bg-slate-100 dark:bg-darklight transform transition-transform duration-300 ${expandedWeeks.includes(weekIndex) ? 'rotate-180 bg-primary/10 text-primary dark:bg-primary/20' : ''}`}>
                           ▼
                         </span>
                       </div>
                     </button>
 
-                    {expandedWeeks.includes(weekIndex) && (
-                      <div className="px-4 pb-4 pt-1 space-y-2">
+                    <div className={`overflow-hidden transition-all duration-300 ${expandedWeeks.includes(weekIndex) ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'}`}>
+                      <div className={`px-5 pb-5 pt-2 space-y-2.5 ${isDark ? 'bg-darkmode' : 'bg-slate-50/50'}`}>
                         {week.sessions?.map((session, sIdx) => (
                           <div
                             key={session._id || session.id || sIdx}
-                            className={`flex items-center gap-3 p-2.5 rounded-xl text-xs sm:text-sm ${
-                              isDark ? 'bg-semidark text-gray' : 'bg-white text-midnight_text border border-border/50'
+                            className={`flex items-center gap-4 p-3.5 rounded-xl text-sm font-medium transition-colors ${
+                              isDark ? 'bg-semidark text-gray-200 border border-dark_border hover:border-primary/50' : 'bg-white text-midnight_text border border-slate-200 shadow-sm hover:border-primary/40 hover:shadow'
                             }`}
                           >
-                            <span className="w-5 h-5 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold shrink-0">
+                            <span className="w-7 h-7 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-black shrink-0">
                               {sIdx + 1}
                             </span>
-                            <span>{session.title}</span>
+                            <span className="leading-snug">{session.title}</span>
                           </div>
                         ))}
                       </div>
-                    )}
+                    </div>
                   </div>
                 ))}
               </div>
             </motion.div>
           )}
-
-          <motion.div 
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.1 }}
-            className={`p-6 rounded-3xl ${isDark ? 'bg-semidark' : 'bg-white border'} shadow-lg`}
-          >
-            <h2 className="text-2xl font-bold flex items-center gap-3 mb-6">
-              <div className="p-2 rounded-lg bg-primary/10 text-primary">
-                <FaTasks />
-              </div>
-              Your Internship Roadmap
-            </h2>
-            
-            
-            {/* Dynamic Content Mapping */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              
-              {internship.domainDetails?.liveClasses?.map((cls, index) => {
-                const status = getStatus(cls.date);
-                
-                return (
-                <div key={`live-${index}`} className={`p-5 rounded-2xl border shadow-property hover:shadow-deatail_shadow transition-all duration-300 overflow-hidden flex flex-col group ${
-                  isDark
-                    ? 'bg-semidark border-dark_border'
-                    : 'bg-white border-border'
-                }`}>
-                  <div className={`h-1.5 -mx-5 -mt-5 mb-4 bg-gradient-to-r ${
-                    status === 'live' 
-                      ? 'from-red-500 to-rose-500'
-                      : status === 'upcoming'
-                      ? 'from-amber-500 to-orange-500'
-                      : status === 'completed'
-                      ? 'from-green-500 to-emerald-500'
-                      : 'from-gray-500 to-gray-600'
-                  }`} />
-
-                  <div className="flex justify-between items-start gap-2 mb-3">
-                    <h3 className="font-bold text-lg text-midnight_text dark:text-white flex-1">{cls.title}</h3>
-                    <div>
-                      {status === 'live' && (
-                        <span className="text-xs font-bold px-2 py-1 rounded-full bg-gradient-to-r from-red-500 to-rose-500 text-white animate-pulse shadow-md whitespace-nowrap">
-                          LIVE
-                        </span>
-                      )}
-                      {status === 'upcoming' && (
-                        <span className="text-xs font-bold px-2 py-1 rounded-full text-amber-500 border border-amber-500 shadow-sm whitespace-nowrap">
-                          Upcoming
-                        </span>
-                      )}
-                      {status === 'completed' && (
-                        <span className="text-xs font-bold px-2 py-1 rounded-full text-green-500 border border-green-500 shadow-sm whitespace-nowrap">
-                          Completed
-                        </span>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className="space-y-2 mb-4 flex-1">
-                    <div className={`flex items-center gap-2 text-sm rounded-lg p-2 ${isDark ? 'bg-darklight text-gray' : 'bg-light text-gray'}`}>
-                      <FaCalendarAlt className="text-primary shrink-0" />
-                      <span className="font-medium text-midnight_text dark:text-white">
-                        {new Date(cls.date).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' })}
-                      </span>
-                    </div>
-                    {cls.passcode && (
-                       <div className={`flex items-center gap-2 text-sm rounded-lg p-2 ${isDark ? 'bg-darklight text-gray' : 'bg-light text-gray'}`}>
-                        <span className="font-medium">Passcode:</span> 
-                        <span className="text-midnight_text dark:text-white tracking-widest">{cls.passcode}</span>
-                      </div>
-                    )}
-                  </div>
-
-                  <div className={`pt-3 border-t ${isDark ? 'border-dark_border' : 'border-border'}`}>
-                    {(status === 'live' || status === 'upcoming') ? (
-                       <a href={cls.zoomLink} target="_blank" rel="noreferrer" className={`block text-center w-full py-2.5 rounded-xl text-sm font-semibold text-white shadow-lg transition ${status === 'live' ? 'bg-gradient-to-r from-red-600 to-rose-600 hover:opacity-90' : 'bg-gradient-to-r from-primary to-skyBlue hover:opacity-90'}`}>
-                         Join Meeting
-                       </a>
-                    ) : (
-                      cls.recordingLink ? (
-                        <a href={cls.recordingLink} target="_blank" rel="noreferrer" className="block text-center w-full py-2.5 rounded-xl text-sm font-semibold border-2 border-primary text-primary hover:bg-primary/5 transition">
-                          Watch Recording
-                        </a>
-                      ) : (
-                        <button disabled className="block text-center w-full py-2.5 rounded-xl text-sm font-semibold border-2 border-gray-300 text-gray-500 cursor-not-allowed">
-                          Recording Unavailable
-                        </button>
-                      )
-                    )}
-                  </div>
-                </div>
-                );
-              })}
-
-              {(!internship.domainDetails?.liveClasses?.length) && (
-                <div className="col-span-full text-center text-gray py-8 text-sm bg-gray-50 dark:bg-gray-800/30 rounded-xl">
-                  No live sessions have been scheduled yet. Please check back later.
-                </div>
-              )}
-            </div>
-</motion.div>
         </div>
-
         {/* Sidebar */}
-        <div className="space-y-6">
+        <div className="lg:col-span-1 space-y-6">
           <motion.div 
             initial={{ x: 20, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
-            transition={{ delay: 0.2 }}
-            className={`p-6 rounded-3xl ${isDark ? 'bg-semidark' : 'bg-white border'} shadow-lg`}
+            transition={{ delay: 0.15 }}
+            className={`p-6 md:p-8 rounded-3xl sticky top-6 ${isDark ? 'bg-semidark border border-dark_border' : 'bg-white border shadow-sm'}`}
           >
-            <h3 className="font-bold text-xl mb-4">Important Notice</h3>
-            <div className={`p-4 rounded-xl border-l-4 border-primary ${isDark ? 'bg-primary/5' : 'bg-primary/5'}`}>
-              <p className="text-sm text-gray mb-2">
-                Your live sessions and project materials will be uploaded to this dashboard shortly before your scheduled start date. 
+            <h3 className="text-lg sm:text-xl font-extrabold mb-5 flex items-center gap-2.5 text-midnight_text dark:text-white">
+              <span className="w-2 h-6 rounded-full bg-primary shrink-0"></span>
+              Important Notice
+            </h3>
+            
+            <div className={`p-5 rounded-2xl ${isDark ? 'bg-primary/5 text-gray-300' : 'bg-slate-50 text-gray-600'} text-[15px] leading-relaxed space-y-4 border ${isDark ? 'border-primary/10' : 'border-slate-100'}`}>
+              <p>
+                Your live sessions and project materials will be uploaded to this dashboard shortly before your scheduled start date.
               </p>
-              <p className="text-sm text-gray">
-                Please check your registered email (<strong>{internship.email}</strong>) for communication from your mentors.
+              <p>
+                Please check your registered email <strong className="text-midnight_text dark:text-white font-bold tracking-wide">({internship.email})</strong> for communication from your mentors.
               </p>
             </div>
           </motion.div>
         </div>
-
       </div>
     </div>
   );

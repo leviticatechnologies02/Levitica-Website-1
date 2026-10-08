@@ -82,6 +82,13 @@ export const batchApi = api.injectEndpoints({
       }),
     }),
 
+    // ✅ GET BATCHES BY INTERNSHIP
+    getBatchesByInternship: builder.query({
+      query: (internshipDomainId) => ({
+        url: `/admin/batchs/by-internship/${internshipDomainId}`,
+      }),
+    }),
+
   }),
 
   overrideExisting: false,
@@ -90,6 +97,7 @@ export const batchApi = api.injectEndpoints({
 export const {
   useGetBatchesQuery,
   useGetBatchesByCourseQuery,
+  useGetBatchesByInternshipQuery,
   useGetBatchstudentsQuery,
   useAddBatchMutation,
   useUpdateBatchMutation,

@@ -484,7 +484,7 @@ const CardsView = ({
               isDark ? 'bg-darklight text-gray' : 'bg-light text-gray'
             }`}>
               <FiBookOpen className={`w-4 h-4 flex-shrink-0 text-primary`} />
-              <span className="font-medium truncate">{m.course?.name || "—"}</span>
+              <span className="font-medium truncate">{m.course?.name || m.internshipDomain?.name || "—"}</span>
             </div>
 
             <div className={`flex items-center gap-2 text-sm rounded-lg p-2 ${
@@ -631,12 +631,12 @@ const TableView = ({
                   {m.title}
                 </div>
                 <div className={`text-xs sm:hidden text-gray`}>
-                  {m.course?.name || "—"}
+                  {m.course?.name || m.internshipDomain?.name || "—"}
                 </div>
               </td>
 
               <td className={`px-4 py-3 hidden sm:table-cell text-gray`}>
-                {m.course?.name || "—"}
+                {m.course?.name || m.internshipDomain?.name || "—"}
               </td>
 
               <td className={`px-4 py-3 hidden md:table-cell text-gray`}>

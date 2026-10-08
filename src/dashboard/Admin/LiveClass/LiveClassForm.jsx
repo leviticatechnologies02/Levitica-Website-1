@@ -9,7 +9,7 @@ import {
 import { toast } from "react-hot-toast";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
-import { useGetBatchesByCourseQuery } from '@/Services/admin/batchdetailsService';
+import { useGetBatchesByCourseQuery, useGetBatchesByInternshipQuery } from '@/Services/admin/batchdetailsService';
 import { useGetAllInternshipsDomainsQuery } from '@/Services/paymentServices/internshipsServices';
 import { FiX, FiBookOpen, FiUsers, FiClock, FiMail, FiPlay, FiEdit2, FiRotateCw, FiType, FiCheckCircle, FiVideo, FiCalendar } from "react-icons/fi";
 
@@ -33,7 +33,7 @@ const validationSchema = Yup.object({
   batchId: Yup.string().when('classType', {
     is: 'course',
     then: () => Yup.string().required("Required"),
-    otherwise: () => Yup.string().notRequired(),
+    otherwise: () => Yup.string().required("Required"),
   }),
   internshipDomainId: Yup.string().when('classType', {
     is: 'internship',
@@ -84,9 +84,18 @@ const LiveClassForm = ({ onSuccess, initialData, mode = "create" }) => {
     initialData?.course?._id || ""
   );
 
+  const [selectedInternshipId, setSelectedInternshipId] = useState(
+    initialData?.internshipDomain?._id || ""
+  );
+
   const { data: batchesByCourse } = useGetBatchesByCourseQuery(
     selectedCourseId,
     { skip: !selectedCourseId }
+  );
+
+  const { data: batchesByInternship } = useGetBatchesByInternshipQuery(
+    selectedInternshipId,
+    { skip: !selectedInternshipId }
   );
 
   const [createMeeting, { isLoading: isCreating }] =
@@ -137,22 +146,21 @@ const LiveClassForm = ({ onSuccess, initialData, mode = "create" }) => {
           animate={{ scale: 1, y: 0, opacity: 1 }}
           exit={{ scale: 0.96, y: 20, opacity: 0 }}
           transition={{ duration: 0.25, ease: "easeOut" }}
-          className={`w-full max-w-2xl max-h-[95vh] sm:max-h-[90vh] overflow-hidden rounded-2xl sm:rounded-3xl shadow-2xl flex flex-col ${
-            isDark
-              ? 'bg-semidark'
-              : 'bg-white'
-          }`}
+          className={`w-full max-w-2xl max-h-[95vh] sm:max-h-[90vh] overflow-hidden rounded-2xl sm:rounded-3xl shadow-2xl flex flex-col ${isDark
+            ? 'bg-semidark'
+            : 'bg-white'
+            }`}
         >
           {/* Gradient Header */}
           <div className="p-4 sm:p-6 flex items-start justify-between border-b">
             <div className="flex items-center gap-3">
               <div className="p-2.5 sm:p-3 rounded-xl backdrop-blur-sm">
-                <FiVideo className={`w-5 h-5 sm:w-6 sm:h-6 ${ isDark ? 'text-primary' : 'text-primary' }` } />
+                <FiVideo className={`w-5 h-5 sm:w-6 sm:h-6 ${isDark ? 'text-primary' : 'text-primary'}`} />
               </div>
               <div>
                 <h2 className="text-lg sm:text-xl text-primary font-bold flex items-center gap-2">
                   {isEditMode ? (
-                    <> 
+                    <>
                       <FiEdit2 className="w-5 h-5 sm:w-6 sm:h-6" />
                       Edit Live Class
                     </>
@@ -168,13 +176,13 @@ const LiveClassForm = ({ onSuccess, initialData, mode = "create" }) => {
                 </p>
               </div>
             </div>
-            <motion.button 
+            <motion.button
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
               onClick={onSuccess}
               className="p-1.5 sm:p-2 rounded-xl hover:bg-white/20 transition text-white"
             >
-              <FiX className={`w-5 h-5 sm:w-6 sm:h-6 ${ isDark ? 'text-white' : 'text-midnight_text' }`}/>
+              <FiX className={`w-5 h-5 sm:w-6 sm:h-6 ${isDark ? 'text-white' : 'text-midnight_text'}`} />
             </motion.button>
           </div>
 
@@ -351,7 +359,8 @@ const LiveClassForm = ({ onSuccess, initialData, mode = "create" }) => {
                     </div>
                     </>
                     ) : (
-                    <div className="sm:col-span-2">
+                    <>
+                    <div>
                       <label className={`text-sm font-semibold mb-2 flex items-center gap-2 ${
                         isDark ? 'text-gray' : 'text-midnight_text'
                       }`}>
@@ -365,6 +374,14 @@ const LiveClassForm = ({ onSuccess, initialData, mode = "create" }) => {
                             ? 'border-dark_border bg-darklight text-white focus:border-primary focus:ring-primary/30'
                             : 'border-border bg-light text-midnight_text focus:border-primary focus:ring-primary/20'
                         }`}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          setFieldValue("internshipDomainId", value);
+                          if (!isEditMode) {
+                            setFieldValue("batchId", "");
+                          }
+                          setSelectedInternshipId(value);
+                        }}
                       >
                         <option value="">Select Internship</option>
                         {internshipDomains?.map((domain) => (
@@ -377,6 +394,38 @@ const LiveClassForm = ({ onSuccess, initialData, mode = "create" }) => {
                         <p className={`text-xs mt-1 text-rose-500`}>{errors.internshipDomainId}</p>
                       )}
                     </div>
+                    
+                    {/* Batch for Internship */}
+                    <div>
+                      <label className={`text-sm font-semibold mb-2 flex items-center gap-2 ${
+                        isDark ? 'text-gray' : 'text-midnight_text'
+                      }`}>
+                        <FiUsers className="w-4 h-4 text-purple-500" /> Batch
+                      </label>
+                      <Field
+                        as="select"
+                        name="batchId"
+                        disabled={!values.internshipDomainId}
+                        className={`w-full rounded-xl border px-3 py-2.5 text-sm focus:outline-none focus:ring-2 transition ${
+                          isDark
+                            ? 'border-dark_border bg-darklight text-white disabled:bg-darkmode disabled:text-gray focus:border-primary focus:ring-primary/30'
+                            : 'border-border bg-light text-midnight_text disabled:bg-section disabled:text-gray focus:border-primary focus:ring-primary/20'
+                        }`}
+                      >
+                        <option value="">
+                          {values.internshipDomainId ? "Select Batch" : "Select Internship First"}
+                        </option>
+                        {batchesByInternship?.data?.map((b) => (
+                          <option key={b._id} value={b._id}>
+                            {b.batchName}
+                          </option>
+                        ))}
+                      </Field>
+                      {errors.batchId && touched.batchId && (
+                        <p className={`text-xs mt-1 text-rose-500`}>{errors.batchId}</p>
+                      )}
+                    </div>
+                    </>
                     )}
                   </div>
 
@@ -415,30 +464,29 @@ const LiveClassForm = ({ onSuccess, initialData, mode = "create" }) => {
                   </motion.button>
                 </Form>
               )}
-            </Formik>
-          </div>
-        </motion.div>
+          </Formik>
+        </div>
       </motion.div>
-    </AnimatePresence>
+    </motion.div>
+    </AnimatePresence >
   );
 };
+
 
 /* ---------------- Reusable Fields ---------------- */
 
 const FieldInput = ({ isDark, label, name, errors, touched, placeholder, ...props }) => (
   <div>
-    <label className={`text-sm font-semibold mb-2 block ${
-      isDark ? 'text-gray' : 'text-midnight_text'
-    }`}>{label}</label>
-    <Field 
-      name={name} 
-      {...props} 
+    <label className={`text-sm font-semibold mb-2 block ${isDark ? 'text-gray' : 'text-midnight_text'
+      }`}>{label}</label>
+    <Field
+      name={name}
+      {...props}
       placeholder={placeholder}
-      className={`w-full rounded-xl border px-3 sm:px-4 py-2.5 text-sm focus:outline-none focus:ring-2 transition placeholder-gray-400 ${
-        isDark
-          ? 'border-dark_border bg-darklight text-white placeholder-gray focus:border-primary focus:ring-primary/30'
-          : 'border-border bg-light text-midnight_text placeholder-gray focus:border-primary focus:ring-primary/20'
-      }`} 
+      className={`w-full rounded-xl border px-3 sm:px-4 py-2.5 text-sm focus:outline-none focus:ring-2 transition placeholder-gray-400 ${isDark
+        ? 'border-dark_border bg-darklight text-white placeholder-gray focus:border-primary focus:ring-primary/30'
+        : 'border-border bg-light text-midnight_text placeholder-gray focus:border-primary focus:ring-primary/20'
+        }`}
     />
     {errors[name] && touched[name] && (
       <p className={`text-xs mt-1.5 text-rose-500`}>{errors[name]}</p>
@@ -448,19 +496,17 @@ const FieldInput = ({ isDark, label, name, errors, touched, placeholder, ...prop
 
 const FieldSelect = ({ isDark, label, name, options, errors, touched }) => (
   <div>
-    <label className={`text-sm font-semibold mb-2 flex items-center gap-2 ${
-      isDark ? 'text-gray' : 'text-midnight_text'
-    }`}>
+    <label className={`text-sm font-semibold mb-2 flex items-center gap-2 ${isDark ? 'text-gray' : 'text-midnight_text'
+      }`}>
       {label}
     </label>
-    <Field 
-      as="select" 
-      name={name} 
-      className={`w-full rounded-xl border px-3 sm:px-4 py-2.5 text-sm focus:outline-none focus:ring-2 transition cursor-pointer ${
-        isDark
-          ? 'border-dark_border bg-darklight text-white focus:border-primary focus:ring-primary/30'
-          : 'border-border bg-light text-midnight_text focus:border-primary focus:ring-primary/20'
-      }`}
+    <Field
+      as="select"
+      name={name}
+      className={`w-full rounded-xl border px-3 sm:px-4 py-2.5 text-sm focus:outline-none focus:ring-2 transition cursor-pointer ${isDark
+        ? 'border-dark_border bg-darklight text-white focus:border-primary focus:ring-primary/30'
+        : 'border-border bg-light text-midnight_text focus:border-primary focus:ring-primary/20'
+        }`}
     >
       <option value="">Select Option</option>
       {options.map((o) => (

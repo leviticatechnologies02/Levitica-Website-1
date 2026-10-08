@@ -1,7 +1,8 @@
 import Loader from '@/dashboard/common/Loader';
-import { useGetAssignedEnrollmentsQuery } from '@/Services/admin/assignService';
+import { useGetAssignedEnrollmentsQuery, useGetAssignedInternshipsQuery } from '@/Services/admin/assignService';
 import GenericTable from "./GenericTable";
-import { flattenEnrollments } from '@/utils/formatchange';
+import { flattenEnrollments, flattenInternshipEnrollments } from '@/utils/formatchange';
+import { useState } from 'react';
 import {
   Users,
   RefreshCcw,
@@ -15,18 +16,39 @@ const AssignedStudents = () => {
   const { theme } = useTheme();
   const isDark = theme === 'dark';
 
+  const [type, setType] = useState('course'); // 'course' | 'internship'
+
   const {
-    data: assignedData,
-    isLoading,
-    isError,
-    error,
-    isSuccess,
-    refetch,
+    data: assignedCoursesData,
+    isLoading: isCoursesLoading,
+    isError: isCoursesError,
+    error: coursesError,
+    isSuccess: isCoursesSuccess,
+    refetch: refetchCourses,
   } = useGetAssignedEnrollmentsQuery(undefined, {
     refetchOnMountOrArgChange: true,
   });
 
-  const results = flattenEnrollments(assignedData?.enrollments || []);
+  const {
+    data: assignedInternshipsData,
+    isLoading: isInternshipsLoading,
+    isError: isInternshipsError,
+    error: internshipsError,
+    isSuccess: isInternshipsSuccess,
+    refetch: refetchInternships,
+  } = useGetAssignedInternshipsQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  });
+
+  const isLoading = type === 'course' ? isCoursesLoading : isInternshipsLoading;
+  const isError = type === 'course' ? isCoursesError : isInternshipsError;
+  const error = type === 'course' ? coursesError : internshipsError;
+  const isSuccess = type === 'course' ? isCoursesSuccess : isInternshipsSuccess;
+  const refetch = type === 'course' ? refetchCourses : refetchInternships;
+
+  const results = type === 'course' 
+    ? flattenEnrollments(assignedCoursesData?.enrollments || [])
+    : flattenInternshipEnrollments(assignedInternshipsData?.enrollments || assignedInternshipsData?.data || []);
 
   if (isLoading) {
     return (
@@ -69,6 +91,30 @@ const AssignedStudents = () => {
 
   return (
     <div className="space-y-6">
+      {/* ================= TYPE TOGGLE ================= */}
+      <div className="flex gap-2">
+        <button
+          onClick={() => { setType('course'); }}
+          className={`px-4 py-2 rounded-lg font-semibold transition ${
+            type === 'course' 
+              ? 'bg-primary text-white shadow-md' 
+              : isDark ? 'bg-darklight text-gray hover:text-white' : 'bg-light text-gray hover:text-midnight_text'
+          }`}
+        >
+          Courses
+        </button>
+        <button
+          onClick={() => { setType('internship'); }}
+          className={`px-4 py-2 rounded-lg font-semibold transition ${
+            type === 'internship' 
+              ? 'bg-primary text-white shadow-md' 
+              : isDark ? 'bg-darklight text-gray hover:text-white' : 'bg-light text-gray hover:text-midnight_text'
+          }`}
+        >
+          Internships
+        </button>
+      </div>
+
       {/* ================= HEADER ================= */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>

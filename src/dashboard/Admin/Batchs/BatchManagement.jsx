@@ -279,7 +279,7 @@ const BatchCards = ({ batches, isDark, onEdit, onDelete, onViewStudents }) => (
             </h3>
             <div className={`flex items-center gap-1 text-xs mt-1 text-gray`}>
               <FiBookOpen size={12} className="text-primary" />
-              {batch.courseId?.name || "Unknown Course"}
+              {batch.courseId?.name || batch.internshipDomainId?.name || "Unknown target"}
             </div>
           </div>
 
@@ -348,8 +348,8 @@ const BatchTable = ({
     },
     {
       id: "courseName",
-      header: "Course",
-      accessorFn: (row) => row.courseId?.name ?? "Unknown",
+      header: "Target",
+      accessorFn: (row) => row.courseId?.name ?? row.internshipDomainId?.name ?? "Unknown",
       cell: (info) => (
         <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${
           isDark
