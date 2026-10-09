@@ -1,3 +1,5 @@
+import { productsData } from "@/data/productsData";
+
 const getBaseUrl = () => {
   const env = import.meta.env.VITE_ENV;
   return env === "production"
@@ -6,15 +8,13 @@ const getBaseUrl = () => {
 };
 
 export const getProducts = async () => {
-  const baseURL = getBaseUrl();
-  const response = await fetch(`${baseURL}/api/products`);
-  if (!response.ok) throw new Error("Failed to fetch products");
-  return response.json();
+  // Return values from local json data instead of backend
+  return Object.values(productsData);
 };
 
 export const getProductBySlug = async (slug) => {
-  const baseURL = getBaseUrl();
-  const response = await fetch(`${baseURL}/api/products/${slug}`);
-  if (!response.ok) throw new Error("Failed to fetch product");
-  return response.json();
+  // Find product by slug key from local json data
+  const product = productsData[slug];
+  if (!product) throw new Error("Product not found");
+  return product;
 };
