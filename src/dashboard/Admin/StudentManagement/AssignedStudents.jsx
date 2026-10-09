@@ -46,9 +46,15 @@ const AssignedStudents = () => {
   const isSuccess = type === 'course' ? isCoursesSuccess : isInternshipsSuccess;
   const refetch = type === 'course' ? refetchCourses : refetchInternships;
 
-  const results = type === 'course' 
-    ? flattenEnrollments(assignedCoursesData?.enrollments || [])
-    : flattenInternshipEnrollments(assignedInternshipsData?.enrollments || assignedInternshipsData?.data || []);
+  const results = type === 'course'
+    ? flattenEnrollments(assignedCoursesData?.enrollments || assignedCoursesData?.data || assignedCoursesData || [])
+    : flattenInternshipEnrollments(
+      assignedInternshipsData?.internships ||
+      assignedInternshipsData?.enrollments ||
+      assignedInternshipsData?.data ||
+      assignedInternshipsData ||
+      []
+    );
 
   if (isLoading) {
     return (
@@ -60,14 +66,12 @@ const AssignedStudents = () => {
 
   if (isError) {
     return (
-      <div className={`rounded-xl p-6 flex items-start gap-4 border ${
-        isDark
+      <div className={`rounded-xl p-6 flex items-start gap-4 border ${isDark
           ? 'bg-rose-500/10 border-rose-500/20'
           : 'bg-rose-500/10 border-rose-500/20'
-      }`}>
-        <div className={`p-3 rounded-lg ${
-          isDark ? 'bg-rose-500/20' : 'bg-rose-500/20'
         }`}>
+        <div className={`p-3 rounded-lg ${isDark ? 'bg-rose-500/20' : 'bg-rose-500/20'
+          }`}>
           <AlertTriangle className={`w-6 h-6 ${isDark ? 'text-rose-400' : 'text-rose-600'}`} />
         </div>
         <div className="flex-1">
@@ -95,21 +99,19 @@ const AssignedStudents = () => {
       <div className="flex gap-2">
         <button
           onClick={() => { setType('course'); }}
-          className={`px-4 py-2 rounded-lg font-semibold transition ${
-            type === 'course' 
-              ? 'bg-primary text-white shadow-md' 
+          className={`px-4 py-2 rounded-lg font-semibold transition ${type === 'course'
+              ? 'bg-primary text-white shadow-md'
               : isDark ? 'bg-darklight text-gray hover:text-white' : 'bg-light text-gray hover:text-midnight_text'
-          }`}
+            }`}
         >
           Courses
         </button>
         <button
           onClick={() => { setType('internship'); }}
-          className={`px-4 py-2 rounded-lg font-semibold transition ${
-            type === 'internship' 
-              ? 'bg-primary text-white shadow-md' 
+          className={`px-4 py-2 rounded-lg font-semibold transition ${type === 'internship'
+              ? 'bg-primary text-white shadow-md'
               : isDark ? 'bg-darklight text-gray hover:text-white' : 'bg-light text-gray hover:text-midnight_text'
-          }`}
+            }`}
         >
           Internships
         </button>
@@ -122,9 +124,8 @@ const AssignedStudents = () => {
             <div className={`p-2 rounded-xl bg-gradient-to-br from-primary to-skyBlue shadow-lg`}>
               <Users className="text-white w-5 h-5" />
             </div>
-            <h2 className={`text-2xl font-bold ${
-              isDark ? 'text-white' : 'text-midnight_text'
-            }`}>
+            <h2 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-midnight_text'
+              }`}>
               Assigned Students
             </h2>
           </div>
@@ -134,20 +135,18 @@ const AssignedStudents = () => {
         </div>
 
         <div className="flex items-center gap-3">
-          <div className={`px-5 py-2.5 rounded-full text-sm font-bold border ${
-            isDark
+          <div className={`px-5 py-2.5 rounded-full text-sm font-bold border ${isDark
               ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30'
               : 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20'
-          }`}>
+            }`}>
             {results.length} Assigned
           </div>
           <button
             onClick={refetch}
-            className={`inline-flex items-center gap-2 rounded-lg px-4 py-2.5 font-semibold transition border ${
-              isDark
+            className={`inline-flex items-center gap-2 rounded-lg px-4 py-2.5 font-semibold transition border ${isDark
                 ? 'border-dark_border text-gray hover:bg-darklight'
                 : 'border-border text-gray hover:bg-light'
-            }`}
+              }`}
           >
             <RefreshCcw size={16} />
             Refresh
@@ -156,12 +155,11 @@ const AssignedStudents = () => {
       </div>
 
       {/* ================= EMPTY STATE ================= */}
-      {isSuccess && results.length === 0 && (
-        <div className={`rounded-xl p-12 text-center border ${
-          isDark
+      {!isLoading && !isError && results.length === 0 && (
+        <div className={`rounded-xl p-12 text-center border ${isDark
             ? 'bg-semidark border-dark_border'
             : 'bg-white border-border'
-        }`}>
+          }`}>
           <Inbox size={64} className={`mx-auto ${isDark ? 'text-gray' : 'text-gray'}`} />
           <h3 className={`mt-4 text-lg font-semibold ${isDark ? 'text-white' : 'text-midnight_text'}`}>
             No Assigned Students
@@ -180,12 +178,11 @@ const AssignedStudents = () => {
       )}
 
       {/* ================= TABLE ================= */}
-      {isSuccess && results.length > 0 && (
-        <div className={`rounded-xl border shadow-property overflow-hidden ${
-          isDark
+      {!isLoading && !isError && results.length > 0 && (
+        <div className={`rounded-xl border shadow-property overflow-hidden ${isDark
             ? 'bg-semidark border-dark_border'
             : 'bg-white border-border'
-        }`}>
+          }`}>
           <div>
             <GenericTable
               data={results}
@@ -193,12 +190,6 @@ const AssignedStudents = () => {
               showBatchColumn={true}
               isAssignedView={true}
             />
-          </div>
-
-          <div className={`border-t p-4 text-sm text-gray ${
-            isDark ? 'border-dark_border' : 'border-border'
-          }`}>
-            Showing {results.length} assigned student records
           </div>
         </div>
       )}

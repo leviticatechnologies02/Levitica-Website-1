@@ -80,7 +80,7 @@ const ProductsSection = () => {
       icon: FaBuilding,
       category: ["property"],
       deployment: "Cloud",
-      image: "/img/hostel.png"
+      image: "/img/companylogo/dvskillhub.jpg"
     },
     {
       id: 4,

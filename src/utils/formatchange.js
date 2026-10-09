@@ -27,54 +27,54 @@ export const transformInternshipAssignmentPayload = (rawData) => {
   };
 };
 
-//used in unassigned for send data to genaric table
-export  const flattenEnrollments=(arr)=> {
+//used in unassigned for send data to generic table
+export const flattenEnrollments = (data) => {
+  const arr = Array.isArray(data) ? data : (data?.enrollments || data?.data || []);
+  return arr.flatMap(entry => {
+    if (!entry) return [];
+    const { _id, user, enrolledCourses } = entry;
+    if (!Array.isArray(enrolledCourses)) return [];
+    return enrolledCourses.map(courseEntry => ({
+      enrollment_id: _id,
+      name: user?.name || entry.name || 'Unknown',
+      email: user?.email || entry.email || 'Unknown',
+      courseName: courseEntry.course?.name || courseEntry.courseTitle || 'No Course',
+      courseId: courseEntry.course?._id || courseEntry.course || 'N/A', 
+      batchName: courseEntry.batch?.batchName || (typeof courseEntry.batch === 'string' ? courseEntry.batch : 'Unassigned'),
+    }));
+  });
+};
 
-    return arr?.flatMap(entry => {
-     
-      const {_id, user, enrolledCourses } = entry;
-      return enrolledCourses.map(courseEntry => ({
-        enrollment_id:_id,
-        name: user.name,
-        email: user.email,
-        courseName: courseEntry.course?.name || 'No Course',
-        courseId: courseEntry.course?._id || 'N/A', 
-        batchName: courseEntry.batch?.batchName || 'Unassigned',
-       
+export const flattenInternshipEnrollments = (data) => {
+  const arr = Array.isArray(data) ? data : (data?.internships || data?.enrollments || data?.data || []);
+  return arr.flatMap(entry => {
+    if (!entry) return [];
+    // If it's just an array of payments directly
+    if ((entry.internshipDomainId || entry.domainId || entry.domain) && !entry.enrolledInternships) {
+      return {
+        enrollment_id: entry._id,
+        name: entry.user?.name || entry.name || 'Unknown',
+        email: entry.user?.email || entry.email || 'Unknown',
+        courseName: entry.internshipDomainId?.name || entry.domainId?.name || entry.domain || 'No Internship',
+        courseId: entry.internshipDomainId?._id || entry.domainId?._id || entry.domainId || 'N/A',
+        batchName: entry.batch?.batchName || (typeof entry.batch === 'string' ? entry.batch : 'Unassigned'),
+      };
+    }
+    
+    const { _id, user, enrolledInternships } = entry;
+    if (Array.isArray(enrolledInternships)) {
+      return enrolledInternships.map(internEntry => ({
+        enrollment_id: _id,
+        name: user?.name || entry.name || 'Unknown',
+        email: user?.email || entry.email || 'Unknown',
+        courseName: internEntry.internshipDomainId?.name || internEntry.domainId?.name || 'No Internship',
+        courseId: internEntry.internshipDomainId?._id || internEntry.domainId?._id || 'N/A', 
+        batchName: internEntry.batch?.batchName || (typeof internEntry.batch === 'string' ? internEntry.batch : 'Unassigned'),
       }));
-    });
-  }
-
-export const flattenInternshipEnrollments = (arr) => {
-    console.log("flattenInternshipEnrollments input:", arr);
-    return arr?.flatMap(entry => {
-      // If it's just an array of payments directly
-      if ((entry.internshipDomainId || entry.domainId) && !entry.enrolledInternships) {
-        console.log("Flattening entry:", entry);
-        return {
-          enrollment_id: entry._id,
-          name: entry.user?.name || entry.name || 'Unknown',
-          email: entry.user?.email || entry.email || 'Unknown',
-          courseName: entry.internshipDomainId?.name || entry.domainId?.name || 'No Internship',
-          courseId: entry.internshipDomainId?._id || entry.domainId?._id || 'N/A',
-          batchName: entry.batch?.batchName || 'Unassigned',
-        };
-      }
-      
-      const {_id, user, enrolledInternships } = entry;
-      if (enrolledInternships) {
-          return enrolledInternships.map(internEntry => ({
-            enrollment_id:_id,
-            name: user?.name || 'Unknown',
-            email: user?.email || 'Unknown',
-            courseName: internEntry.internshipDomainId?.name || 'No Internship',
-            courseId: internEntry.internshipDomainId?._id || 'N/A', 
-            batchName: internEntry.batch?.batchName || 'Unassigned',
-          }));
-      }
-      return [];
-    });
-}
+    }
+    return [];
+  });
+};
 
   export const transformStudentEnrollmentData = (enrollments) => {
   return enrollments

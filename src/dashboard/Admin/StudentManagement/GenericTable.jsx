@@ -24,7 +24,7 @@ const GenericTable = ({
   onAssignBatch,
   onCourseChange,
   onRemove,
-  getRowId = (row) => row.id,
+  getRowId = (row, index) => row?.id || (row?.enrollment_id ? `${row.enrollment_id}-${row.courseId || index}` : String(index)),
 }) => {
   const { theme } = useTheme();
   const isDark = theme === 'dark';
@@ -67,7 +67,7 @@ const GenericTable = ({
       },
       { accessorKey: "name", header: "Student Name" },
       { accessorKey: "email", header: "Email" },
-      { accessorKey: "courseName", header: "Course" },
+      { accessorKey: "courseName", header: "Course / Domain" },
       showBatchColumn && {
         accessorKey: "batchName",
         header: "Batch",

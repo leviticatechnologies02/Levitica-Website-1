@@ -17,6 +17,8 @@ import { useEffect, useState } from "react";
 import { useGetStudentsQuery } from '@/Services/admin/studentReportsServices';
 import {
   useLazyGetUnassignedEnrollmentsQuery,
+  useGetAssignedEnrollmentsQuery,
+  useGetAssignedInternshipsQuery,
 } from '@/Services/admin/assignService';
 import { useCourses } from '@/hooks/useCourses';
 
@@ -37,6 +39,8 @@ const AssignStudents = () => {
 
   // Fetch unassigned students data for stats
   const [fetchUnassigned, { data: unassignedData }] = useLazyGetUnassignedEnrollmentsQuery();
+  const { data: assignedCoursesData } = useGetAssignedEnrollmentsQuery();
+  const { data: assignedInternshipsData } = useGetAssignedInternshipsQuery();
   const { courses = [] } = useCourses();
 
   useEffect(() => {
@@ -48,7 +52,10 @@ const AssignStudents = () => {
   const pendingStudents = studentsData?.students?.filter(s => !s.emailVerified).length || 0;
   
   const unassignedCount = unassignedData?.enrollments?.length || 0;
-  const assignedCount = totalStudents - unassignedCount;
+  const assignedCoursesCount = assignedCoursesData?.enrollments?.reduce((acc, curr) => acc + (curr.enrolledCourses?.length || 0), 0) || 0;
+  const assignedInternshipsCount = assignedInternshipsData?.internships?.length || 0;
+  const realAssignedCount = assignedCoursesCount + assignedInternshipsCount;
+  const assignedCount = realAssignedCount > 0 ? realAssignedCount : Math.max(0, totalStudents - unassignedCount);
   const totalCourses = courses.length;
 
   const tabs = [
