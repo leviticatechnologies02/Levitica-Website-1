@@ -36,6 +36,7 @@ import AdminDashboard from '@/dashboard/Admin/AdminDashboard';
 import CoursesManagement from '@/dashboard/Admin/CourseManagement/CoursesManagement';
 import BatchManagement from '@/dashboard/Admin/Batchs/BatchManagement';
 import SuperAdminPage from '@/dashboard/Admin/AddAdmin/SuperAdminPage.jsx';
+import EnquiriesList from '@/dashboard/Admin/Enquiries/EnquiriesList';
 
 
 import Internship from '@/pages/public/Sections/Internship/Internship';
@@ -140,6 +141,7 @@ const AppRouter = () => {
               <Route index element={<AdminDashboard />} />
               <Route path="addadmin" element={<SuperAdminPage />} />
               <Route path="payments" element={<PaymentOverview />} />
+              <Route path="enquiries" element={<EnquiriesList />} />
               <Route path="settings" element={<SettingsPage />} />
               <Route path='promocode' element={
                 <PromoCodeManagement />

@@ -8,7 +8,7 @@ import {
     FaArrowLeft,
     FaCheck
 } from "react-icons/fa";
-import { productsData } from "@/data/productsData";
+import { getProductBySlug } from "@/Services/sharedServices/productService";
 
 const getProductLogo = (product) => {
     if (product.logo) {
@@ -48,16 +48,20 @@ const ProductDetails = () => {
     }, []);
 
     useEffect(() => {
-        const productKey = Object.keys(productsData).find(
-            (key) => key === slug || productsData[key].title.toLowerCase().replace(/\s+/g, "-") === slug
-        );
+        const fetchProduct = async () => {
+            try {
+                setLoading(true);
+                const data = await getProductBySlug(slug);
+                setProduct(data);
+            } catch (error) {
+                console.error("Failed to fetch product:", error);
+                setProduct(null);
+            } finally {
+                setLoading(false);
+            }
+        };
 
-        if (productKey) {
-            setProduct(productsData[productKey]);
-        } else {
-            setProduct(null);
-        }
-        setLoading(false);
+        fetchProduct();
     }, [slug]);
 
     if (loading) {

@@ -113,6 +113,12 @@ const Sidebar = () => {
       roles: ['superadmin'],
     },
     {
+      label: "Enquiries",
+      icon: <FaBookOpen size={20} />,
+      path: "/dashboard/admin/enquiries",
+      roles: ['superadmin'],
+    },
+    {
       label: "Add Admin",
       icon: <FaUserPlus size={20} />,
       path: "/dashboard/admin/addadmin",

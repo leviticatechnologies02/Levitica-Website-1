@@ -4,7 +4,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import toast from "react-hot-toast";
 import { FaArrowLeft, FaCheckCircle, FaPaperPlane, FaChevronDown, FaTimes, FaStar, FaUsers, FaClock, FaShieldAlt, FaHeadset } from "react-icons/fa";
-import { productsData } from "@/data/productsData";
+import { getProductBySlug } from "@/Services/sharedServices/productService";
 
 /* ─── shared input style ─── */
 const cls =
@@ -286,10 +286,16 @@ const ProductEnquiry = () => {
   const [logoError, setLogoError] = useState(false);
 
   useEffect(() => {
-    const key = Object.keys(productsData).find(
-      (k) => k === slug || productsData[k].title.toLowerCase().replace(/\s+/g, "-") === slug
-    );
-    setProduct(key ? productsData[key] : null);
+    const fetchProduct = async () => {
+      try {
+        const data = await getProductBySlug(slug);
+        setProduct(data);
+      } catch (error) {
+        console.error("Failed to fetch product:", error);
+        setProduct(null);
+      }
+    };
+    fetchProduct();
     window.scrollTo(0, 0);
     // Reset logo error when product changes
     setLogoError(false);
@@ -345,6 +351,10 @@ const ProductEnquiry = () => {
         email: emailField ? values[emailField.name] : "",
         mobile: mobileField ? values[mobileField.name] : "",
         message: `[Product Enquiry — ${product.title}]\n\n${lines.join("\n")}`,
+        details: {
+          productTitle: product.title,
+          ...values
+        },
       };
 
       const res = await fetch(`${baseURL}/contact`, {
