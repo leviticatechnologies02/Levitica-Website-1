@@ -10,6 +10,7 @@ export const productsData = {
     link: null,
     features: ["Employee Database Management", "Automated Payroll & Tax Compliance", "Time & Attendance Tracking with Geofencing", "Onboarding & Offboarding Workflows", "Performance Management & Goal Tracking", "Leave & Expense Approvals Portal"],
     benefits: ["Improves HR team efficiency by up to 40%", "Eliminates payroll errors through automated calculation engines", "Ensures regulatory and tax compliance out-of-the-box", "Enhances employee experience with a self-service mobile app portal"],
+    enquiryMessage: "Transform your workplace with intelligent HR automation. We invite enterprises, SMEs, and HR leaders to partner with us for a seamless cloud-based HRMS. Our team will contact you to understand your specific HR workflows, offer a tailored demo, and provide flexible licensing options. Your details are strictly used to schedule the demo and share relevant product pricing.",
     enquiry: {
       heading: "HRMS Demo & Licensing Enquiry",
       tagline: "Modernize your HR operations with a fully automated, cloud-based platform.",
@@ -17,6 +18,8 @@ export const productsData = {
       highlights: ["Automated Payroll & Compliance", "Attendance with Geofencing", "Leave & Expense Management", "Performance Review Workflows", "Scalable Cloud Deployment", "Dedicated Onboarding Support"],
       formTitle: "Request HRMS Demo",
       formSubtitle: "Our HR specialists will reach out within 24 hours.",
+      declarationText: "I agree to be contacted by the Levitica team regarding the HRMS demo, pricing, and onboarding details. My information will not be shared with third parties.",
+      declarationText: "I agree to be contacted by the Levitica team regarding the HRMS demo, pricing, and onboarding details. My information will not be shared with third parties.",
       formSchema: [
         { type: "text", name: "companyName", label: "Company / Organization Name", placeholder: "Enter company name", required: true, half: true },
         { type: "text", name: "hrManager", label: "HR Manager / Contact Name", placeholder: "Full name", required: true, half: true },
@@ -52,6 +55,7 @@ export const productsData = {
     link: "https://leviticanestora.com/",
     features: ["Real-time Room & Bed Occupancy Maps", "Automated Rent Invoicing & Digital Payments", "Tenant KYC & Digital Agreement Storage", "Maintenance Ticket Management System", "Visitor Logging & Gate Security Access", "Financial Reporting & Expense Audits"],
     benefits: ["Reduces manual rent collection overhead by 60%", "Provides instant insights on vacancy rates", "Streamlines maintenance logs", "Maintains detailed guest registers"],
+    enquiryMessage: "Streamline your property management with automated billing and tenant tracking. We invite hostel owners, PG managers, and property administrators to partner with us for a digital upgrade. Our experts will contact you to understand your property size and offer a customized onboarding plan. Your contact details are solely used to arrange a personalized walkthrough and pricing discussion.",
     enquiry: {
       heading: "Hostel & PG System Enquiry",
       tagline: "Digitize your property operations end-to-end.",
@@ -59,6 +63,8 @@ export const productsData = {
       highlights: ["Real-time Occupancy Dashboard", "Automated Rent & Invoicing", "Tenant KYC & Agreement Storage", "Maintenance Ticketing System", "Visitor Logging & Gate Security", "Financial Expense Reports"],
       formTitle: "Property Management Enquiry",
       formSubtitle: "Tell us about your property and we'll tailor the perfect solution.",
+      declarationText: "I consent to receiving communications regarding the Hostel & PG System demonstration, onboarding process, and customized pricing tailored for my property.",
+      declarationText: "I consent to receiving communications regarding the Hostel & PG System demonstration, onboarding process, and customized pricing tailored for my property.",
       formSchema: [
         { type: "text", name: "propertyName", label: "Property / Hostel Name", placeholder: "Enter property name", required: true, half: true },
         { type: "text", name: "ownerName", label: "Owner / Manager Name", placeholder: "Full name", required: true, half: true },
@@ -91,6 +97,7 @@ export const productsData = {
     link: null,
     features: ["AI Resume Screening & Ranking Engine", "Interactive Candidate Matching Bots", "Predictive Deal Closure Forecasting", "Lead Source Attribution & Performance Audit", "Automated Multi-Channel Outreach Systems", "Unified HR & Client Dashboard View"],
     benefits: ["Cuts candidate screening time from days to minutes", "Increases CRM lead conversion rates", "Delivers data-driven recruitment and sales forecasts", "Consolidates critical business tools"],
+    enquiryMessage: "Accelerate your business with customized AI and automation solutions. We invite forward-thinking enterprises and IT leaders to collaborate with Levitica One. Submit your details, and our AI consultants will reach out to analyze your operational bottlenecks and propose a bespoke automation roadmap. All submitted information is kept strictly confidential and used only to scope your automation needs.",
     enquiry: {
       heading: "Levitica One Platform Enquiry",
       tagline: "Supercharge hiring and sales pipelines with predictive AI.",
@@ -98,6 +105,8 @@ export const productsData = {
       highlights: ["AI Resume Screening", "Candidate Ranking & Shortlisting", "CRM Lead Pipeline Management", "Predictive Sales Forecasting", "Automated Outreach Workflows", "Custom AI Model Integrations"],
       formTitle: "Request AI Platform Demo",
       formSubtitle: "Our AI consultants will contact you within 24 hours.",
+      declarationText: "I agree to be contacted by Levitica's AI consultants to discuss my operational bottlenecks and explore bespoke automation solutions. My details will be kept confidential.",
+      declarationText: "I agree to be contacted by Levitica's AI consultants to discuss my operational bottlenecks and explore bespoke automation solutions. My details will be kept confidential.",
       formSchema: [
         { type: "text", name: "companyName", label: "Company Name", placeholder: "Enter company name", required: true, half: true },
         { type: "text", name: "contactName", label: "Contact Person Name", placeholder: "Full name", required: true, half: true },
@@ -133,6 +142,7 @@ export const productsData = {
     link: "https://dvskillhub.leviticatechnologies.com/",
     features: ["Interactive Multi-format Course Builder", "Integrated Live Streaming & Video Rooms", "Secure Online Assessment & Auto-grading", "Student Progress Tracking Dashboards", "Automated Certificate Generation", "Multi-tenant Portal Support"],
     benefits: ["Deliver classroom-quality training anywhere", "Track corporate training compliance", "Customizable to institution's branding", "Highly interactive discussion boards"],
+    enquiryMessage: "Elevate your training programs with a modern, white-labeled Learning Management System. We invite training institutes, corporate L&D teams, and ed-tech creators to deploy DVSkillHub. Our technical team will reach out to discuss your user base and custom branding requirements. Your details will be used exclusively to provide a platform demonstration and deployment timeline.",
     enquiry: {
       heading: "DVSkillHub Academic & Corporate Collaboration",
       tagline: "Empower students with industry-ready skills through our LMS.",
@@ -140,6 +150,8 @@ export const productsData = {
       highlights: ["Internship Opportunities", "Placement Assistance", "Industry Training Programs", "Campus Collaboration", "Student Skill Development", "Tea, Coffee & Food Facilities Available"],
       formTitle: "Register Your College / Organization",
       formSubtitle: "Fill in your details and our team will connect with you shortly.",
+      declarationText: "I agree to receive communications regarding DVSkillHub demonstrations, platform deployments, and customized branding options for my institute or organization.",
+      declarationText: "I agree to receive communications regarding DVSkillHub demonstrations, platform deployments, and customized branding options for my institute or organization.",
       formSchema: [
         { type: "text", name: "collegeName", label: "College / Institute Name", placeholder: "Enter college name", required: true, half: true },
         { type: "text", name: "tpoName", label: "TPO / Contact Person Name", placeholder: "Full name", required: true, half: true },
@@ -174,6 +186,7 @@ export const productsData = {
     link: "https://hospital-management-12.vercel.app/",
     features: ["Electronic Health Records (EHR)", "Patient Appointment Scheduler", "Laboratory Information Management (LIMS)", "Automated Ward & Bed Allotment", "Insurance Claim Submission", "Pharmacy Inventory Management"],
     benefits: ["Reduces patient wait times up to 50%", "Secures sensitive health documents", "Accelerates billing & insurance workflows", "Streamlines medical supply inventory"],
+    enquiryMessage: "Digitize your healthcare facility with our comprehensive hospital management system. We invite hospitals, clinics, and healthcare administrators to partner with us for streamlined patient records and billing. Our healthcare technology team will contact you to discuss your facility's requirements and regulatory compliance needs. Your information is securely handled to organize a dedicated product consultation.",
     enquiry: {
       heading: "Hospital Management System Enquiry",
       tagline: "Digitize your hospital's entire patient lifecycle securely.",
@@ -181,6 +194,8 @@ export const productsData = {
       highlights: ["Electronic Health Records (EHR)", "Patient Appointment Scheduling", "Laboratory Information Management", "Automated Billing & Insurance Claims", "Pharmacy Inventory Management", "Cloud & On-Premise Deployment"],
       formTitle: "Healthcare System Demo Request",
       formSubtitle: "Our healthcare technology team will arrange a tailored walkthrough.",
+      declarationText: "I agree to be contacted by the Levitica healthcare technology team for a dedicated product consultation and to discuss regulatory compliance requirements.",
+      declarationText: "I agree to be contacted by the Levitica healthcare technology team for a dedicated product consultation and to discuss regulatory compliance requirements.",
       formSchema: [
         { type: "text", name: "facilityName", label: "Hospital / Clinic Name", placeholder: "Enter facility name", required: true, half: true },
         { type: "text", name: "adminName", label: "Administrator / Doctor Name", placeholder: "Full name", required: true, half: true },
@@ -217,6 +232,7 @@ export const productsData = {
     link: "https://leviticaconnect.com",
     features: ["Real-time Chat, Channels, and @Mentions", "HD Video Meetings & Screen Sharing", "Centralized Document Sharing & Co-editing", "Automated Meeting Transcripts & Summaries", "Cognitive Workflow Approvals", "Enterprise SSO & Multi-factor Auth"],
     benefits: ["Combines chat, video, and file sharing in a single app", "100% White-Label with your branding", "End-to-end message encryption", "Support for 100,000+ concurrent users"],
+    enquiryMessage: "Unify your team communication with a secure, enterprise-grade collaboration platform. We invite corporate IT teams and enterprise leaders to adopt Levitica Connect. Upon submitting your details, our enterprise specialists will contact you to discuss user deployment, security configurations, and seamless integration with your existing tools. Your data is strictly used for enterprise onboarding and licensing.",
     enquiry: {
       heading: "Levitica Connect Enquiry",
       tagline: "Unify your team communication in a secure, branded workspace.",
@@ -224,6 +240,8 @@ export const productsData = {
       highlights: ["Real-time Chat & Team Channels", "HD Video Conferencing & Screen Sharing", "Secure Document Collaboration", "AI Meeting Summaries", "100% White-Label & Custom Domain", "Enterprise-grade SSO & MFA"],
       formTitle: "Request Collaboration Platform Demo",
       formSubtitle: "Our enterprise team will reach out within 24 hours.",
+      declarationText: "I consent to receiving information about Levitica Connect regarding enterprise onboarding, security configurations, and user deployment.",
+      declarationText: "I consent to receiving information about Levitica Connect regarding enterprise onboarding, security configurations, and user deployment.",
       formSchema: [
         { type: "text", name: "companyName", label: "Company Name", placeholder: "Enter company name", required: true, half: true },
         { type: "text", name: "contactName", label: "Contact Person", placeholder: "Full name", required: true, half: true },
@@ -262,6 +280,7 @@ export const productsData = {
     link: "https://levitica-data-management.vercel.app/",
     features: ["Secure Departmental Database Silos", "Sales Contracts & Account Records Hub", "Finance Compliance & Billing Archive", "HR Dossiers & Employee File Repositories", "Granular Role-Based Permissions", "Full Activity Log Audits"],
     benefits: ["Central search for corporate assets", "Maximum protection for sensitive data", "Minimizes compliance risk with automatic logging", "Secure hybrid backups with point-in-time recovery"],
+    enquiryMessage: "Scale your digital infrastructure with robust and secure enterprise database management. We invite CTOs, data architects, and IT enterprises to leverage Levitica Core. Our data specialists will reach out to evaluate your storage requirements, compliance standards, and migration scope. Your provided details are strictly confidential and used only to architect your customized data solution.",
     enquiry: {
       heading: "Levitica Core Enquiry",
       tagline: "Centralize and protect your enterprise records with role-based security.",
@@ -269,6 +288,8 @@ export const productsData = {
       highlights: ["Departmental Data Silos", "Sales & Finance Record Vaults", "HR Dossier & Document Storage", "Role-Based Access Controls", "Full Activity Audit Logging", "AES-256 Encrypted Backups"],
       formTitle: "Levitica Core Enquiry",
       formSubtitle: "Our specialists will understand your storage and compliance requirements.",
+      declarationText: "I agree to have Levitica's data specialists contact me to evaluate my enterprise storage requirements and discuss secure data solutions.",
+      declarationText: "I agree to have Levitica's data specialists contact me to evaluate my enterprise storage requirements and discuss secure data solutions.",
       formSchema: [
         { type: "text", name: "companyName", label: "Company / Organization Name", placeholder: "Enter company name", required: true, half: true },
         { type: "text", name: "contactName", label: "Contact Person", placeholder: "Full name", required: true, half: true },
@@ -316,6 +337,7 @@ export const productsData = {
       "Colleges improve placement rates and industry connect",
       "Flexible learning — attend live or watch recorded sessions anytime"
     ],
+    enquiryMessage: "Empower your students with real skills, live mentorship, and industry internships.\n\nWe invite colleges, TPOs, and institutions from Telangana and Andhra Pradesh to partner with Levitica Academy for student internships, skill-building programs, and placement-linked course tracks. Your details will be used by our academic coordinators to reach out and discuss customized institutional partnerships and batch onboarding.",
     enquiry: {
       heading: "Levitica Academy — Internship & Learning Enquiry",
       tagline: "Empower your students with real skills, live mentorship, and industry internships.",
@@ -330,6 +352,7 @@ export const productsData = {
       ],
       formTitle: "Register Your College / Institution",
       formSubtitle: "Our team will connect with you within 24 hours to discuss collaboration.",
+      declarationText: "I consent to Levitica Academy storing my details. I agree to receive invitations for meetings, webinars, and organizational events we host to build academic partnerships and discuss student internships.",
       formSchema: [
         {
           type: "searchable-select", name: "collegeName", label: "College / Institution Name",

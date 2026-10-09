@@ -44,12 +44,12 @@ const Footer = () => {
         <div className="bg-primary text-white">
 
           {/* ===== TOP CONTENT ===== */}
-          <div className="px-6 lg:px-10 py-6">
+          <div className="max-w-7xl mx-auto px-6 lg:px-10 py-10">
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
+            <div className="flex flex-col md:flex-row flex-wrap lg:flex-nowrap gap-10 lg:gap-6 lg:justify-between">
 
               {/* ADDRESS */}
-              <div>
+              <div className="w-full lg:w-1/3 xl:w-2/5">
                 <h4 className="text-lg text-white font-semibold mb-2">
                   Address
                 </h4>

@@ -188,10 +188,9 @@ const ProductDetails = () => {
                             >
                                 <h3 className="text-xl font-bold text-midnight_text dark:text-white mb-1">
                                     For Enquiry
-                                    
                                 </h3>
-                                <div className="text-gray dark:text-slate-300 text-sm mb-5">
-                                    For any queries or support related to this product, feel free to reach out to us:
+                                <div className="text-gray dark:text-slate-300 text-sm mb-5 leading-relaxed whitespace-pre-line">
+                                    {product.enquiryMessage || "For any queries or support related to this product, feel free to reach out to us:"}
                                 </div>
                                 <Link
                                     to={`/products/${slug}/enquiry`}

@@ -108,8 +108,20 @@ function buildYup(schema) {
       : Yup.string();
     if (f.type === "tel")
       rule = rule.matches(/^[0-9]{10}$/, "Must be a valid 10-digit number");
-    if (f.required) rule = rule.required(`${f.label.replace(" *", "")} is required`);
+    if (f.type === "declaration") {
+      rule = Yup.boolean().oneOf([true], "You must agree to the declaration");
+    } else if (f.required) {
+      rule = rule.required(`${f.label.replace(" *", "")} is required`);
+    }
     shape[f.name] = rule;
+
+    if (f.type === "searchable-select") {
+      shape[`${f.name}_other`] = Yup.string().when(f.name, {
+        is: "Others",
+        then: (s) => s.required(`Please enter your ${f.label.replace(" *", "")}`),
+        otherwise: (s) => s.notRequired(),
+      });
+    }
   });
   return Yup.object(shape);
 }
@@ -118,7 +130,10 @@ function buildYup(schema) {
 function buildInitial(schema) {
   const vals = {};
   schema.forEach((f) => {
-    vals[f.name] = f.type === "checkboxes" ? [] : "";
+    vals[f.name] = f.type === "checkboxes" ? [] : f.type === "declaration" ? false : "";
+    if (f.type === "searchable-select") {
+      vals[`${f.name}_other`] = "";
+    }
   });
   return vals;
 }
@@ -155,6 +170,19 @@ const RenderField = ({ f, values, setFieldValue, errors, touched }) => {
           error={err}
         />
         {err && <p className="text-red-500 text-xs mt-1">{err}</p>}
+        {values[f.name] === "Others" && (
+          <div className="mt-3 animate-fade-in-up">
+            <Field 
+              name={`${f.name}_other`} 
+              type="text" 
+              placeholder={`Enter ${f.label.replace(" *", "")}`} 
+              className={cls} 
+            />
+            {touched[`${f.name}_other`] && errors[`${f.name}_other`] && (
+              <p className="text-red-500 text-xs mt-1">{errors[`${f.name}_other`]}</p>
+            )}
+          </div>
+        )}
       </div>
     );
   }
@@ -248,6 +276,26 @@ const RenderField = ({ f, values, setFieldValue, errors, touched }) => {
     );
   }
 
+  if (f.type === "declaration") {
+    return (
+      <div className=" mt-4 mb-2">
+        <label className="flex items-start gap-3 cursor-pointer group">
+          <div className="pt-0.5">
+            <Field
+              type="checkbox"
+              name={f.name}
+              className="w-4 h-4 text-primary bg-white border-slate-300 rounded focus:ring-primary cursor-pointer mt-0.5"
+            />
+          </div>
+          <span className="text-xs text-slate-600 dark:text-slate-400 group-hover:text-slate-800 dark:group-hover:text-slate-200 transition-colors leading-relaxed text-justify">
+            {f.label}
+          </span>
+        </label>
+        {err && <p className="text-red-500 text-xs mt-1 ml-7">{err}</p>}
+      </div>
+    );
+  }
+
   return null;
 };
 
@@ -268,7 +316,7 @@ const getProductLogo = (product) => {
       }
     }
   }
-  
+
   // Fallback to main company logo
   return "/img/leviticalogo.png";
 };
@@ -313,10 +361,18 @@ const ProductEnquiry = () => {
   }
 
   const enq = product.enquiry;
-  const schema = enq.formSchema;
+  const schema = [
+    ...enq.formSchema,
+    {
+      type: "declaration",
+      name: "declaration",
+      label: enq.declarationText || "I agree to be contacted by the Levitica team regarding this enquiry and consent to my details being securely stored for this purpose.",
+      required: true
+    }
+  ];
   const validationSchema = buildYup(schema);
   const initialValues = buildInitial(schema);
-  
+
   // Get product-specific logo or fallback to company logo
   const productLogo = getProductLogo(product);
   const hasProductLogo = hasCustomLogo(product);
@@ -332,9 +388,12 @@ const ProductEnquiry = () => {
       const lines = schema
         .filter((f) => f.type !== "textarea")
         .map((f) => {
-          const val = Array.isArray(values[f.name])
-            ? values[f.name].join(", ") || "—"
-            : values[f.name] || "—";
+          let val = values[f.name] || "—";
+          if (Array.isArray(values[f.name])) {
+            val = values[f.name].join(", ") || "—";
+          } else if (values[f.name] === "Others" && values[`${f.name}_other`]) {
+            val = `Others (${values[`${f.name}_other`]})`;
+          }
           return `${f.label.replace(" *", "").padEnd(30)}: ${val}`;
         });
 
@@ -513,7 +572,7 @@ const ProductEnquiry = () => {
                 <Form>
                   <div className="grid grid-cols-2 gap-x-4 gap-y-4">
                     {schema.map((f) => {
-                      const isFullWidth = ["checkboxes", "food", "textarea"].includes(f.type) || f.half === false;
+                      const isFullWidth = ["checkboxes", "food", "textarea", "declaration"].includes(f.type) || f.half === false;
                       return (
                         <div key={f.name} className={isFullWidth ? "col-span-2" : "col-span-2 sm:col-span-1"}>
                           <RenderField
@@ -540,10 +599,6 @@ const ProductEnquiry = () => {
                         : <><FaPaperPlane size={14} /> Submit Registration</>
                       }
                     </button>
-                    <p className="text-center text-xs text-slate-400 dark:text-slate-500 mt-3">
-                      By submitting, you agree to be contacted by our team regarding{" "}
-                      <strong className="text-slate-500 dark:text-slate-400">{product.title}</strong>.
-                    </p>
                   </div>
                 </Form>
               )}
