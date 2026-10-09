@@ -263,7 +263,7 @@ const PaymentSuccess = () => {
           Your internship registration is confirmed.
         </p>
         <div className="bg-blue-50 border border-blue-100 text-blue-800 p-3 rounded-lg text-sm mb-6">
-          <strong>Next Step:</strong> We've sent your login credentials to your email. Please check your inbox (and spam) to access your Student Dashboard.
+          <strong>Next Step (For New Students):</strong> To access your dashboard, please go to the login page and click on <strong>Forgot Password</strong> to set your new password, then log in.
         </div>
 
         {/* Payment Details */}
