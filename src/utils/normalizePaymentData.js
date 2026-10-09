@@ -1,40 +1,61 @@
 export const normalizeCoursePayments = (transactions = []) => {
-  return transactions.map((t) => ({
-    orderId: t.orderId,
-    paymentId: t.paymentId,
+  return transactions.map((t) => {
+    const userObj = t.user || t.userId || t.student || t.studentId || {};
+    const name = userObj.name || t.name || t.customerName || "Unknown User";
+    const email = userObj.email || t.email || t.customerEmail || "-";
+    let mode = t.paymentMode || t.paymentMethod || t.gateway;
+    if (!mode || mode.toUpperCase() === "UNKNOWN") {
+      mode = t.paymentId ? "RAZORPAY" : "UNKNOWN";
+    }
 
-    name: t.user?.name,
-    email: t.user?.email,
+    return {
+      orderId: t.orderId,
+      paymentId: t.paymentId,
 
-    title: t.courses?.map((c) => c.name).join(", "),
-    type: "Course",
+      name,
+      email,
 
-    amount: t.amount,
-    status: t.status,
+      title: t.courses?.map((c) => c.name).join(", ") || t.courseName || "-",
+      type: "Course",
 
-    paymentMode: t.paymentMode || "unknown",
-    appUsed: t.appUsed || "-",
+      amount: t.amount,
+      status: t.status,
 
-    createdAt: t.createdAt,
-  }));
+      paymentMode: mode,
+      appUsed: t.appUsed || "-",
+
+      createdAt: t.createdAt,
+    };
+  });
 };
+
 export const normalizeInternshipPayments = (payments = []) => {
-  return payments.map((p) => ({
-    orderId: p.orderId,
-    paymentId: p.paymentId,
+  return payments.map((p) => {
+    const userObj = p.user || p.userId || p.student || p.studentId || {};
+    const name = p.name || userObj.name || p.customerName || "Unknown User";
+    const email = p.email || userObj.email || p.customerEmail || "-";
+    let mode = p.paymentMode || p.paymentMethod || p.gateway;
+    if (!mode || mode.toUpperCase() === "UNKNOWN") {
+      mode = p.paymentId ? "RAZORPAY" : "UNKNOWN";
+    }
 
-    name: p.name,
-    email: p.email,
+    return {
+      orderId: p.orderId,
+      paymentId: p.paymentId,
 
-    title: p.title,
-    type: "Internship",
+      name,
+      email,
 
-    amount: p.amount,
-    status: p.status,
+      title: p.title || p.domain || "-",
+      type: "Internship",
 
-    paymentMode: p.paymentMode || "unknown",
-    appUsed: p.appUsed || "-",
+      amount: p.amount,
+      status: p.status,
 
-    createdAt: p.createdAt,
-  }));
+      paymentMode: mode,
+      appUsed: p.appUsed || "-",
+
+      createdAt: p.createdAt,
+    };
+  });
 };
