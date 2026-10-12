@@ -127,7 +127,7 @@ const AppRouter = () => {
         <Route path="dashboard" element={<ProtectedRoute />}>
           <Route index element={<DashboardIndex />} />
 
-          <Route element={<ProtectedRoute allowedRoles={["student", "admin", "superadmin"]} />}>
+          <Route element={<ProtectedRoute allowedRoles={["student", "admin", "superadmin", "mentor"]} />}>
             <Route element={<DashboardLayout />}>
               <Route path="course/:id" element={<CommonCourseDetails />} />
             </Route>

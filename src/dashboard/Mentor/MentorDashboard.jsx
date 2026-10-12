@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   FiBookOpen,
@@ -21,6 +21,7 @@ import { useGetMentorOverviewQuery } from "@/Services/mentor/mentorPortalService
 const MentorDashboard = () => {
   const { theme } = useTheme();
   const isDark = theme === "dark";
+  const navigate = useNavigate();
 
   const { data, isLoading } = useGetMentorOverviewQuery();
   const overview = data?.data;
@@ -195,10 +196,11 @@ const MentorDashboard = () => {
               {courses.slice(0, 3).map((c) => (
                 <div
                   key={c._id}
-                  className={`p-4 rounded-2xl border flex items-center gap-4 transition shadow-sm ${
+                  onClick={() => navigate(`/dashboard/mentor/courses?id=${c._id}`)}
+                  className={`p-4 rounded-2xl border flex items-center gap-4 transition shadow-sm cursor-pointer select-none ${
                     isDark
-                      ? "bg-semidark border-dark_border text-white hover:border-indigo-500/40"
-                      : "bg-white border-border text-midnight_text hover:border-indigo-500/40"
+                      ? "bg-semidark border-dark_border text-white hover:border-indigo-500/60 hover:shadow-indigo-500/10 hover:shadow-md"
+                      : "bg-white border-border text-midnight_text hover:border-indigo-500/60 hover:shadow-indigo-500/10 hover:shadow-md"
                   }`}
                 >
                   <div className="w-14 h-14 rounded-xl bg-slate-800 overflow-hidden shrink-0 flex items-center justify-center text-lg font-bold text-indigo-400">
@@ -230,10 +232,11 @@ const MentorDashboard = () => {
               {internshipDomains.slice(0, 3).map((d) => (
                 <div
                   key={d._id}
-                  className={`p-4 rounded-2xl border flex items-center gap-4 transition shadow-sm ${
+                  onClick={() => navigate(`/dashboard/mentor/courses?id=${d._id}`)}
+                  className={`p-4 rounded-2xl border flex items-center gap-4 transition shadow-sm cursor-pointer select-none ${
                     isDark
-                      ? "bg-semidark border-dark_border text-white hover:border-amber-500/40"
-                      : "bg-white border-border text-midnight_text hover:border-amber-500/40"
+                      ? "bg-semidark border-dark_border text-white hover:border-amber-500/60 hover:shadow-amber-500/10 hover:shadow-md"
+                      : "bg-white border-border text-midnight_text hover:border-amber-500/60 hover:shadow-amber-500/10 hover:shadow-md"
                   }`}
                 >
                   <div className="w-14 h-14 rounded-xl bg-amber-500/10 border border-amber-500/20 shrink-0 flex items-center justify-center text-amber-400">

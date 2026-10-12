@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { useSearchParams } from "react-router-dom";
 import {
   FiBookOpen,
   FiBriefcase,
@@ -8,20 +9,42 @@ import {
   FiLayers,
   FiCheckCircle,
   FiCalendar,
+  FiArrowRight,
+  FiInfo,
 } from "react-icons/fi";
 import { useTheme } from "@/context/ThemeContext";
 import { useGetMentorCoursesQuery } from "@/Services/mentor/mentorPortalService";
+import MentorProgramDetailsModal from "./MentorProgramDetailsModal";
 
 const MentorCourses = () => {
   const { theme } = useTheme();
   const isDark = theme === "dark";
   const [activeTab, setActiveTab] = useState("all"); // 'all' | 'courses' | 'internships'
+  const [selectedProgram, setSelectedProgram] = useState(null); // { item, type: 'course' | 'internship' }
+
+  const [searchParams] = useSearchParams();
+  const requestedId = searchParams.get("id") || searchParams.get("courseId");
 
   const { data, isLoading } = useGetMentorCoursesQuery();
   const courses = data?.courses || [];
   const internshipDomains = data?.internshipDomains || [];
 
   const totalPrograms = courses.length + internshipDomains.length;
+
+  // Auto-open modal if URL query parameter specified
+  useEffect(() => {
+    if (requestedId && !selectedProgram) {
+      const foundCourse = courses.find((c) => c._id === requestedId);
+      if (foundCourse) {
+        setSelectedProgram({ item: foundCourse, type: "course" });
+        return;
+      }
+      const foundDomain = internshipDomains.find((d) => d._id === requestedId);
+      if (foundDomain) {
+        setSelectedProgram({ item: foundDomain, type: "internship" });
+      }
+    }
+  }, [requestedId, courses, internshipDomains]);
 
   return (
     <div className="min-h-screen py-6 px-4 sm:px-6 lg:px-8">
@@ -38,7 +61,7 @@ const MentorCourses = () => {
               My Assigned Programs & Internships
             </h1>
             <p className="text-sm text-gray mt-1">
-              Courses and Industrial Internship domains assigned to you by Super Admin.
+              Courses and Industrial Internship domains assigned to you by Super Admin. Tap any card for full syllabus, batch details, and mentor deliverables.
             </p>
           </div>
 
@@ -97,8 +120,9 @@ const MentorCourses = () => {
 
         {/* Loading State */}
         {isLoading ? (
-          <div className="p-16 text-center text-sm text-gray">
-            Loading assigned programs...
+          <div className="p-16 text-center text-sm text-gray flex flex-col items-center justify-center gap-2">
+            <div className="w-7 h-7 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+            <p>Loading assigned programs...</p>
           </div>
         ) : totalPrograms === 0 ? (
           <div
@@ -118,21 +142,34 @@ const MentorCourses = () => {
             {/* 1. Courses Section */}
             {(activeTab === "all" || activeTab === "courses") && courses.length > 0 && (
               <div className="space-y-4">
-                <div className="flex items-center gap-2">
-                  <FiBookOpen className="text-indigo-400" />
-                  <h2 className="text-lg font-bold">Assigned Courses</h2>
-                  <span className="text-xs text-gray">({courses.length})</span>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <FiBookOpen className="text-indigo-400" />
+                    <h2 className="text-lg font-bold">Assigned Courses</h2>
+                    <span className="text-xs text-gray">({courses.length})</span>
+                  </div>
+                  <span className="text-[11px] text-gray italic">
+                    Tap any course card to inspect full curriculum & details
+                  </span>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {courses.map((course) => (
                     <motion.div
                       key={course._id}
-                      whileHover={{ y: -4 }}
-                      className={`rounded-2xl border overflow-hidden flex flex-col justify-between shadow-sm transition ${
+                      whileHover={{ y: -5 }}
+                      onClick={() => setSelectedProgram({ item: course, type: "course" })}
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          setSelectedProgram({ item: course, type: "course" });
+                        }
+                      }}
+                      className={`rounded-2xl border overflow-hidden flex flex-col justify-between shadow-sm transition-all duration-200 cursor-pointer group select-none ${
                         isDark
-                          ? "bg-semidark border-dark_border text-white hover:border-indigo-500/40"
-                          : "bg-white border-border text-midnight_text hover:border-indigo-500/40"
+                          ? "bg-semidark border-dark_border text-white hover:border-indigo-500 hover:shadow-indigo-500/10 hover:shadow-xl"
+                          : "bg-white border-border text-midnight_text hover:border-indigo-500 hover:shadow-indigo-500/10 hover:shadow-xl"
                       }`}
                     >
                       <div>
@@ -141,20 +178,23 @@ const MentorCourses = () => {
                             <img
                               src={course.thumbnail.url}
                               alt={course.name}
-                              className="w-full h-full object-cover"
+                              className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
                             />
                           ) : (
-                            <div className="w-full h-full flex items-center justify-center text-4xl font-extrabold text-indigo-400/30">
+                            <div className="w-full h-full flex items-center justify-center text-4xl font-extrabold text-indigo-400/30 group-hover:scale-105 transition duration-300">
                               {course.name.charAt(0)}
                             </div>
                           )}
                           <span className="absolute top-3 left-3 px-3 py-1 rounded-full text-[11px] font-bold bg-slate-950/80 text-white backdrop-blur-md border border-white/20">
                             {course.category || "General"}
                           </span>
+                          <span className="absolute top-3 right-3 px-2.5 py-1 rounded-full text-[10px] font-bold bg-indigo-600/90 text-white shadow-sm opacity-0 group-hover:opacity-100 transition duration-200 flex items-center gap-1">
+                            <FiInfo size={11} /> Tap for Details
+                          </span>
                         </div>
 
                         <div className="p-5 space-y-3">
-                          <h3 className="text-base font-bold line-clamp-1">
+                          <h3 className="text-base font-bold line-clamp-1 group-hover:text-primary transition">
                             {course.name}
                           </h3>
                           <p className="text-xs text-gray line-clamp-2 leading-relaxed">
@@ -189,9 +229,12 @@ const MentorCourses = () => {
                         </div>
                       </div>
 
-                      <div className="p-5 pt-0">
-                        <span className="w-full py-2 px-3 rounded-xl text-xs font-semibold text-center block bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+                      <div className="p-5 pt-0 flex items-center gap-2">
+                        <span className="flex-1 py-2 px-3 rounded-xl text-xs font-semibold text-center block bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 group-hover:bg-indigo-500/20 transition">
                           <FiCheckCircle className="inline mr-1" /> Active Mentor
+                        </span>
+                        <span className="py-2 px-3 rounded-xl text-xs font-bold text-center bg-primary/10 text-primary border border-primary/20 group-hover:bg-primary group-hover:text-white transition flex items-center gap-1 shrink-0">
+                          Full Details <FiArrowRight size={12} />
                         </span>
                       </div>
                     </motion.div>
@@ -204,11 +247,16 @@ const MentorCourses = () => {
             {(activeTab === "all" || activeTab === "internships") &&
               internshipDomains.length > 0 && (
                 <div className="space-y-4">
-                  <div className="flex items-center gap-2">
-                    <FiBriefcase className="text-amber-500" />
-                    <h2 className="text-lg font-bold">Assigned Industrial Internships</h2>
-                    <span className="text-xs text-gray">
-                      ({internshipDomains.length})
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <FiBriefcase className="text-amber-500" />
+                      <h2 className="text-lg font-bold">Assigned Industrial Internships</h2>
+                      <span className="text-xs text-gray">
+                        ({internshipDomains.length})
+                      </span>
+                    </div>
+                    <span className="text-[11px] text-gray italic">
+                      Tap any internship domain to inspect tracks & deliverables
                     </span>
                   </div>
 
@@ -216,15 +264,23 @@ const MentorCourses = () => {
                     {internshipDomains.map((domain) => (
                       <motion.div
                         key={domain._id}
-                        whileHover={{ y: -4 }}
-                        className={`rounded-2xl border overflow-hidden flex flex-col justify-between shadow-sm transition ${
+                        whileHover={{ y: -5 }}
+                        onClick={() => setSelectedProgram({ item: domain, type: "internship" })}
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" || e.key === " ") {
+                            setSelectedProgram({ item: domain, type: "internship" });
+                          }
+                        }}
+                        className={`rounded-2xl border overflow-hidden flex flex-col justify-between shadow-sm transition-all duration-200 cursor-pointer group select-none ${
                           isDark
-                            ? "bg-semidark border-dark_border text-white hover:border-amber-500/40"
-                            : "bg-white border-border text-midnight_text hover:border-amber-500/40"
+                            ? "bg-semidark border-dark_border text-white hover:border-amber-500 hover:shadow-amber-500/10 hover:shadow-xl"
+                            : "bg-white border-border text-midnight_text hover:border-amber-500 hover:shadow-amber-500/10 hover:shadow-xl"
                         }`}
                       >
                         <div>
-                          <div className="p-5 pb-3 border-b border-border/30 bg-gradient-to-br from-amber-500/10 to-transparent">
+                          <div className="p-5 pb-3 border-b border-border/30 bg-gradient-to-br from-amber-500/10 to-transparent relative">
                             <div className="flex items-center justify-between gap-2">
                               <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30">
                                 Industrial Internship
@@ -235,7 +291,7 @@ const MentorCourses = () => {
                                 </span>
                               )}
                             </div>
-                            <h3 className="text-base font-bold mt-2.5 line-clamp-1">
+                            <h3 className="text-base font-bold mt-2.5 line-clamp-1 group-hover:text-amber-400 transition">
                               {domain.name}
                             </h3>
                             <p className="text-xs text-amber-400 font-medium mt-0.5 line-clamp-1">
@@ -278,9 +334,12 @@ const MentorCourses = () => {
                           </div>
                         </div>
 
-                        <div className="p-5 pt-0">
-                          <span className="w-full py-2 px-3 rounded-xl text-xs font-semibold text-center block bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                        <div className="p-5 pt-0 flex items-center gap-2">
+                          <span className="flex-1 py-2 px-3 rounded-xl text-xs font-semibold text-center block bg-amber-500/10 text-amber-400 border border-amber-500/20 group-hover:bg-amber-500/20 transition">
                             <FiCheckCircle className="inline mr-1" /> Active Domain Mentor
+                          </span>
+                          <span className="py-2 px-3 rounded-xl text-xs font-bold text-center bg-primary/10 text-primary border border-primary/20 group-hover:bg-primary group-hover:text-white transition flex items-center gap-1 shrink-0">
+                            Full Details <FiArrowRight size={12} />
                           </span>
                         </div>
                       </motion.div>
@@ -289,6 +348,15 @@ const MentorCourses = () => {
                 </div>
               )}
           </div>
+        )}
+
+        {/* Modal for Full Details */}
+        {selectedProgram && (
+          <MentorProgramDetailsModal
+            program={selectedProgram.item}
+            type={selectedProgram.type}
+            onClose={() => setSelectedProgram(null)}
+          />
         )}
       </div>
     </div>

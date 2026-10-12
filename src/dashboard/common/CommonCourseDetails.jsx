@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import {
@@ -17,6 +17,8 @@ import {
   FiShare2,
   FiPlayCircle,
   FiFileText,
+  FiArrowLeft,
+  FiLayers,
 } from "react-icons/fi";
 import { toast } from "react-hot-toast";
 import { useAddItemMutation } from '@/Services/student/cartServices';
@@ -27,6 +29,7 @@ import RelatedCourses from "./RelatedCourses";
 
 const CommonCourseDetails = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const { openModal } = useModal();
   const dispatch = useDispatch();
   const [expandedWeeks, setExpandedWeeks] = useState([]);
@@ -118,6 +121,14 @@ const CommonCourseDetails = () => {
   return (
     <div className="px-2">
       <div className="max-w-7xl mx-auto px-4 py-8 md:py-12">
+        {role === "mentor" && (
+          <button
+            onClick={() => navigate("/dashboard/mentor/courses")}
+            className="inline-flex items-center gap-2 text-xs font-semibold text-primary hover:underline mb-6 cursor-pointer"
+          >
+            <FiArrowLeft size={14} /> Back to My Assigned Programs
+          </button>
+        )}
         
         {/* Hero Section - Two Column Layout */}
         <div className="grid lg:grid-cols-3 gap-8 lg:gap-12">
@@ -249,6 +260,37 @@ const CommonCourseDetails = () => {
                     >
                       <FiEdit size={18} /> Edit Course Details
                     </button>
+                  ) : role === "mentor" ? (
+                    <div className="space-y-3">
+                      <div className="p-3.5 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-center space-y-1">
+                        <span className="text-xs font-bold text-indigo-400 flex items-center justify-center gap-1.5">
+                          <FiCheckCircle size={15} /> You are an Assigned Mentor
+                        </span>
+                        <p className="text-[11px] text-gray dark:text-gray-400">
+                          Assigned by Super Admin to teach and evaluate cohorts in this program.
+                        </p>
+                      </div>
+                      <div className="grid grid-cols-2 gap-2">
+                        <button
+                          onClick={() => navigate("/dashboard/mentor/batches")}
+                          className="inline-flex items-center justify-center gap-2 px-3 py-2.5 btn-primary rounded-xl text-xs font-semibold cursor-pointer"
+                        >
+                          <FiLayers size={14} /> My Batches
+                        </button>
+                        <button
+                          onClick={() => navigate(`/dashboard/mentor/assignments?courseId=${course._id}`)}
+                          className="inline-flex items-center justify-center gap-2 px-3 py-2.5 border border-border dark:border-dark_border rounded-xl text-xs font-semibold hover:bg-light dark:hover:bg-darklight text-midnight_text dark:text-white cursor-pointer"
+                        >
+                          <FiBookOpen size={14} /> Assignments
+                        </button>
+                      </div>
+                      <button
+                        onClick={handleShare}
+                        className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 border border-border dark:border-dark_border rounded-xl text-xs font-semibold hover:bg-light dark:hover:bg-darklight text-gray-600 dark:text-gray-400 hover:text-primary transition-colors cursor-pointer"
+                      >
+                        <FiShare2 size={14} /> Share Course Link
+                      </button>
+                    </div>
                   ) : (
                     <div className="flex gap-2">
                       <button
