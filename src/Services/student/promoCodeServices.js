@@ -5,7 +5,7 @@ export const promoServices = api.injectEndpoints({
 
     applyPromo: builder.mutation({
       query: (data) => ({
-        url: "/promo/apply",
+        url: "/api/promo/apply",
         method: "POST",
         body: data,
       }),

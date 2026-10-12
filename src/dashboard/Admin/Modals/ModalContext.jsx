@@ -189,7 +189,8 @@ export const ModalProvider = ({ children }) => {
               {/* Promo code modal */}
               {modalType === MODAL_TYPES.ADD_PROMO && (
                 <PromoModal
-                  mode="add"
+                  mode={modalProps.mode || "add"}
+                  promo={modalProps.promo || {}}
                   onSuccess={closeModal}
                 />
               )}

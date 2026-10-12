@@ -50,11 +50,10 @@ const MentorDashboard = () => {
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          className={`relative overflow-hidden rounded-3xl p-6 sm:p-8 border shadow-xl ${
-            isDark
-              ? "bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 border-dark_border text-white"
-              : "bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 border-border text-white"
-          }`}
+          className={`relative overflow-hidden rounded-3xl p-6 sm:p-8 border shadow-xl ${isDark
+            ? "bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 border-dark_border text-white"
+            : "bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 border-border text-white"
+            }`}
         >
           <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div className="flex items-center gap-5">
@@ -76,7 +75,7 @@ const MentorDashboard = () => {
                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
                   Verified Mentor Portal
                 </div>
-                <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
+                <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
                   Welcome back, {mentor?.name || "Mentor"}!
                 </h1>
                 <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-xl">
@@ -144,11 +143,10 @@ const MentorDashboard = () => {
             <Link
               key={i}
               to={stat.link}
-              className={`p-4 sm:p-5 rounded-2xl border transition-all duration-200 hover:-translate-y-1 block shadow-sm ${
-                isDark
-                  ? "bg-semidark border-dark_border hover:border-primary/40 text-white"
-                  : "bg-white border-border hover:border-primary/40 text-midnight_text"
-              }`}
+              className={`p-4 sm:p-5 rounded-2xl border transition-all duration-200 hover:-translate-y-1 block shadow-sm ${isDark
+                ? "bg-semidark border-dark_border hover:border-primary/40 text-white"
+                : "bg-white border-border hover:border-primary/40 text-midnight_text"
+                }`}
             >
               <div className="flex items-center justify-between mb-3">
                 <span className="p-2.5 rounded-xl bg-slate-500/10">{stat.icon}</span>
@@ -166,9 +164,8 @@ const MentorDashboard = () => {
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <h2
-              className={`text-lg font-bold flex items-center gap-2 ${
-                isDark ? "text-white" : "text-midnight_text"
-              }`}
+              className={`text-lg font-bold flex items-center gap-2 ${isDark ? "text-white" : "text-midnight_text"
+                }`}
             >
               <FiBookOpen className="text-primary" /> My Assigned Programs & Internships
             </h2>
@@ -182,9 +179,8 @@ const MentorDashboard = () => {
 
           {courses.length === 0 && internshipDomains.length === 0 ? (
             <div
-              className={`p-10 rounded-2xl border text-center text-gray text-xs space-y-2 ${
-                isDark ? "bg-semidark border-dark_border" : "bg-white border-border"
-              }`}
+              className={`p-10 rounded-2xl border text-center text-gray text-xs space-y-2 ${isDark ? "bg-semidark border-dark_border" : "bg-white border-border"
+                }`}
             >
               <FiBookOpen size={36} className="mx-auto opacity-30 text-primary" />
               <p className="font-semibold text-sm">No programs assigned yet</p>
@@ -197,11 +193,10 @@ const MentorDashboard = () => {
                 <div
                   key={c._id}
                   onClick={() => navigate(`/dashboard/mentor/courses?id=${c._id}`)}
-                  className={`p-4 rounded-2xl border flex items-center gap-4 transition shadow-sm cursor-pointer select-none ${
-                    isDark
-                      ? "bg-semidark border-dark_border text-white hover:border-indigo-500/60 hover:shadow-indigo-500/10 hover:shadow-md"
-                      : "bg-white border-border text-midnight_text hover:border-indigo-500/60 hover:shadow-indigo-500/10 hover:shadow-md"
-                  }`}
+                  className={`p-4 rounded-2xl border flex items-center gap-4 transition shadow-sm cursor-pointer select-none ${isDark
+                    ? "bg-semidark border-dark_border text-white hover:border-indigo-500/60 hover:shadow-indigo-500/10 hover:shadow-md"
+                    : "bg-white border-border text-midnight_text hover:border-indigo-500/60 hover:shadow-indigo-500/10 hover:shadow-md"
+                    }`}
                 >
                   <div className="w-14 h-14 rounded-xl bg-slate-800 overflow-hidden shrink-0 flex items-center justify-center text-lg font-bold text-indigo-400">
                     {c.thumbnail?.url ? (
@@ -233,11 +228,10 @@ const MentorDashboard = () => {
                 <div
                   key={d._id}
                   onClick={() => navigate(`/dashboard/mentor/courses?id=${d._id}`)}
-                  className={`p-4 rounded-2xl border flex items-center gap-4 transition shadow-sm cursor-pointer select-none ${
-                    isDark
-                      ? "bg-semidark border-dark_border text-white hover:border-amber-500/60 hover:shadow-amber-500/10 hover:shadow-md"
-                      : "bg-white border-border text-midnight_text hover:border-amber-500/60 hover:shadow-amber-500/10 hover:shadow-md"
-                  }`}
+                  className={`p-4 rounded-2xl border flex items-center gap-4 transition shadow-sm cursor-pointer select-none ${isDark
+                    ? "bg-semidark border-dark_border text-white hover:border-amber-500/60 hover:shadow-amber-500/10 hover:shadow-md"
+                    : "bg-white border-border text-midnight_text hover:border-amber-500/60 hover:shadow-amber-500/10 hover:shadow-md"
+                    }`}
                 >
                   <div className="w-14 h-14 rounded-xl bg-amber-500/10 border border-amber-500/20 shrink-0 flex items-center justify-center text-amber-400">
                     <FiBriefcase size={22} />
@@ -265,9 +259,8 @@ const MentorDashboard = () => {
           <div className="lg:col-span-2 space-y-4">
             <div className="flex items-center justify-between">
               <h2
-                className={`text-lg font-bold flex items-center gap-2 ${
-                  isDark ? "text-white" : "text-midnight_text"
-                }`}
+                className={`text-lg font-bold flex items-center gap-2 ${isDark ? "text-white" : "text-midnight_text"
+                  }`}
               >
                 <FiClipboard className="text-primary" /> Assignments & Submissions
               </h2>
@@ -281,9 +274,8 @@ const MentorDashboard = () => {
 
             {assignments.length === 0 ? (
               <div
-                className={`p-8 rounded-2xl border text-center text-gray text-xs space-y-2 ${
-                  isDark ? "bg-semidark border-dark_border" : "bg-white border-border"
-                }`}
+                className={`p-8 rounded-2xl border text-center text-gray text-xs space-y-2 ${isDark ? "bg-semidark border-dark_border" : "bg-white border-border"
+                  }`}
               >
                 <FiCheckCircle size={32} className="mx-auto opacity-30 text-emerald-500" />
                 <p className="font-semibold text-sm">No assignments active</p>
@@ -291,17 +283,15 @@ const MentorDashboard = () => {
               </div>
             ) : (
               <div
-                className={`rounded-2xl border overflow-hidden shadow-sm ${
-                  isDark ? "bg-semidark border-dark_border" : "bg-white border-border"
-                }`}
+                className={`rounded-2xl border overflow-hidden shadow-sm ${isDark ? "bg-semidark border-dark_border" : "bg-white border-border"
+                  }`}
               >
                 <div className="overflow-x-auto">
                   <table className="w-full text-left border-collapse text-xs">
                     <thead>
                       <tr
-                        className={`border-b text-[11px] uppercase text-gray font-semibold ${
-                          isDark ? "border-dark_border bg-darklight/40" : "border-border bg-gray-50"
-                        }`}
+                        className={`border-b text-[11px] uppercase text-gray font-semibold ${isDark ? "border-dark_border bg-darklight/40" : "border-border bg-gray-50"
+                          }`}
                       >
                         <th className="py-3 px-4">Title</th>
                         <th className="py-3 px-4">Program</th>
@@ -311,9 +301,8 @@ const MentorDashboard = () => {
                       </tr>
                     </thead>
                     <tbody
-                      className={`divide-y ${
-                        isDark ? "divide-dark_border" : "divide-border"
-                      }`}
+                      className={`divide-y ${isDark ? "divide-dark_border" : "divide-border"
+                        }`}
                     >
                       {assignments.map((a) => (
                         <tr key={a._id} className="hover:bg-primary/5 transition">
@@ -352,9 +341,8 @@ const MentorDashboard = () => {
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <h2
-                className={`text-lg font-bold flex items-center gap-2 ${
-                  isDark ? "text-white" : "text-midnight_text"
-                }`}
+                className={`text-lg font-bold flex items-center gap-2 ${isDark ? "text-white" : "text-midnight_text"
+                  }`}
               >
                 <FiVideo className="text-primary" /> Live Sessions
               </h2>
@@ -367,9 +355,8 @@ const MentorDashboard = () => {
             </div>
 
             <div
-              className={`p-4 rounded-2xl border space-y-3.5 shadow-sm ${
-                isDark ? "bg-semidark border-dark_border" : "bg-white border-border"
-              }`}
+              className={`p-4 rounded-2xl border space-y-3.5 shadow-sm ${isDark ? "bg-semidark border-dark_border" : "bg-white border-border"
+                }`}
             >
               {liveClasses.length === 0 ? (
                 <div className="text-center py-8 text-gray text-xs space-y-2">
@@ -381,9 +368,8 @@ const MentorDashboard = () => {
                 liveClasses.slice(0, 5).map((lc) => (
                   <div
                     key={lc._id}
-                    className={`p-3.5 rounded-xl border space-y-2 ${
-                      isDark ? "bg-darklight/40 border-dark_border" : "bg-slate-50 border-border"
-                    }`}
+                    className={`p-3.5 rounded-xl border space-y-2 ${isDark ? "bg-darklight/40 border-dark_border" : "bg-slate-50 border-border"
+                      }`}
                   >
                     <div className="flex items-start justify-between gap-2">
                       <h4 className="font-bold text-xs sm:text-sm line-clamp-1">

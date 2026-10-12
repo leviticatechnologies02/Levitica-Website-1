@@ -15,6 +15,7 @@ import {
   FaCog,
   FaCertificate,
   FaClipboardList,
+  FaTag,
 } from "react-icons/fa";
 
 const Sidebar = () => {
@@ -154,6 +155,12 @@ const Sidebar = () => {
       icon: <FaCreditCard size={20} />,
       path: "/dashboard/admin/payments",
       roles: ['superadmin'],
+    },
+    {
+      label: "Promo Codes",
+      icon: <FaTag size={18} />,
+      path: "/dashboard/admin/promocode",
+      roles: ["admin", "superadmin"],
     },
     {
       label: "Enquiries",

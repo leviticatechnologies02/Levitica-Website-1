@@ -14,7 +14,7 @@ const AdminDashboard = () => {
   const { theme } = useTheme();
   const isDark = theme === 'dark';
   const { user } = useSelector((state) => state.auth);
-  
+
   const { data: stats, isLoading, error } = useGetStatsQuery();
 
   const {
@@ -25,45 +25,45 @@ const AdminDashboard = () => {
   } = stats?.data || {};
 
   const statsData = [
-    { 
-      label: "Verified Users", 
-      count: verifiedUsers, 
+    {
+      label: "Verified Users",
+      count: verifiedUsers,
       icon: FiUsers,
-      gradient: isDark 
-        ? 'from-primary/20 to-primary/5' 
+      gradient: isDark
+        ? 'from-primary/20 to-primary/5'
         : 'from-primary/10 to-primary/5',
       borderColor: 'border-l-4 border-l-primary',
       iconColor: isDark ? 'text-primary' : 'text-primary',
       textColor: isDark ? 'text-primary' : 'text-primary'
     },
-    { 
-      label: "Courses", 
-      count: courses, 
+    {
+      label: "Courses",
+      count: courses,
       icon: FiBook,
-      gradient: isDark 
-        ? 'from-purple-500/20 to-purple-500/5' 
+      gradient: isDark
+        ? 'from-purple-500/20 to-purple-500/5'
         : 'from-purple-500/10 to-purple-500/5',
       borderColor: 'border-l-4 border-l-purple-500',
       iconColor: isDark ? 'text-purple-400' : 'text-purple-600',
       textColor: isDark ? 'text-purple-300' : 'text-purple-700'
     },
-    { 
-      label: "Batches", 
-      count: batches, 
+    {
+      label: "Batches",
+      count: batches,
       icon: FiGrid,
-      gradient: isDark 
-        ? 'from-emerald-500/20 to-emerald-500/5' 
+      gradient: isDark
+        ? 'from-emerald-500/20 to-emerald-500/5'
         : 'from-emerald-500/10 to-emerald-500/5',
       borderColor: 'border-l-4 border-l-emerald-500',
       iconColor: isDark ? 'text-emerald-400' : 'text-emerald-600',
       textColor: isDark ? 'text-emerald-300' : 'text-emerald-700'
     },
-    { 
-      label: "Enrollments", 
-      count: enrollments, 
+    {
+      label: "Enrollments",
+      count: enrollments,
       icon: FiTrendingUp,
-      gradient: isDark 
-        ? 'from-orange-500/20 to-orange-500/5' 
+      gradient: isDark
+        ? 'from-orange-500/20 to-orange-500/5'
         : 'from-orange-500/10 to-orange-500/5',
       borderColor: 'border-l-4 border-l-orange-500',
       iconColor: isDark ? 'text-orange-400' : 'text-orange-600',
@@ -73,17 +73,15 @@ const AdminDashboard = () => {
 
   if (isLoading) {
     return (
-      <div className={`flex h-[80vh] items-center justify-center ${
-        isDark ? 'bg-darkmode' : 'bg-section'
-      }`}>
+      <div className={`flex h-[80vh] items-center justify-center ${isDark ? 'bg-darkmode' : 'bg-section'
+        }`}>
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
-          className={`h-12 w-12 rounded-full border-4 ${
-            isDark 
-              ? 'border-dark_border border-t-primary' 
+          className={`h-12 w-12 rounded-full border-4 ${isDark
+              ? 'border-dark_border border-t-primary'
               : 'border-border border-t-primary'
-          }`}
+            }`}
         ></motion.div>
       </div>
     );
@@ -91,11 +89,10 @@ const AdminDashboard = () => {
 
   if (error) {
     return (
-      <div className={`p-6 rounded-xl ${
-        isDark
+      <div className={`p-6 rounded-xl ${isDark
           ? 'bg-rose-500/10 border border-rose-500/20 text-rose-400'
           : 'bg-rose-500/10 border border-rose-500/20 text-rose-600'
-      }`}>
+        }`}>
         <div className="flex items-center gap-3">
           <FiAlertTriangle className="w-6 h-6" />
           <div>
@@ -111,15 +108,14 @@ const AdminDashboard = () => {
     <div className={`min-h-screen`}>
       <div className="py-6 px-4">
         <div className="max-w-7xl mx-auto space-y-8">
-        
+
           {/* ===== HERO SECTION - NO BOX LAYOUT ===== */}
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
             <div className="space-y-2 px-2">
               <div className="flex items-center gap-3">
                 <div>
-                  <h1 className={`text-2xl sm:text-3xl lg:text-3xl font-bold ${
-                    isDark ? 'text-white' : 'text-midnight_text'
-                  }`}>
+                  <h1 className={`text-2xl sm:text-3xl lg:text-3xl font-bold ${isDark ? 'text-white' : 'text-midnight_text'
+                    }`}>
                     Welcome back, {user?.name?.split(' ')[0] || 'Admin'}!
                   </h1>
                   <p className={`text-sm text-gray mt-1 flex items-center gap-2`}>
@@ -129,22 +125,22 @@ const AdminDashboard = () => {
                 </div>
               </div>
             </div>
-            
+
             <div className="flex gap-3 flex-wrap">
-              <motion.button 
+              <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition shadow-md hover:shadow-lg flex items-center gap-2 btn btn-primary`}
               >
-                <FiBarChart2 className="w-4 h-4" /> 
+                <FiBarChart2 className="w-4 h-4" />
                 <span>Generate Report</span>
               </motion.button>
-              <motion.button 
+              <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition shadow-md hover:shadow-lg flex items-center gap-2 border btn btn-white`}
               >
-                <FiSettings className="w-4 h-4" /> 
+                <FiSettings className="w-4 h-4" />
                 <span>Settings</span>
               </motion.button>
             </div>
@@ -161,22 +157,19 @@ const AdminDashboard = () => {
               <motion.div
                 key={idx}
                 whileHover={{ translateY: -4 }}
-                className={`rounded-xl p-5 ${stat.borderColor} transition-all duration-300 bg-gradient-to-br ${stat.gradient} shadow-property hover:shadow-deatail_shadow cursor-pointer border ${
-                  isDark
+                className={`rounded-xl p-5 ${stat.borderColor} transition-all duration-300 bg-gradient-to-br ${stat.gradient} shadow-property hover:shadow-deatail_shadow cursor-pointer border ${isDark
                     ? 'border-dark_border'
                     : 'border-border'
-                }`}
+                  }`}
               >
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
-                    <p className={`text-xs font-semibold uppercase tracking-wide mb-2 ${
-                      stat.textColor
-                    }`}>
+                    <p className={`text-xs font-semibold uppercase tracking-wide mb-2 ${stat.textColor
+                      }`}>
                       {stat.label}
                     </p>
-                    <p className={`text-3xl font-bold ${
-                      isDark ? 'text-white' : 'text-midnight_text'
-                    }`}>
+                    <p className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-midnight_text'
+                      }`}>
                       {stat.count.toLocaleString()}
                     </p>
                   </div>
@@ -192,17 +185,16 @@ const AdminDashboard = () => {
 
           {/* ===== MAIN CONTENT GRID ===== */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            
+
             {/* Quick Actions */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: 0.3 }}
-              className={`lg:col-span-1 rounded-xl p-5 shadow-property hover:shadow-deatail_shadow border ${
-                isDark
+              className={`lg:col-span-1 rounded-xl p-5 shadow-property hover:shadow-deatail_shadow border ${isDark
                   ? 'bg-semidark border-dark_border'
                   : 'bg-white border-border'
-              }`}
+                }`}
             >
               <div className="flex items-center gap-2 mb-4 pb-2 border-b ${isDark ? 'border-dark_border' : 'border-border'}">
                 <div className={`p-1.5 rounded-lg bg-primary/10`}>
@@ -231,11 +223,10 @@ const AdminDashboard = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: 0.5 }}
-            className={`rounded-xl p-6 shadow-property hover:shadow-deatail_shadow border ${
-              isDark
+            className={`rounded-xl p-6 shadow-property hover:shadow-deatail_shadow border ${isDark
                 ? 'bg-semidark border-dark_border'
                 : 'bg-white border-border'
-            }`}
+              }`}
           >
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-5 pb-3 border-b ${isDark ? 'border-dark_border' : 'border-border'}">
               <div className="flex items-center gap-3">
@@ -251,11 +242,10 @@ const AdminDashboard = () => {
                   </p>
                 </div>
               </div>
-              <div className={`text-xs px-3 py-1.5 rounded-lg font-medium flex items-center gap-2 ${
-                isDark 
-                  ? 'bg-emerald-500/10 text-emerald-400' 
+              <div className={`text-xs px-3 py-1.5 rounded-lg font-medium flex items-center gap-2 ${isDark
+                  ? 'bg-emerald-500/10 text-emerald-400'
                   : 'bg-emerald-500/10 text-emerald-600'
-              }`}>
+                }`}>
                 <FiCheck className="w-3.5 h-3.5" /> Secure Entry • Encrypted Session
               </div>
             </div>

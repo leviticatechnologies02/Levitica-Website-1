@@ -11,7 +11,7 @@ export const useCheckoutHandler = () => {
   const [createOrder] = useCreateOrderMutation();
   const [verifyPayment] = useVerifyPaymentMutation();
 
-  const handleCheckout = async ({ courseIds, user }) => {
+  const handleCheckout = async ({ courseIds, user, promoCode, promoId }) => {
     try {
       const sdkLoaded = await loadRazorpay();
       if (!sdkLoaded || !razorpayConfig) {
@@ -19,7 +19,19 @@ export const useCheckoutHandler = () => {
         return { success: false };
       }
 
-      const orderResponse = await createOrder({ courseIds, userId: user.id }).unwrap();
+      const orderResponse = await createOrder({
+        courseIds,
+        userId: user.id,
+        promoCode,
+        promoId
+      }).unwrap();
+
+      // Check if 100% free enrollment
+      if (orderResponse.freeEnrollment) {
+        toast.success(orderResponse.message || "Enrolled successfully!");
+        return { success: true, freeEnrollment: true };
+      }
+
       const order = orderResponse.order;
       if (!order?.id) {
         toast.error("No order ID received from backend");

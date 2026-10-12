@@ -32,6 +32,15 @@ export const usePayment = () => {
         throw new Error(orderResponse.message || 'Order creation failed');
       }
 
+      if (orderResponse.freeEnrollment) {
+        toast.success(orderResponse.message || "Internship registered successfully!");
+        navigate(
+          `/internships/payment-success?orderId=${orderResponse.order?.id}&paymentId=FREE_PROMO&signature=FREE`
+        );
+        setIsLoading(false);
+        return;
+      }
+
       const { order } = orderResponse;
 
       // 2️⃣ Razorpay options

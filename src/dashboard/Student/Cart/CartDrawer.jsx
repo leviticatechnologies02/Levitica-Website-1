@@ -13,8 +13,12 @@ import {
   FiTrash2,
   FiShoppingBag,
   FiArrowRight,
+  FiTag,
+  FiCheck,
 } from "react-icons/fi";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { useApplyPromoMutation } from "@/Services/student/promoCodeServices";
 import { useCheckoutHandler } from '@/features/paymentFlow';
 
 export default function CartDrawer({ isOpen, onClose }) {
@@ -45,6 +49,33 @@ export default function CartDrawer({ isOpen, onClose }) {
   const loading = removeStatus.isLoading || clearStatus.isLoading;
   const { handleCheckout } = useCheckoutHandler();
 
+  const [promoInput, setPromoInput] = useState("");
+  const [appliedPromo, setAppliedPromo] = useState(null);
+  const [applyPromo, { isLoading: isApplyingPromo }] = useApplyPromoMutation();
+
+  const handleApplyPromo = async () => {
+    if (!promoInput.trim()) {
+      toast.error("Please enter a promo code");
+      return;
+    }
+    try {
+      const res = await applyPromo({
+        code: promoInput.trim().toUpperCase(),
+        amount: total,
+      }).unwrap();
+      setAppliedPromo(res);
+      toast.success(`🎉 Promo code ${res.code} applied! Saved ₹${res.discount}`);
+    } catch (err) {
+      toast.error(err?.data?.message || err?.message || "Invalid or expired promo code");
+    }
+  };
+
+  const handleRemovePromo = () => {
+    setAppliedPromo(null);
+    setPromoInput("");
+    toast.success("Promo code removed");
+  };
+
   useEffect(() => {
     if (cartData?.items) {
       dispatch(setCartItems(cartData.items));
@@ -67,10 +98,17 @@ export default function CartDrawer({ isOpen, onClose }) {
     if (!user || items.length === 0) return;
 
     const courseIds = items.map((item) => item._id);
-    const { success } = await handleCheckout({ courseIds, user });
+    const { success } = await handleCheckout({
+      courseIds,
+      user,
+      promoCode: appliedPromo?.code,
+      promoId: appliedPromo?.promoId,
+    });
 
     if (success) {
       await handleClearCart(user.id);
+      setAppliedPromo(null);
+      setPromoInput("");
       onClose();
     }
   };
@@ -219,11 +257,82 @@ export default function CartDrawer({ isOpen, onClose }) {
                   </p>
                 )}
 
-                <div className="flex justify-between items-center mb-4">
-                  <span className="text-sm text-gray">Total Amount</span>
-                  <span className="text-2xl font-bold text-midnight_text dark:text-white">
-                    ₹{Number(total || 0).toLocaleString('en-IN')}
-                  </span>
+                {/* PROMO CODE SECTION */}
+                {hasPaidItems && (
+                  <div className="mb-4">
+                    {appliedPromo ? (
+                      <div className="flex items-center justify-between p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300">
+                        <div className="flex items-center gap-2">
+                          <FiCheck className="text-emerald-600 dark:text-emerald-400 text-lg flex-shrink-0" />
+                          <div>
+                            <div className="text-xs font-semibold flex items-center gap-1.5">
+                              <span className="font-mono bg-emerald-100 dark:bg-emerald-900/60 px-1.5 py-0.5 rounded text-xs uppercase tracking-wider">{appliedPromo.code}</span>
+                              <span>Applied</span>
+                            </div>
+                            <p className="text-[11px] text-emerald-600 dark:text-emerald-400 mt-0.5">
+                              You saved ₹{Number(appliedPromo.discount || 0).toLocaleString("en-IN")}
+                            </p>
+                          </div>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={handleRemovePromo}
+                          className="text-xs text-red-500 hover:text-red-700 font-medium px-2 py-1 rounded hover:bg-red-50 dark:hover:bg-red-950/40 transition"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="flex gap-2">
+                        <div className="relative flex-1">
+                          <FiTag className="absolute left-3 top-1/2 -translate-y-1/2 text-gray text-sm" />
+                          <input
+                            type="text"
+                            value={promoInput}
+                            onChange={(e) => setPromoInput(e.target.value.toUpperCase())}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter") {
+                                e.preventDefault();
+                                handleApplyPromo();
+                              }
+                            }}
+                            placeholder="PROMO CODE"
+                            className="w-full pl-9 pr-3 py-2 text-xs font-mono uppercase bg-light dark:bg-darklight border border-border dark:border-dark_border rounded-xl text-midnight_text dark:text-white placeholder:text-gray focus:outline-none focus:border-primary"
+                          />
+                        </div>
+                        <button
+                          type="button"
+                          onClick={handleApplyPromo}
+                          disabled={isApplyingPromo || !promoInput.trim()}
+                          className="px-4 py-2 text-xs font-semibold text-white bg-primary hover:bg-skyBlue disabled:opacity-50 disabled:cursor-not-allowed rounded-xl transition"
+                        >
+                          {isApplyingPromo ? "Applying..." : "Apply"}
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* PRICE BREAKDOWN */}
+                <div className="space-y-1.5 mb-4 text-sm">
+                  {appliedPromo && (
+                    <>
+                      <div className="flex justify-between items-center text-gray">
+                        <span>Subtotal</span>
+                        <span>₹{Number(total || 0).toLocaleString("en-IN")}</span>
+                      </div>
+                      <div className="flex justify-between items-center text-emerald-600 dark:text-emerald-400 font-medium">
+                        <span>Promo Discount</span>
+                        <span>-₹{Number(appliedPromo.discount || 0).toLocaleString("en-IN")}</span>
+                      </div>
+                    </>
+                  )}
+                  <div className="flex justify-between items-center pt-2 border-t border-border dark:border-dark_border">
+                    <span className="text-sm font-semibold text-midnight_text dark:text-white">Total Amount</span>
+                    <span className="text-2xl font-bold text-midnight_text dark:text-white">
+                      ₹{Number(appliedPromo ? appliedPromo.finalAmount : (total || 0)).toLocaleString("en-IN")}
+                    </span>
+                  </div>
                 </div>
 
                 <button

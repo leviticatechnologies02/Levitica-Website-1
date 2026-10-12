@@ -23,7 +23,8 @@ export const api = createApi(
       "Promos",
       "Mentor",
       "Assignment",
-      "AssignmentSubmission"
+      "AssignmentSubmission",
+      "Enquiries"
     ],
     
   })
