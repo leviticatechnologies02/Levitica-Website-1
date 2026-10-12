@@ -155,7 +155,7 @@ const PaymentTab = () => {
                               </span>
                               <span className={`text-xs ${isDark ? 'text-gray' : 'text-gray'}`}>•</span>
                               <span className={`text-xs font-medium text-primary`}>
-                                ₹{course.price}
+                                ₹{Number(course.price || 0).toLocaleString('en-IN')}
                               </span>
                             </div>
                           </div>

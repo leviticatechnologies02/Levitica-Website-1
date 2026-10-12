@@ -145,7 +145,7 @@ const CourseCard = ({ course, handleAdd, isAdded, isEnrolled }) => {
           ) : (
             <div className="flex items-center gap-1">
               <span className="text-lg font-bold text-midnight_text dark:text-white">
-                ₹{course.price}
+                ₹{Number(course.price).toLocaleString('en-IN')}
               </span>
               <span className="text-xs text-gray">one-time</span>
             </div>

@@ -85,7 +85,7 @@ const InternshipPayments = () => {
                 </td>
 
                 <td className={`p-3 font-semibold ${isDark ? 'text-white' : ''}`}>
-                  ₹{p.amount}
+                  ₹{Number(p.amount || 0).toLocaleString('en-IN')}
                 </td>
 
                 <td className="p-3">

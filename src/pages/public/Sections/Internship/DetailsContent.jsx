@@ -13,7 +13,7 @@ const DetailsContent = ({ domains, isLoading, isError, showPaymentForm, setShowP
     durations.map(d => `${d.days} Days`).join(" / ");
 
   const formatFees = (durations = []) =>
-    durations.map(d => `₹${d.fee}`).join(" / ");
+    durations.map(d => `₹${Number(d.fee || 0).toLocaleString('en-IN')}`).join(" / ");
 
 
   const learningOutcomes = [
@@ -283,32 +283,6 @@ const DetailsContent = ({ domains, isLoading, isError, showPaymentForm, setShowP
               <HiPlus className="ml-2" size={16} />
             </button>
           </div>
-        </div>
-
-        {/* Footer */}
-        <div className="border-t border-gray-200 pt-4 text-center">
-          <div className="flex justify-center items-center">
-            <div className="w-20">
-              <img
-                src="/img/leviticalogo.png"
-                alt="levitica logo"
-                className="w-full h-auto"
-              />
-            </div>
-          </div>
-
-          <p className="text-sm text-black/70 text-center">
-            © {new Date().getFullYear()}{" "}
-            <a
-              href="https://leviticatechnologies.com"
-              target="_blank"
-              rel="noreferrer"
-              className="font-medium hover:underline text-blue-600"
-            >
-              Levitica Technologies
-            </a>
-            . All rights reserved.
-          </p>
         </div>
       </div>
     </div>

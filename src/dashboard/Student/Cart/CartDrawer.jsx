@@ -199,7 +199,7 @@ export default function CartDrawer({ isOpen, onClose }) {
                           {isFree ? (
                             <span className="text-primary">FREE 🎁</span>
                           ) : (
-                            `₹${item.price}`
+                            `₹${Number(item.price || 0).toLocaleString('en-IN')}`
                           )}
                         </p>
                       </div>
@@ -222,7 +222,7 @@ export default function CartDrawer({ isOpen, onClose }) {
                 <div className="flex justify-between items-center mb-4">
                   <span className="text-sm text-gray">Total Amount</span>
                   <span className="text-2xl font-bold text-midnight_text dark:text-white">
-                    ₹{total}
+                    ₹{Number(total || 0).toLocaleString('en-IN')}
                   </span>
                 </div>
 

@@ -696,7 +696,7 @@ const CourseAdsCarousel = () => {
 
                       <div className="mt-3 pt-3 border-t border-lightgray/40 dark:border-dark_border/20 flex items-center justify-between">
                         <span className="text-sm font-black text-midnight_text dark:text-white">
-                          {isFree ? "Free Course" : `₹${course.price}`}
+                          {isFree ? "Free Course" : `₹${Number(course.price).toLocaleString('en-IN')}`}
                         </span>
 
                         <button

@@ -30,7 +30,7 @@ const PromoTableView = ({ promos, onEdit, onDelete, onToggle }) => {
                             <td>
                                 {p.discountType === "percentage"
                                     ? `${p.discountValue}%`
-                                    : `₹${p.discountValue}`}
+                                    : `₹${Number(p.discountValue || 0).toLocaleString('en-IN')}`}
                             </td>
 
                             <td>

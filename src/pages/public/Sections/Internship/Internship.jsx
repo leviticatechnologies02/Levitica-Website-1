@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import DetailsContent from "./DetailsContent";
 import InternshipPaymentForm from "./InternshipsPaymentForm";
+import Footer from "@/pages/public/Footer";
 import { X } from "lucide-react";
 import { useGetAllInternshipsDomainsQuery } from '@/Services/paymentServices/internshipsServices';
 import { dummyInternshipDomains } from "./dummyDomains";
@@ -45,9 +46,9 @@ const Internships = () => {
   }, []);
 
   return (
-    <div className="min-h-screen overflow-x-hidden">
+    <div className="min-h-screen overflow-x-hidden flex flex-col justify-between">
       <div
-        className="min-h-screen relative "
+        className="min-h-screen relative flex-1"
 
       >
         {/* ================= Main Layout ================= */}
@@ -108,6 +109,9 @@ const Internships = () => {
           </div>
         )}
       </div>
+
+      {/* ================= Footer ================= */}
+      <Footer />
     </div>
   );
 };

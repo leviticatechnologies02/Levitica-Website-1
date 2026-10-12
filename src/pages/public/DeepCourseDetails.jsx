@@ -181,7 +181,11 @@ const CourseDetails = () => {
                 <h3 className="text-lg text-slate-900 dark:text-white font-semibold mb-4">Enroll</h3>
 
                 <p className="text-3xl font-bold text-primary dark:text-cyan">
-                  {course.price}
+                  {typeof course.price === 'number'
+                    ? `₹${course.price.toLocaleString('en-IN')}`
+                    : typeof course.price === 'string' && !isNaN(Number(course.price.replace(/[₹,\s]/g, ''))) && course.price.replace(/[₹,\s]/g, '') !== ''
+                      ? `₹${Number(course.price.replace(/[₹,\s]/g, '')).toLocaleString('en-IN')}`
+                      : course.price}
                 </p>
 
                 <button

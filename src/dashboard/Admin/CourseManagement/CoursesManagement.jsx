@@ -201,7 +201,7 @@ const CoursesCardView = ({
                 ? 'bg-emerald-500 text-white'
                 : 'bg-primary text-white'
               }`}>
-              {course.price === 0 ? "FREE" : `₹${course.price}`}
+              {course.price === 0 ? "FREE" : `₹${Number(course.price).toLocaleString('en-IN')}`}
             </div>
           </div>
 
@@ -373,7 +373,7 @@ const CoursesTableView = ({
                         : 'btn-view'}`
                       : 'btn-border'
                     }`}>
-                    ₹{course.price}
+                    ₹{Number(course.price).toLocaleString('en-IN')}
                   </span>
                 </td>
                 <td className="px-5 py-4">

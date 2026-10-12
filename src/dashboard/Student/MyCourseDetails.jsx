@@ -183,7 +183,7 @@ const StudentEnrolledCourseDetails = () => {
                 }`}>
                   <p className={`text-xs mb-1 text-gray`}>Price</p>
                   <p className={`text-sm sm:text-base font-medium text-midnight_text dark:text-white`}>
-                    {isFreeBonus ? "Free" : `₹${payment?.amountInRupees}`}
+                    {isFreeBonus ? "Free" : `₹${Number(payment?.amountInRupees || 0).toLocaleString('en-IN')}`}
                   </p>
                 </div>
               </div>
@@ -725,7 +725,7 @@ const StudentEnrolledCourseDetails = () => {
                 : 'bg-light border-border'
             }`}>
               <p className={`text-xs mb-1 font-medium text-gray`}>Amount</p>
-              <p className={`text-sm sm:text-base font-semibold text-midnight_text dark:text-white`}>₹{payment.amountInRupees}</p>
+              <p className={`text-sm sm:text-base font-semibold text-midnight_text dark:text-white`}>₹{Number(payment.amountInRupees || 0).toLocaleString('en-IN')}</p>
             </div>
 
             <div className={`p-3 rounded-lg border ${

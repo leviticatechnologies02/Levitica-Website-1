@@ -99,7 +99,7 @@ const RelatedCourses = ({ currentCourseId }) => {
                 bg-gradient-to-r from-primary to-skyBlue
                 text-white
               ">
-                {Number(item.price) === 0 ? "FREE" : `₹${item.price}`}
+                {Number(item.price) === 0 ? "FREE" : `₹${Number(item.price).toLocaleString('en-IN')}`}
               </div>
             </div>
 
@@ -168,10 +168,10 @@ const RelatedCourses = ({ currentCourseId }) => {
                 ) : (
                   <>
                     <span className="text-lg font-bold text-primary">
-                      ₹{item.price}
+                      ₹{Number(item.price).toLocaleString('en-IN')}
                     </span>
                     <span className="text-xs text-gray ml-1 line-through">
-                      ₹{Math.round(item.price * 1.3)}
+                      ₹{Math.round(Number(item.price) * 1.3).toLocaleString('en-IN')}
                     </span>
                   </>
                 )}

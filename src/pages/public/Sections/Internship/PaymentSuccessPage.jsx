@@ -274,7 +274,7 @@ const PaymentSuccess = () => {
           <Detail icon={<FaEnvelope />} label="Email" value={paymentData.student.email} />
           <Detail icon={<FaIdCard />} label="Roll Number" value={paymentData.student.rollNumber} />
           <Detail icon={<FaReceipt />} label="Payment ID" value={paymentData.paymentId} />
-          <Detail icon={<FaRupeeSign />} label="Amount Paid" value={`₹${paymentData.amount}`} />
+          <Detail icon={<FaRupeeSign />} label="Amount Paid" value={`₹${Number(paymentData.amount || 0).toLocaleString('en-IN')}`} />
           <Detail icon={<FaClock />} label="Program Duration" value={`${paymentData.program} Days`} />
 
         </div>

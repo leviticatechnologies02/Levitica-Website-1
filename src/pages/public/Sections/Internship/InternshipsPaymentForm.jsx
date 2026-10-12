@@ -365,7 +365,7 @@ const programOptions =
             <option value="">Select Program Duration</option>
             {programOptions.map((program) => (
               <option key={program.id} value={program.id}>
-                {program.days} days - ₹{program.amount}
+                {program.days} days - ₹{Number(program.amount || 0).toLocaleString('en-IN')}
               </option>
             ))}
           </select>
@@ -383,7 +383,7 @@ const programOptions =
           <div className="flex items-center">
             <span className="text-2xl font-bold text-gray-900 mr-1">₹</span>
             <span className="text-3xl font-bold text-gray-900">
-              {formik.values.amount}.00
+              {Number(formik.values.amount || 0).toLocaleString('en-IN')}.00
             </span>
           </div>
         </div>
@@ -412,7 +412,7 @@ const programOptions =
                 </>
               ) : (
                 <>
-                  Pay ₹ {formik.values.amount}.00
+                  Pay ₹{Number(formik.values.amount || 0).toLocaleString('en-IN')}.00
                 </>
               )}
             </button>

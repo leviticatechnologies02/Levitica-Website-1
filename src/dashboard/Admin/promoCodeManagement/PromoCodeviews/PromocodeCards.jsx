@@ -29,7 +29,7 @@ const PromoCardView = ({ promos, onEdit, onDelete, onToggle }) => {
                     <p className="text-sm text-gray-500">
                         {p.discountType === "percentage"
                             ? `${p.discountValue}%`
-                            : `₹${p.discountValue}`}
+                            : `₹${Number(p.discountValue || 0).toLocaleString('en-IN')}`}
                     </p>
 
                     <p className="text-xs">
