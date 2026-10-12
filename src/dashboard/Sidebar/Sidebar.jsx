@@ -14,6 +14,7 @@ import {
   FaCreditCard,
   FaCog,
   FaCertificate,
+  FaClipboardList,
 } from "react-icons/fa";
 
 const Sidebar = () => {
@@ -44,7 +45,7 @@ const Sidebar = () => {
       label: "Dashboard",
       icon: <FaHome size={20} />,
       path: "/dashboard",
-      roles: ["student", "admin", 'superadmin'],
+      roles: ["student", "admin", "superadmin", "mentor"],
     },
     {
       label: "Browse Courses",
@@ -65,10 +66,46 @@ const Sidebar = () => {
       roles: ["student"],
     },
     {
+      label: "Assignments",
+      icon: <FaClipboardList size={20} />,
+      path: "/dashboard/student/assignments",
+      roles: ["student"],
+    },
+    {
       label: "Settings",
       icon: <FaCog size={20} />,
       path: `/dashboard/student/settings`,
       roles: ["student"],
+    },
+    {
+      label: "Assigned Courses",
+      icon: <FaBookOpen size={20} />,
+      path: "/dashboard/mentor/courses",
+      roles: ["mentor"],
+    },
+    {
+      label: "Batches & Students",
+      icon: <FaLayerGroup size={20} />,
+      path: "/dashboard/mentor/batches",
+      roles: ["mentor"],
+    },
+    {
+      label: "Assignments & Grading",
+      icon: <FaClipboardList size={20} />,
+      path: "/dashboard/mentor/assignments",
+      roles: ["mentor"],
+    },
+    {
+      label: "Live Classes",
+      icon: <FaVideo size={20} />,
+      path: "/dashboard/mentor/live-classes",
+      roles: ["mentor"],
+    },
+    {
+      label: "Settings",
+      icon: <FaCog size={20} />,
+      path: "/dashboard/mentor/settings",
+      roles: ["mentor"],
     },
     {
       label: "Students",
@@ -89,10 +126,16 @@ const Sidebar = () => {
       roles: ["admin", 'superadmin'],
     },
     {
+      label: "Assignments",
+      icon: <FaClipboardList size={20} />,
+      path: "/dashboard/admin/assignments",
+      roles: ["admin", "superadmin"],
+    },
+    {
       label: "Mentor",
       icon: <FaUsers size={20} />,
       path: "/dashboard/admin/mentors",
-      roles: ["admin", 'superadmin'],
+      roles: ["superadmin"],
     },
     {
       label: "Live Classes",

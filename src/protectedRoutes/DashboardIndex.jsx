@@ -8,6 +8,10 @@ const DashboardIndex = () => {
     return <Navigate to="admin" replace />;
   }
 
+  if (role === "mentor") {
+    return <Navigate to="mentor" replace />;
+  }
+
   return <Navigate to="student" replace />;
 };
 

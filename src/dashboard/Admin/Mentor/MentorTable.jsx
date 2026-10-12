@@ -17,6 +17,7 @@ import {
   FiPhone,
   FiMail,
   FiBookOpen,
+  FiBriefcase,
 } from "react-icons/fi";
 import {
   useGetMentorsQuery,
@@ -137,29 +138,49 @@ const MentorTable = () => {
         },
       }),
       columnHelper.accessor("courses", {
-        header: "Assigned Courses",
+        header: "Assigned Courses & Internships",
         cell: ({ row }) => {
           const courseList = Array.isArray(row.original.courses) ? row.original.courses : [];
+          const domainList = Array.isArray(row.original.internshipDomains) ? row.original.internshipDomains : [];
+
+          if (courseList.length === 0 && domainList.length === 0) {
+            return <span className="text-xs text-slate-500">—</span>;
+          }
+
           return (
-            <div className="flex flex-wrap gap-1 max-w-[220px]">
-              {courseList.length > 0 ? (
-                courseList.map((course, idx) => {
-                  const courseName = typeof course === 'object' ? course.name : course;
-                  return (
-                    <span
-                      key={idx}
-                      className={`inline-block px-2 py-0.5 rounded text-[10px] font-semibold tracking-wide ${isDark
-                        ? 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20'
-                        : 'bg-indigo-50 text-indigo-700 border border-indigo-100'
-                        }`}
-                    >
-                      {courseName}
-                    </span>
-                  );
-                })
-              ) : (
-                <span className="text-xs text-slate-500">—</span>
-              )}
+            <div className="flex flex-wrap gap-1 max-w-[240px]">
+              {courseList.map((course, idx) => {
+                const courseName = typeof course === 'object' ? course.name : course;
+                return (
+                  <span
+                    key={`c-${idx}`}
+                    className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold tracking-wide ${isDark
+                      ? 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20'
+                      : 'bg-indigo-50 text-indigo-700 border border-indigo-100'
+                      }`}
+                    title="Course"
+                  >
+                    <FiBookOpen className="h-2.5 w-2.5" />
+                    {courseName}
+                  </span>
+                );
+              })}
+              {domainList.map((domain, idx) => {
+                const domainName = typeof domain === 'object' ? domain.name : domain;
+                return (
+                  <span
+                    key={`d-${idx}`}
+                    className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold tracking-wide ${isDark
+                      ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
+                      : 'bg-amber-50 text-amber-800 border border-amber-200'
+                      }`}
+                    title="Internship Domain"
+                  >
+                    <FiBriefcase className="h-2.5 w-2.5" />
+                    {domainName}
+                  </span>
+                );
+              })}
             </div>
           );
         },
@@ -237,53 +258,60 @@ const MentorTable = () => {
               Total registered mentors: <span className="font-semibold text-emerald-500">{mentors.length}</span>
             </p>
           </div>
-
         </div>
-        <div className={`p-1 rounded-lg flex gap-1 shadow-sm border ${isDark ? 'bg-darklight border-slate-700' : 'bg-light border-slate-200'
-          }`}>
+
+        {/* View Mode Toggle */}
+        <div className="flex items-center gap-2">
           <button
             onClick={() => setViewMode("table")}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition ${viewMode === "table"
-              ? 'btn btn-primary shadow'
+            className={`p-2 rounded-lg border transition-colors ${viewMode === "table"
+              ? isDark
+                ? "bg-slate-700 border-slate-600 text-white"
+                : "bg-slate-200 border-slate-300 text-slate-900"
               : isDark
-                ? 'text-slate-400 hover:text-white'
-                : 'text-slate-600 hover:text-slate-900'
+                ? "border-slate-700 text-slate-400 hover:text-white"
+                : "border-slate-200 text-slate-600 hover:text-slate-900"
               }`}
+            title="Table View"
           >
-            <FiList className="h-3.5 w-3.5" />
-            <span>Table View</span>
+            <FiList className="h-4 w-4" />
           </button>
           <button
-            onClick={() => setViewMode("card")}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition ${viewMode === "card"
-              ? 'btn btn-primary shadow'
+            onClick={() => setViewMode("cards")}
+            className={`p-2 rounded-lg border transition-colors ${viewMode === "cards"
+              ? isDark
+                ? "bg-slate-700 border-slate-600 text-white"
+                : "bg-slate-200 border-slate-300 text-slate-900"
               : isDark
-                ? 'text-slate-400 hover:text-white'
-                : 'text-slate-600 hover:text-slate-900'
+                ? "border-slate-700 text-slate-400 hover:text-white"
+                : "border-slate-200 text-slate-600 hover:text-slate-900"
               }`}
+            title="Card View"
           >
-            <FiGrid className="h-3.5 w-3.5" />
-            <span>Cards View</span>
+            <FiGrid className="h-4 w-4" />
           </button>
         </div>
       </div>
 
-      <div className={`rounded-xl border shadow-property overflow-hidden ${isDark ? 'bg-semidark border-dark_border' : 'bg-white border-border'
+      {/* Directory Body */}
+      <div className={`rounded-xl border shadow-property overflow-hidden ${isDark
+        ? 'border-dark_border bg-semidark'
+        : 'border-border bg-white'
         }`}>
-
-        {/* ================= TABLE VIEW ================= */}
-        {viewMode === "table" && (
-          <div className="w-full overflow-x-auto">
-            <table className="min-w-[850px] w-full text-sm">
-              <thead className={`border-b ${isDark ? 'border-dark_border bg-darklight' : 'border-border bg-light'
-                }`}>
+        {viewMode === "table" ? (
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
                 {table.getHeaderGroups().map((headerGroup) => (
-                  <tr key={headerGroup.id}>
+                  <tr
+                    key={headerGroup.id}
+                    className={`border-b text-xs font-semibold uppercase tracking-wider ${isDark
+                      ? 'border-dark_border bg-darklight text-slate-300'
+                      : 'border-border bg-slate-50 text-slate-600'
+                      }`}
+                  >
                     {headerGroup.headers.map((header) => (
-                      <th
-                        key={header.id}
-                        className={`px-4 py-3.5 text-left font-semibold text-xs whitespace-nowrap text-gray`}
-                      >
+                      <th key={header.id} className="py-3.5 px-4 font-bold">
                         {flexRender(
                           header.column.columnDef.header,
                           header.getContext()
@@ -293,23 +321,17 @@ const MentorTable = () => {
                   </tr>
                 ))}
               </thead>
-
-              <tbody className={`divide-y ${isDark ? 'divide-dark_border' : 'divide-border'
+              <tbody className={`divide-y text-xs ${isDark ? 'divide-dark_border' : 'divide-border'
                 }`}>
                 {table.getRowModel().rows.map((row) => (
                   <tr
                     key={row.id}
-                    className={`transition-colors ${isDark ? 'hover:bg-darklight' : 'hover:bg-light'
-                      }`}
+                    className={`transition-colors hover:bg-slate-500/5`}
                   >
                     {row.getVisibleCells().map((cell) => (
-                      <td
-                        key={cell.id}
-                        className={`px-4 py-3.5 text-sm whitespace-nowrap`}
-                      >
+                      <td key={cell.id} className="py-3 px-4">
                         {flexRender(
-                          cell.column.columnDef.cell ??
-                          cell.column.columnDef.accessorKey,
+                          cell.column.columnDef.cell,
                           cell.getContext()
                         )}
                       </td>
@@ -319,14 +341,13 @@ const MentorTable = () => {
               </tbody>
             </table>
           </div>
-        )}
-
-        {/* ================= CARD VIEW ================= */}
-        {viewMode === "card" && (
-          <div className="p-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        ) : (
+          /* Card View */
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-5">
             {mentors.map((mentor, idx) => {
               const expList = Array.isArray(mentor.expertise) ? mentor.expertise : [];
               const courseList = Array.isArray(mentor.courses) ? mentor.courses : [];
+              const domainList = Array.isArray(mentor.internshipDomains) ? mentor.internshipDomains : [];
               const isActive = mentor.isActive !== false;
               const profileImageUrl = mentor.profileImage?.url;
 
@@ -420,7 +441,7 @@ const MentorTable = () => {
                       {/* Assigned courses tags */}
                       <div className="space-y-1.5 pt-1">
                         <span className="flex items-center gap-1.5 text-xs text-slate-500 font-medium">
-                          <FiBookOpen className="h-3.5 w-3.5 text-slate-400" />
+                          <FiBookOpen className="h-3.5 w-3.5 text-indigo-400" />
                           Assigned Courses
                         </span>
                         <div className="flex flex-wrap gap-1">
@@ -436,6 +457,35 @@ const MentorTable = () => {
                                     }`}
                                 >
                                   {courseName}
+                                </span>
+                              );
+                            })
+                          ) : (
+                            <span className="text-xs text-slate-500">—</span>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Assigned Internships tags */}
+                      <div className="space-y-1.5 pt-1">
+                        <span className="flex items-center gap-1.5 text-xs text-slate-500 font-medium">
+                          <FiBriefcase className="h-3.5 w-3.5 text-amber-500" />
+                          Assigned Internships
+                        </span>
+                        <div className="flex flex-wrap gap-1">
+                          {domainList.length > 0 ? (
+                            domainList.map((domain, idx) => {
+                              const domainName = typeof domain === 'object' ? domain.name : domain;
+                              return (
+                                <span
+                                  key={idx}
+                                  className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold tracking-wide ${isDark
+                                    ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
+                                    : 'bg-amber-50 text-amber-800 border border-amber-200'
+                                    }`}
+                                >
+                                  <FiBriefcase className="h-2.5 w-2.5" />
+                                  {domainName}
                                 </span>
                               );
                             })

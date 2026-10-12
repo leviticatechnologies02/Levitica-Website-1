@@ -55,6 +55,15 @@ import StudentEnrolledCourseDetails from '@/dashboard/Student/MyCourseDetails.js
 import MyInternshipDetails from '@/dashboard/Student/MyInternshipDetails.jsx';
 import PromoCodeManagement from '@/dashboard/Admin/promoCodeManagement/PromoCodeManagement.jsx';
 import MentorManagement from './dashboard/Admin/Mentor/MentorManagement';
+import AssignmentManagement from '@/dashboard/Admin/Assignments/AssignmentManagement';
+import StudentAssignments from '@/dashboard/Student/StudentAssignments';
+import MentorDashboard from "@/dashboard/Mentor/MentorDashboard";
+import MentorCourses from "@/dashboard/Mentor/MentorCourses";
+import MentorBatches from "@/dashboard/Mentor/MentorBatches";
+import MentorAssignments from "@/dashboard/Mentor/MentorAssignments";
+import MentorLiveClasses from "@/dashboard/Mentor/MentorLiveClasses";
+import MentorSettings from "@/dashboard/Mentor/MentorSettings";
+
 
 const AppLayout = () => (
   <>
@@ -132,7 +141,19 @@ const AppRouter = () => {
               <Route path="mycourses/:courseId" element={<StudentEnrolledCourseDetails />} />
               <Route path="myinternships/:internshipId" element={<MyInternshipDetails />} />
               <Route path="live-session" element={<LiveClasses />} />
+              <Route path="assignments" element={<StudentAssignments />} />
               <Route path="settings" element={<SettingsPage />} />
+            </Route>
+          </Route>
+
+          <Route path="mentor" element={<ProtectedRoute allowedRoles={["mentor"]} />}>
+            <Route element={<DashboardLayout />}>
+              <Route index element={<MentorDashboard />} />
+              <Route path="courses" element={<MentorCourses />} />
+              <Route path="batches" element={<MentorBatches />} />
+              <Route path="assignments" element={<MentorAssignments />} />
+              <Route path="live-classes" element={<MentorLiveClasses />} />
+              <Route path="settings" element={<MentorSettings />} />
             </Route>
           </Route>
 
@@ -152,6 +173,7 @@ const AppRouter = () => {
               <Route path="internships" element={<InternshipsDomainManagement />} />
               <Route path="zoom" element={<AdminLiveClasses />} />
               <Route path="batchs" element={<BatchManagement />} />
+              <Route path="assignments" element={<AssignmentManagement />} />
 
               <Route path="students" element={<AssignStudents />}>
                 <Route index element={<StudentsTable />} />

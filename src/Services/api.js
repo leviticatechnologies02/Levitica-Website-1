@@ -21,7 +21,9 @@ export const api = createApi(
       "InternshipDomain",
       "StudentReports",
       "Promos",
-      "Mentor"
+      "Mentor",
+      "Assignment",
+      "AssignmentSubmission"
     ],
     
   })
