@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   FiX,
   FiCheckCircle,
@@ -12,11 +12,14 @@ import {
   FiAlertCircle,
   FiSend,
   FiHelpCircle,
-  FiMessageSquare,
+  FiRefreshCw,
 } from "react-icons/fi";
 import { toast } from "react-hot-toast";
 import { useTheme } from "@/context/ThemeContext";
-import { useSubmitAssignmentMutation } from "@/Services/student/assignmentStudentService";
+import {
+  useSubmitAssignmentMutation,
+  useGetStudentAssignmentDetailsQuery,
+} from "@/Services/student/assignmentStudentService";
 
 const StudentAssignmentSolveModal = ({ isOpen, onClose, assignment, refetchList }) => {
   const { theme } = useTheme();
@@ -24,14 +27,28 @@ const StudentAssignmentSolveModal = ({ isOpen, onClose, assignment, refetchList 
 
   const [submitAssignment, { isLoading: isSubmitting }] = useSubmitAssignmentMutation();
 
-  const isSubmitted =
-    assignment?.submissionStatus === "submitted" ||
-    assignment?.submissionStatus === "resubmitted" ||
-    assignment?.submissionStatus === "late_submitted" ||
-    assignment?.submissionStatus === "graded";
+  // Fetch complete, live details when modal opens
+  const { data: detailsData } = useGetStudentAssignmentDetailsQuery(assignment?._id, {
+    skip: !assignment?._id || !isOpen,
+  });
 
-  const isGraded = assignment?.submissionStatus === "graded";
-  const mySubmission = assignment?.mySubmission;
+  const currentAssignment = detailsData?.assignment || assignment;
+  const mySubmission = currentAssignment?.mySubmission;
+
+  const status = currentAssignment?.submissionStatus || mySubmission?.status;
+  const isGraded = status === "graded";
+  const isResubmitRequested = status === "resubmit_requested";
+  const isSubmitted =
+    status === "submitted" ||
+    status === "resubmitted" ||
+    status === "late_submitted" ||
+    status === "graded";
+
+  // Editable only if:
+  // 1) Not yet submitted, OR
+  // 2) Mentor/Admin has explicitly requested a resubmission
+  const canEditAndSubmit = !isSubmitted || isResubmitRequested;
+  const isReadOnly = !canEditAndSubmit;
 
   // Student answer state
   const [submissionText, setSubmissionText] = useState("");
@@ -44,12 +61,20 @@ const StudentAssignmentSolveModal = ({ isOpen, onClose, assignment, refetchList 
       setSubmissionText(mySubmission.submissionText || "");
       setSubmissionLink(mySubmission.submissionLink || "");
       const answerMap = {};
-      (mySubmission.answers || []).forEach((a) => {
-        const qId = a.questionId || a.questionText;
-        answerMap[qId] = {
+      (mySubmission.answers || []).forEach((a, idx) => {
+        const ansObj = {
           answerText: a.answerText || "",
           selectedOption: a.selectedOption || null,
         };
+        if (a.questionId) {
+          const strId = a.questionId.toString();
+          answerMap[strId] = ansObj;
+          answerMap[a.questionId] = ansObj;
+        }
+        if (a.questionText) {
+          answerMap[a.questionText.trim()] = ansObj;
+        }
+        answerMap[idx] = ansObj;
       });
       setAnswers(answerMap);
     } else {
@@ -58,7 +83,19 @@ const StudentAssignmentSolveModal = ({ isOpen, onClose, assignment, refetchList 
       setFiles([]);
       setAnswers({});
     }
-  }, [assignment, isOpen]);
+  }, [currentAssignment, mySubmission, isOpen]);
+
+  // Robust answer lookup for a question
+  const getQuestionAnswer = (q, idx) => {
+    const qIdStr = q._id ? q._id.toString() : null;
+    return (
+      (q._id && answers[q._id]) ||
+      (qIdStr && answers[qIdStr]) ||
+      (q.questionText && answers[q.questionText.trim()]) ||
+      answers[idx] ||
+      {}
+    );
+  };
 
   const handleAnswerChange = (qIdentifier, field, value) => {
     setAnswers((prev) => ({
@@ -71,14 +108,13 @@ const StudentAssignmentSolveModal = ({ isOpen, onClose, assignment, refetchList 
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if (!assignment?._id) return;
+    if (e) e.preventDefault();
+    if (!currentAssignment?._id) return;
 
     // Format answers array
-    const formattedAnswers = (assignment.questions || []).map((q) => {
-      const qKey = q._id || q.questionText;
-      const ansObj = answers[qKey] || {};
+    const formattedAnswers = (currentAssignment.questions || []).map((q, idx) => {
+      const qKey = q._id ? q._id.toString() : q.questionText;
+      const ansObj = getQuestionAnswer(q, idx);
       return {
         questionId: q._id,
         questionText: q.questionText,
@@ -100,12 +136,14 @@ const StudentAssignmentSolveModal = ({ isOpen, onClose, assignment, refetchList 
       }
 
       await submitAssignment({
-        id: assignment._id,
+        id: currentAssignment._id,
         body: formData,
       }).unwrap();
 
       toast.success(
-        assignment.isOverdue
+        isResubmitRequested
+          ? "Revised assessment resubmitted successfully!"
+          : currentAssignment.isOverdue
           ? "Assignment submitted late successfully!"
           : "Assignment submitted successfully!"
       );
@@ -117,7 +155,7 @@ const StudentAssignmentSolveModal = ({ isOpen, onClose, assignment, refetchList 
     }
   };
 
-  if (!isOpen || !assignment) return null;
+  if (!isOpen || !currentAssignment) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-sm overflow-y-auto">
@@ -132,25 +170,29 @@ const StudentAssignmentSolveModal = ({ isOpen, onClose, assignment, refetchList 
         }`}
       >
         {/* Header */}
-        <div className={`flex items-center justify-between p-5 border-b ${
-          isDark ? "border-dark_border bg-darklight/40" : "border-border bg-herobg/30"
-        }`}>
+        <div
+          className={`flex items-center justify-between p-5 border-b ${
+            isDark ? "border-dark_border bg-darklight/40" : "border-border bg-herobg/30"
+          }`}
+        >
           <div>
             <div className="flex items-center gap-2">
               <span className="text-xs px-2.5 py-0.5 rounded-full bg-primary/20 text-primary font-bold">
-                {assignment.course?.name || "General"}
+                {currentAssignment.course?.name || currentAssignment.internshipDomain?.name || "General"}
               </span>
-              {assignment.dueDate && (
+              {currentAssignment.dueDate && (
                 <span className="text-xs text-gray flex items-center gap-1">
-                  <FiClock size={12} /> Due: {new Date(assignment.dueDate).toLocaleDateString()}
+                  <FiClock size={12} /> Due: {new Date(currentAssignment.dueDate).toLocaleDateString()}
                 </span>
               )}
             </div>
-            <h2 className="text-xl font-bold mt-1">{assignment.title}</h2>
+            <h2 className="text-xl font-bold mt-1">{currentAssignment.title}</h2>
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-xl text-gray hover:text-white hover:bg-white/10 transition"
+            className={`p-2 rounded-xl text-gray transition cursor-pointer ${
+              isDark ? "hover:text-white hover:bg-white/10" : "hover:text-midnight_text hover:bg-black/5"
+            }`}
           >
             <FiX size={20} />
           </button>
@@ -158,39 +200,137 @@ const StudentAssignmentSolveModal = ({ isOpen, onClose, assignment, refetchList 
 
         {/* Modal Scroll Body */}
         <div className="flex-1 overflow-y-auto p-5 sm:p-6 space-y-6">
-          {/* Graded Result Banner if available */}
-          {isGraded && mySubmission && (
-            <div className="p-4 rounded-xl border border-emerald-500/30 bg-emerald-500/10 space-y-2">
+          {/* 1. Status Banners */}
+          {/* A) Resubmission Requested Banner */}
+          {isResubmitRequested && (
+            <div className={`p-4 rounded-xl border space-y-2 ${
+              isDark
+                ? "border-amber-500/40 bg-amber-500/10"
+                : "border-amber-200 bg-amber-50/90 text-amber-900"
+            }`}>
               <div className="flex items-center justify-between">
-                <span className="text-sm font-bold text-emerald-400 flex items-center gap-1.5">
+                <span className={`text-sm font-bold flex items-center gap-1.5 ${
+                  isDark ? "text-amber-400" : "text-amber-800"
+                }`}>
+                  <FiRefreshCw size={16} /> Resubmission Requested
+                </span>
+                <span className={`text-xs font-bold px-3 py-1 rounded-full border ${
+                  isDark
+                    ? "bg-amber-500/20 text-amber-300 border-amber-500/30"
+                    : "bg-amber-100 text-amber-800 border-amber-300"
+                }`}>
+                  Action Required
+                </span>
+              </div>
+              <p className={`text-xs leading-relaxed ${
+                isDark ? "text-amber-200/90" : "text-amber-900"
+              }`}>
+                Your mentor or administrator has requested that you revise and resubmit your answers for this assessment. Your previous selections are loaded below. Please make the required updates and submit.
+              </p>
+              {mySubmission?.feedback && (
+                <div className={`pt-2 mt-1 border-t text-xs ${
+                  isDark ? "border-amber-500/20" : "border-amber-200"
+                }`}>
+                  <span className={`font-bold ${isDark ? "text-white" : "text-amber-950"}`}>
+                    Mentor Feedback / Instructions:
+                  </span>{" "}
+                  <span className={isDark ? "text-amber-100" : "text-amber-900 font-medium"}>
+                    {mySubmission.feedback}
+                  </span>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* B) Under Review Banner (Submitted, View Only) */}
+          {isSubmitted && !isGraded && !isResubmitRequested && (
+            <div className={`p-4 rounded-xl border flex items-start justify-between gap-3 ${
+              isDark
+                ? "border-blue-500/30 bg-blue-500/10"
+                : "border-blue-200 bg-blue-50/80"
+            }`}>
+              <div className="flex items-start gap-2.5">
+                <FiCheckCircle
+                  size={18}
+                  className={`shrink-0 mt-0.5 ${isDark ? "text-blue-400" : "text-blue-600"}`}
+                />
+                <div>
+                  <h4 className={`text-xs font-bold ${isDark ? "text-blue-300" : "text-blue-900"}`}>
+                    Submission Under Review (View Only)
+                  </h4>
+                  <p className={`text-xs mt-0.5 leading-relaxed ${
+                    isDark ? "text-blue-200/80" : "text-blue-800"
+                  }`}>
+                    You have submitted this assessment on {mySubmission?.submittedAt ? new Date(mySubmission.submittedAt).toLocaleDateString() : "recently"}. Your submitted answers are displayed below. Resubmission is currently locked and will become active only if your mentor or administrator requests revisions.
+                  </p>
+                </div>
+              </div>
+              <span className={`text-[11px] font-bold px-2.5 py-1 rounded-lg shrink-0 border ${
+                isDark
+                  ? "bg-blue-500/20 text-blue-300 border-blue-500/30"
+                  : "bg-blue-100 text-blue-700 border-blue-200"
+              }`}>
+                View Only
+              </span>
+            </div>
+          )}
+
+          {/* C) Graded Result Banner */}
+          {isGraded && mySubmission && (
+            <div className={`p-4 rounded-xl border space-y-2 ${
+              isDark
+                ? "border-emerald-500/30 bg-emerald-500/10"
+                : "border-emerald-200 bg-emerald-50/80"
+            }`}>
+              <div className="flex items-center justify-between">
+                <span className={`text-sm font-bold flex items-center gap-1.5 ${
+                  isDark ? "text-emerald-400" : "text-emerald-800"
+                }`}>
                   <FiAward size={18} /> Evaluation Result
                 </span>
-                <span className="text-sm font-bold bg-emerald-500/20 text-emerald-300 px-3 py-1 rounded-xl">
-                  Score: {mySubmission.marksAwarded} / {assignment.totalMarks || 100}
+                <span className={`text-sm font-bold px-3 py-1 rounded-xl border ${
+                  isDark
+                    ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/30"
+                    : "bg-emerald-100 text-emerald-800 border-emerald-200"
+                }`}>
+                  Score: {mySubmission.marksAwarded} / {currentAssignment.totalMarks || 100}
                 </span>
               </div>
               {mySubmission.feedback && (
-                <p className="text-xs text-emerald-200/90 pt-1 border-t border-emerald-500/20">
-                  <strong className="text-white">Instructor Feedback:</strong> {mySubmission.feedback}
+                <p className={`text-xs pt-1 border-t ${
+                  isDark
+                    ? "text-emerald-200/90 border-emerald-500/20"
+                    : "text-emerald-800 border-emerald-200"
+                }`}>
+                  <strong className={isDark ? "text-white" : "text-emerald-950 font-bold"}>
+                    Instructor Feedback:
+                  </strong>{" "}
+                  <span className={isDark ? "text-emerald-100" : "text-emerald-800 font-medium"}>
+                    {mySubmission.feedback}
+                  </span>
                 </p>
               )}
             </div>
           )}
 
           {/* Description & Instructions */}
-          <div className={`p-4 rounded-xl border ${
-            isDark ? "bg-darklight/30 border-dark_border" : "bg-herobg/20 border-border"
-          }`}>
+          <div
+            className={`p-4 rounded-xl border ${
+              isDark ? "bg-darklight/30 border-dark_border" : "bg-herobg/20 border-border"
+            }`}
+          >
             <h4 className="text-xs font-semibold uppercase text-primary mb-1">Instructions</h4>
-            <p className="text-xs sm:text-sm leading-relaxed whitespace-pre-wrap text-gray-200">
-              {assignment.description}
+            <p className={`text-xs sm:text-sm leading-relaxed whitespace-pre-wrap ${
+              isDark ? "text-gray-200" : "text-midnight_text"
+            }`}>
+              {currentAssignment.description}
             </p>
 
             {/* Attachments / Reference links provided by Admin */}
-            {(assignment.attachments?.length > 0 || assignment.referenceLinks?.length > 0) && (
+            {(currentAssignment.attachments?.length > 0 || currentAssignment.referenceLinks?.length > 0) && (
               <div className="mt-3 pt-3 border-t border-gray-500/20 flex flex-wrap gap-2 items-center">
                 <span className="text-xs font-semibold text-gray">Resources:</span>
-                {(assignment.attachments || []).map((att, i) => (
+                {(currentAssignment.attachments || []).map((att, i) => (
                   <a
                     key={i}
                     href={att.fileUrl}
@@ -201,7 +341,7 @@ const StudentAssignmentSolveModal = ({ isOpen, onClose, assignment, refetchList 
                     <FiFileText size={12} /> {att.name}
                   </a>
                 ))}
-                {(assignment.referenceLinks || []).map((link, i) => (
+                {(currentAssignment.referenceLinks || []).map((link, i) => (
                   <a
                     key={i}
                     href={link.url}
@@ -216,21 +356,21 @@ const StudentAssignmentSolveModal = ({ isOpen, onClose, assignment, refetchList 
             )}
           </div>
 
-          {/* Questions Section Prepared by Super Admin */}
+          {/* Questions Section */}
           <div className="space-y-4">
             <h3 className="text-sm font-semibold uppercase tracking-wider text-primary flex items-center gap-2">
-              <FiHelpCircle /> Questions ({assignment.questions?.length || 0})
+              <FiHelpCircle /> Questions ({currentAssignment.questions?.length || 0})
             </h3>
 
-            {(!assignment.questions || assignment.questions.length === 0) ? (
+            {!currentAssignment.questions || currentAssignment.questions.length === 0 ? (
               <p className="text-xs text-gray italic">
                 Please submit your solution using the form below.
               </p>
             ) : (
               <div className="space-y-4">
-                {assignment.questions.map((q, idx) => {
-                  const qKey = q._id || q.questionText;
-                  const currentAns = answers[qKey] || {};
+                {currentAssignment.questions.map((q, idx) => {
+                  const qKey = q._id ? q._id.toString() : q.questionText;
+                  const currentAns = getQuestionAnswer(q, idx);
 
                   return (
                     <div
@@ -256,40 +396,55 @@ const StudentAssignmentSolveModal = ({ isOpen, onClose, assignment, refetchList 
                             return (
                               <label
                                 key={optIdx}
-                                className={`flex items-center gap-3 p-2.5 rounded-xl border cursor-pointer text-xs transition ${
+                                className={`flex items-center gap-3 p-3 rounded-xl border text-xs transition ${
                                   isSelected
-                                    ? "bg-primary/15 border-primary text-white font-medium"
+                                    ? "bg-primary text-white border-primary font-semibold shadow-sm"
                                     : isDark
-                                    ? "bg-darklight border-dark_border hover:border-gray-500"
-                                    : "bg-white border-border hover:border-gray-300"
-                                } ${isGraded ? "cursor-default" : ""}`}
+                                    ? "bg-darklight border-dark_border hover:border-gray-500 text-gray-200"
+                                    : "bg-white border-border hover:border-gray-300 text-midnight_text"
+                                } ${isReadOnly ? "cursor-default" : "cursor-pointer"}`}
                               >
                                 <input
                                   type="radio"
                                   name={`q_${idx}`}
-                                  disabled={isGraded}
-                                  checked={isSelected}
-                                  onChange={() => handleAnswerChange(qKey, "selectedOption", opt)}
-                                  className="accent-primary w-4 h-4"
+                                  disabled={isReadOnly}
+                                  checked={Boolean(isSelected)}
+                                  onChange={() =>
+                                    !isReadOnly && handleAnswerChange(qKey, "selectedOption", opt)
+                                  }
+                                  className="accent-primary w-4 h-4 cursor-pointer disabled:cursor-default"
                                 />
-                                <span>{opt}</span>
+                                <span className="flex-1">{opt}</span>
+                                {isSelected && (
+                                  <span className="text-[10px] px-2 py-0.5 rounded-md font-bold bg-white/20 text-white">
+                                    Your Answer
+                                  </span>
+                                )}
                               </label>
                             );
                           })}
                         </div>
                       ) : (
-                        <textarea
-                          rows={3}
-                          disabled={isGraded}
-                          value={currentAns.answerText || ""}
-                          onChange={(e) => handleAnswerChange(qKey, "answerText", e.target.value)}
-                          placeholder="Write your answer here..."
-                          className={`w-full px-3.5 py-2.5 rounded-xl border text-xs sm:text-sm outline-none transition disabled:opacity-75 ${
-                            isDark
-                              ? "bg-darklight border-dark_border text-white focus:border-primary"
-                              : "bg-white border-border text-black focus:border-primary"
-                          }`}
-                        />
+                        <div className="space-y-1">
+                          <textarea
+                            rows={3}
+                            disabled={isReadOnly}
+                            value={currentAns.answerText || ""}
+                            onChange={(e) =>
+                              !isReadOnly && handleAnswerChange(qKey, "answerText", e.target.value)
+                            }
+                            placeholder={
+                              isReadOnly
+                                ? "No answer submitted for this question."
+                                : "Write your answer here..."
+                            }
+                            className={`w-full px-3.5 py-2.5 rounded-xl border text-xs sm:text-sm outline-none transition disabled:opacity-85 ${
+                              isDark
+                                ? "bg-darklight border-dark_border text-white focus:border-primary"
+                                : "bg-white border-border text-black focus:border-primary"
+                            }`}
+                          />
+                        </div>
                       )}
                     </div>
                   );
@@ -306,35 +461,76 @@ const StudentAssignmentSolveModal = ({ isOpen, onClose, assignment, refetchList 
               <FiSend /> Solution Links & Attachments
             </h3>
 
+            {/* If student previously submitted attachments, display them here */}
+            {mySubmission?.attachments?.length > 0 && (
+              <div className={`p-3.5 rounded-xl border space-y-2 ${
+                isDark ? "bg-darklight/20 border-dark_border" : "bg-gray-50 border-border"
+              }`}>
+                <span className="text-xs font-semibold text-gray flex items-center gap-1.5">
+                  <FiFileText className="text-primary" /> Your Submitted Attachments ({mySubmission.attachments.length}):
+                </span>
+                <div className="flex flex-wrap gap-2">
+                  {mySubmission.attachments.map((file, i) => (
+                    <a
+                      key={i}
+                      href={file.fileUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-xs px-3 py-1.5 rounded-lg border border-primary/30 text-primary bg-primary/5 hover:bg-primary/10 flex items-center gap-1.5 transition font-medium"
+                    >
+                      <FiFileText size={13} /> {file.name} <FiExternalLink size={11} />
+                    </a>
+                  ))}
+                </div>
+              </div>
+            )}
+
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-xs font-semibold uppercase text-gray mb-1">
                   Submission Link (GitHub / Figma / Google Drive)
                 </label>
-                <input
-                  type="url"
-                  disabled={isGraded}
-                  value={submissionLink}
-                  onChange={(e) => setSubmissionLink(e.target.value)}
-                  placeholder="https://github.com/username/project"
-                  className={`w-full px-3.5 py-2 rounded-xl border text-xs sm:text-sm outline-none ${
-                    isDark ? "bg-darklight border-dark_border text-white focus:border-primary" : "bg-white border-border focus:border-primary"
-                  }`}
-                />
+                <div className="relative">
+                  <input
+                    type="url"
+                    disabled={isReadOnly}
+                    value={submissionLink}
+                    onChange={(e) => setSubmissionLink(e.target.value)}
+                    placeholder="https://github.com/username/project"
+                    className={`w-full px-3.5 py-2 rounded-xl border text-xs sm:text-sm outline-none disabled:opacity-75 ${
+                      isDark
+                        ? "bg-darklight border-dark_border text-white focus:border-primary"
+                        : "bg-white border-border focus:border-primary"
+                    }`}
+                  />
+                  {isReadOnly && submissionLink && (
+                    <a
+                      href={submissionLink}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="absolute right-2 top-2 p-1 text-primary hover:text-primary/80"
+                      title="Open Link"
+                    >
+                      <FiExternalLink size={14} />
+                    </a>
+                  )}
+                </div>
               </div>
 
-              <div>
-                <label className="block text-xs font-semibold uppercase text-gray mb-1">
-                  Attach Solution Files (PDF, Code ZIP, Screenshots)
-                </label>
-                <input
-                  type="file"
-                  multiple
-                  disabled={isGraded}
-                  onChange={(e) => setFiles(e.target.files)}
-                  className="w-full text-xs text-gray file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-primary file:text-white hover:file:opacity-90 cursor-pointer disabled:opacity-50"
-                />
-              </div>
+              {!isReadOnly && (
+                <div>
+                  <label className="block text-xs font-semibold uppercase text-gray mb-1">
+                    Attach Solution Files (PDF, Code ZIP, Screenshots)
+                  </label>
+                  <input
+                    type="file"
+                    multiple
+                    disabled={isReadOnly}
+                    onChange={(e) => setFiles(e.target.files)}
+                    className="w-full text-xs text-gray file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-primary file:text-white hover:file:opacity-90 cursor-pointer disabled:opacity-50"
+                  />
+                </div>
+              )}
             </div>
 
             <div>
@@ -343,12 +539,14 @@ const StudentAssignmentSolveModal = ({ isOpen, onClose, assignment, refetchList 
               </label>
               <textarea
                 rows={2}
-                disabled={isGraded}
+                disabled={isReadOnly}
                 value={submissionText}
                 onChange={(e) => setSubmissionText(e.target.value)}
-                placeholder="Optional notes or summary of your work..."
-                className={`w-full px-3.5 py-2 rounded-xl border text-xs sm:text-sm outline-none ${
-                  isDark ? "bg-darklight border-dark_border text-white focus:border-primary" : "bg-white border-border focus:border-primary"
+                placeholder={isReadOnly ? "No additional notes provided." : "Optional notes or summary of your work..."}
+                className={`w-full px-3.5 py-2 rounded-xl border text-xs sm:text-sm outline-none disabled:opacity-75 ${
+                  isDark
+                    ? "bg-darklight border-dark_border text-white focus:border-primary"
+                    : "bg-white border-border focus:border-primary"
                 }`}
               />
             </div>
@@ -356,13 +554,20 @@ const StudentAssignmentSolveModal = ({ isOpen, onClose, assignment, refetchList 
         </div>
 
         {/* Modal Footer */}
-        <div className={`p-4 border-t flex items-center justify-between ${
-          isDark ? "border-dark_border bg-darklight/30" : "border-border bg-gray-50"
-        }`}>
+        <div
+          className={`p-4 border-t flex items-center justify-between ${
+            isDark ? "border-dark_border bg-darklight/30" : "border-border bg-gray-50"
+          }`}
+        >
           <div>
-            {isSubmitted && (
-              <span className="text-xs text-emerald-400 font-semibold flex items-center gap-1">
-                <FiCheckCircle size={14} /> Submitted on {new Date(mySubmission.submittedAt).toLocaleDateString()}
+            {mySubmission?.submittedAt ? (
+              <span className="text-xs text-emerald-400 font-semibold flex items-center gap-1.5">
+                <FiCheckCircle size={15} /> Submitted on {new Date(mySubmission.submittedAt).toLocaleDateString()}
+                {mySubmission.isLate && " (Late)"}
+              </span>
+            ) : (
+              <span className="text-xs text-gray font-medium">
+                Not submitted yet
               </span>
             )}
           </div>
@@ -371,24 +576,32 @@ const StudentAssignmentSolveModal = ({ isOpen, onClose, assignment, refetchList 
             <button
               type="button"
               onClick={onClose}
-              className={`px-4 py-2 rounded-xl border text-xs font-semibold transition ${
-                isDark ? "border-dark_border text-gray hover:bg-darklight" : "border-border text-gray hover:bg-gray-100"
+              className={`px-5 py-2.5 rounded-xl border text-xs font-semibold transition cursor-pointer ${
+                isDark
+                  ? "border-dark_border text-gray hover:bg-darklight hover:text-white"
+                  : "border-border text-gray hover:bg-gray-100 hover:text-black"
               }`}
             >
               Close
             </button>
-            {!isGraded && (
+
+            {/* Resubmit / Submit button: ONLY shown if not yet submitted, OR if mentor/admin explicitly requested resubmission */}
+            {canEditAndSubmit && (
               <button
                 type="button"
                 disabled={isSubmitting}
                 onClick={handleSubmit}
-                className="px-6 py-2 rounded-xl bg-primary text-white text-xs font-semibold shadow hover:bg-primary/90 transition flex items-center gap-1.5 disabled:opacity-50"
+                className={`px-6 py-2.5 rounded-xl text-white text-xs font-semibold shadow transition flex items-center gap-1.5 disabled:opacity-50 cursor-pointer ${
+                  isResubmitRequested
+                    ? "bg-amber-500 hover:bg-amber-600 shadow-md"
+                    : "bg-primary hover:bg-primary/90"
+                }`}
               >
                 <FiSend size={13} />
                 {isSubmitting
                   ? "Submitting..."
-                  : isSubmitted
-                  ? "Update / Resubmit"
+                  : isResubmitRequested
+                  ? "Resubmit Assessment"
                   : "Submit Assignment"}
               </button>
             )}

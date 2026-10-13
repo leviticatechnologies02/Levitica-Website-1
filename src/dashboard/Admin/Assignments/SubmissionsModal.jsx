@@ -265,7 +265,10 @@ const SubmissionsModal = ({ isOpen, onClose, assignment }) => {
                     <div className="space-y-3">
                       {assignment.questions.map((q, idx) => {
                         const studentAnswer = (selectedSub.answers || []).find(
-                          (a) => a.questionId === q._id || a.questionText === q.questionText
+                          (a, aIdx) =>
+                            (a.questionId && q._id && a.questionId.toString() === q._id.toString()) ||
+                            (a.questionText && q.questionText && a.questionText.trim().toLowerCase() === q.questionText.trim().toLowerCase()) ||
+                            aIdx === idx
                         );
 
                         return (
@@ -284,14 +287,14 @@ const SubmissionsModal = ({ isOpen, onClose, assignment }) => {
                             <div className="pt-1">
                               {q.questionType === "mcq" ? (
                                 <div className="space-y-1">
-                                  <p className="text-gray">Selected Option: <span className="font-bold text-white">{studentAnswer?.selectedOption || "Not answered"}</span></p>
+                                  <p className="text-gray">Selected Option: <span className={`font-bold ${isDark ? "text-white" : "text-midnight_text"}`}>{studentAnswer?.selectedOption || "Not answered"}</span></p>
                                   {q.correctAnswer && (
-                                    <p className="text-[11px] text-emerald-400">Correct Answer: {q.correctAnswer}</p>
+                                    <p className={`text-[11px] font-medium ${isDark ? "text-emerald-400" : "text-emerald-700"}`}>Correct Answer: {q.correctAnswer}</p>
                                   )}
                                 </div>
                               ) : (
                                 <p className="text-gray whitespace-pre-wrap">
-                                  Answer: <span className="text-white">{studentAnswer?.answerText || "No answer provided"}</span>
+                                  Answer: <span className={isDark ? "text-white" : "text-midnight_text"}>{studentAnswer?.answerText || "No answer provided"}</span>
                                 </p>
                               )}
                             </div>

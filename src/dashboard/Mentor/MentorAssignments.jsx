@@ -402,10 +402,12 @@ const MentorAssignments = () => {
                       >
                         <span className="font-bold text-primary">Question {idx + 1} ({ans.questionType}):</span>
                         {ans.selectedOption && (
-                          <p className="font-semibold text-slate-200">Selected Option: {ans.selectedOption}</p>
+                          <p className={`font-semibold ${isDark ? "text-slate-200" : "text-slate-800"}`}>Selected Option: {ans.selectedOption}</p>
                         )}
                         {ans.answerText && (
-                          <p className="whitespace-pre-wrap text-slate-300 font-mono text-[11px] bg-black/20 p-2 rounded-lg">
+                          <p className={`whitespace-pre-wrap font-mono text-[11px] p-2 rounded-lg ${
+                            isDark ? "text-slate-300 bg-black/20" : "text-slate-800 bg-slate-200/50"
+                          }`}>
                             {ans.answerText}
                           </p>
                         )}

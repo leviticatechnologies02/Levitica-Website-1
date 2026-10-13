@@ -312,7 +312,7 @@ const AssignmentModal = ({
                     }}
                     className={`p-3 rounded-xl border flex items-center gap-2.5 text-xs font-semibold transition ${
                       isSelected
-                        ? "bg-primary/20 border-primary text-white shadow-sm"
+                        ? "bg-primary border-primary text-white shadow-sm"
                         : isDark
                         ? "bg-darklight/40 border-dark_border text-gray hover:text-white"
                         : "bg-gray-50 border-border text-gray hover:text-black"
