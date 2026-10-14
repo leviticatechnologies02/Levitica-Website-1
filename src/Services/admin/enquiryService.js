@@ -3,9 +3,10 @@ import { api } from '@/Services/api';
 export const enquiryApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getEnquiries: builder.query({
-      query: () => ({
+      query: (params) => ({
         url: "/admin/enquiries",
         method: "GET",
+        params,
       }),
       providesTags: ["Enquiries"],
     }),

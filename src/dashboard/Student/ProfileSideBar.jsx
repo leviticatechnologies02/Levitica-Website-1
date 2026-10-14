@@ -5,18 +5,19 @@ import { useDispatch } from "react-redux";
 import { FaRupeeSign } from "react-icons/fa6";
 import { useTheme } from '@/context/ThemeContext';
 
-const ProfileSidebar = ({ user, activeTab, onTabChange, isDark: isDarkProp }) => {
+const ProfileSidebar = ({ user, activeTab, onTabChange, isDark: isDarkProp, menuItems: customMenuItems }) => {
   const { theme } = useTheme();
   const isDark = isDarkProp !== undefined ? isDarkProp : theme === 'dark';
   const navigate = useNavigate();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-
-  const menuItems = [
+  const defaultMenuItems = [
     { id: "profile", label: "Profile", icon: <User size={18} /> },
     { id: "payments", label: "Payments History", icon: <FaRupeeSign size={18} /> },
     { id: "security", label: "Security", icon: <ShieldAlert size={18} /> },
   ];
+
+  const menuItems = customMenuItems || defaultMenuItems;
 
   return (
     <aside className={`w-full flex flex-col rounded-2xl shadow-sm border ${

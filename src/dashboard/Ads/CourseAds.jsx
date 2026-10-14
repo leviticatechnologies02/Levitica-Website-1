@@ -14,11 +14,14 @@ import {
   BookOpenCheck,
   TrendingUp,
   Compass,
-  Briefcase
+  Briefcase,
+  X,
 } from "lucide-react";
+import { toast } from "react-hot-toast";
 import { useCourses } from '@/hooks/useCourses';
 import { useTheme } from '@/context/ThemeContext';
 import { useGetAllInternshipsDomainsQuery } from '@/Services/paymentServices/internshipsServices';
+import StarRating, { getCourseRatingData } from "@/dashboard/common/StarRating";
 
 const CourseAdsCarousel = () => {
   const navigate = useNavigate();
@@ -39,6 +42,39 @@ const CourseAdsCarousel = () => {
   const [paused, setPaused] = useState(false);
   const [progress, setProgress] = useState(0);
   const [direction, setDirection] = useState(1); // 1 = slide next, -1 = slide prev
+
+  // Interactive Course Rating Modal state
+  const [rateModal, setRateModal] = useState(null); // { course, rating, comment }
+  const [ratingsVersion, setRatingsVersion] = useState(0);
+
+  const handleOpenRateModal = (course, initialRating = 5) => {
+    const rData = getCourseRatingData(course);
+    setRateModal({
+      course,
+      rating: rData.userRating || initialRating || 5,
+      comment: "",
+    });
+  };
+
+  const handleSaveRating = (e) => {
+    e.preventDefault();
+    if (!rateModal) return;
+
+    try {
+      const existing = JSON.parse(localStorage.getItem("levitica_user_ratings") || "{}");
+      existing[rateModal.course._id] = {
+        rating: rateModal.rating,
+        comment: rateModal.comment,
+        updatedAt: new Date().toISOString(),
+      };
+      localStorage.setItem("levitica_user_ratings", JSON.stringify(existing));
+      setRatingsVersion((v) => v + 1);
+      toast.success(`Thank you! You rated "${rateModal.course.name}" ${rateModal.rating} stars.`);
+      setRateModal(null);
+    } catch (err) {
+      toast.error("Failed to save rating");
+    }
+  };
 
   // Rich Carousel slides configured dynamically
   const carouselSlides = useMemo(() => [
@@ -74,8 +110,8 @@ const CourseAdsCarousel = () => {
       title: "Java Programming Masterclass",
       subtitle: "Complete Backend Path",
       description: "Master Java from absolute basics to advanced enterprise frameworks like Spring Boot. Includes hands-on projects and database integrations.",
-      price: "₹4,999",
-      originalPrice: "₹9,999",
+      price: "₹14,999",
+      originalPrice: "₹19,999",
       rating: 4.8,
       type: "course",
       badge: "Bestseller",
@@ -86,8 +122,8 @@ const CourseAdsCarousel = () => {
       title: "Azure Cloud & DevOps Specialist",
       subtitle: "Cloud Infrastructure Track",
       description: "Learn Azure administration, cloud architecture, and CI/CD pipelines. Get ready for industry certifications (AZ-900 & AZ-104).",
-      price: "₹8,000",
-      originalPrice: "₹15,000",
+      price: "₹15,000",
+      originalPrice: "₹20,000",
       rating: 4.7,
       type: "course",
       badge: "Cloud Track",
@@ -532,7 +568,7 @@ const CourseAdsCarousel = () => {
                       {/* Decorative Background Circles */}
                       <div className="absolute -right-6 -bottom-6 w-20 h-20 rounded-full bg-white/10" />
                       <div className="absolute right-12 top-[-10px] w-12 h-12 rounded-full bg-white/10" />
-                      
+
                       {/* Level Badge */}
                       <span className="self-start text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded bg-white/20 text-white backdrop-blur-md border border-white/15">
                         {domain.level || "Industrial"}
@@ -636,6 +672,7 @@ const CourseAdsCarousel = () => {
             >
               {randomCourses.map((course) => {
                 const isFree = course.price === 0;
+                const ratingData = getCourseRatingData(course);
 
                 return (
                   <motion.div
@@ -682,16 +719,27 @@ const CourseAdsCarousel = () => {
                         {course.shortdescription}
                       </p>
 
-                      {/* Rating Placeholder to enrich look */}
-                      <div className="flex items-center gap-1 mt-3">
-                        <div className="flex text-yellow-400">
-                          <Star size={11} fill="currentColor" />
-                          <Star size={11} fill="currentColor" />
-                          <Star size={11} fill="currentColor" />
-                          <Star size={11} fill="currentColor" />
-                          <Star size={11} fill="currentColor" />
-                        </div>
-                        <span className="text-[10px] font-semibold text-gray dark:text-slate-500">(4.5)</span>
+                      {/* Accurate Star Rating with fractional fill and interactive rating */}
+                      <div className="flex items-center justify-between gap-1 mt-3">
+                        <StarRating
+                          rating={ratingData.rating}
+                          reviewsCount={ratingData.reviewsCount}
+                          userRating={ratingData.userRating}
+                          interactive={true}
+                          onRate={(stars) => handleOpenRateModal(course, stars)}
+                          size={12}
+                        />
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleOpenRateModal(course, ratingData.userRating || 5);
+                          }}
+                          className="text-[10px] font-semibold text-primary hover:underline cursor-pointer"
+                          title="Click to rate this course"
+                        >
+                          {ratingData.userRating ? "Edit" : "Rate"}
+                        </button>
                       </div>
 
                       <div className="mt-3 pt-3 border-t border-lightgray/40 dark:border-dark_border/20 flex items-center justify-between">
@@ -726,6 +774,97 @@ const CourseAdsCarousel = () => {
         </div>
 
       </div>
+
+      {/* Interactive Course Rating Modal */}
+      <AnimatePresence>
+        {rateModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              className={`w-full max-w-md rounded-2xl border shadow-2xl p-6 ${isDark ? "bg-semidark border-dark_border text-white" : "bg-white border-border text-midnight_text"
+                }`}
+            >
+              <div className="flex items-start justify-between gap-2 pb-3 border-b border-border/40">
+                <div>
+                  <h3 className="font-bold text-base">Rate Course</h3>
+                  <p className="text-xs text-gray line-clamp-1 mt-0.5">{rateModal.course?.name}</p>
+                </div>
+                <button
+                  onClick={() => setRateModal(null)}
+                  className="p-1 rounded-lg text-gray hover:text-white hover:bg-white/10 transition cursor-pointer"
+                >
+                  <X size={18} />
+                </button>
+              </div>
+
+              <form onSubmit={handleSaveRating} className="space-y-4 pt-4">
+                <div className="text-center py-2 space-y-2">
+                  <p className="text-xs text-gray font-medium">Click on the stars to set your rating:</p>
+                  <div className="flex items-center justify-center gap-2">
+                    {[1, 2, 3, 4, 5].map((starValue) => {
+                      const isFilled = starValue <= rateModal.rating;
+                      return (
+                        <button
+                          key={starValue}
+                          type="button"
+                          onClick={() => setRateModal((prev) => ({ ...prev, rating: starValue }))}
+                          className="p-1 transition-transform hover:scale-125 focus:outline-none cursor-pointer"
+                        >
+                          <Star
+                            size={28}
+                            className={
+                              isFilled
+                                ? "text-amber-400 fill-amber-400 transition-colors drop-shadow-[0_0_6px_rgba(251,191,36,0.5)]"
+                                : "text-slate-300 dark:text-slate-600 fill-slate-200 dark:fill-slate-700/50"
+                            }
+                          />
+                        </button>
+                      );
+                    })}
+                  </div>
+                  <span className="inline-block text-xs font-bold text-amber-400 px-2.5 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20">
+                    {rateModal.rating}.0 / 5.0 Stars
+                  </span>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-gray mb-1.5">
+                    Feedback / Review Comment (Optional)
+                  </label>
+                  <textarea
+                    rows={3}
+                    value={rateModal.comment}
+                    onChange={(e) => setRateModal((prev) => ({ ...prev, comment: e.target.value }))}
+                    placeholder="Tell us what you liked about this course..."
+                    className={`w-full p-3 rounded-xl text-xs border outline-none transition ${isDark
+                      ? "bg-darklight border-dark_border text-white focus:border-primary placeholder-gray"
+                      : "bg-light border-border text-midnight_text focus:border-primary placeholder-gray"
+                      }`}
+                  />
+                </div>
+
+                <div className="flex items-center justify-end gap-2.5 pt-2">
+                  <button
+                    type="button"
+                    onClick={() => setRateModal(null)}
+                    className="px-4 py-2 rounded-xl text-xs font-semibold text-gray hover:text-white transition cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-5 py-2 rounded-xl text-xs font-semibold btn-primary shadow-md hover:shadow-lg transition cursor-pointer"
+                  >
+                    Submit Rating
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

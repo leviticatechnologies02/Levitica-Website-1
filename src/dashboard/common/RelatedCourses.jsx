@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useCourses } from '@/hooks/useCourses';
 import { FiBookOpen, FiClock, FiStar, FiArrowRight, FiTrendingUp } from "react-icons/fi";
 import { motion } from "framer-motion";
+import StarRating, { getCourseRatingData } from "./StarRating";
 
 const RelatedCourses = ({ currentCourseId }) => {
   const navigate = useNavigate();
@@ -147,15 +148,13 @@ const RelatedCourses = ({ currentCourseId }) => {
               {item.shortdescription || "Explore this comprehensive course designed to enhance your skills and career growth."}
             </p>
 
-            {/* Rating Placeholder */}
-            <div className="flex items-center gap-1 mt-2">
-              <div className="flex items-center">
-                {[...Array(4)].map((_, i) => (
-                  <FiStar key={i} className="h-3 w-3 fill-amber-500 text-amber-500" />
-                ))}
-                <FiStar className="h-3 w-3 text-amber-500" />
-              </div>
-              <span className="text-xs text-gray">(4.5)</span>
+            {/* Accurate Star Rating */}
+            <div className="mt-2.5">
+              <StarRating
+                rating={getCourseRatingData(item).rating}
+                reviewsCount={getCourseRatingData(item).reviewsCount}
+                size={12}
+              />
             </div>
 
             {/* Price and View Details Button */}
@@ -166,14 +165,9 @@ const RelatedCourses = ({ currentCourseId }) => {
                     Free
                   </span>
                 ) : (
-                  <>
-                    <span className="text-lg font-bold text-primary">
-                      ₹{Number(item.price).toLocaleString('en-IN')}
-                    </span>
-                    <span className="text-xs text-gray ml-1 line-through">
-                      ₹{Math.round(Number(item.price) * 1.3).toLocaleString('en-IN')}
-                    </span>
-                  </>
+                  <span className="text-lg font-bold text-primary">
+                    ₹{Number(item.price).toLocaleString('en-IN')}
+                  </span>
                 )}
               </div>
               <button

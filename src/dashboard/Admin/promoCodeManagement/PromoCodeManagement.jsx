@@ -94,7 +94,7 @@ const PromoCodeManagement = () => {
       {/* HEADER */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-2xl md:text-3xl font-extrabold flex items-center gap-2.5">
+          <h1 className="text-2xl md:text-3xl font-bold flex items-center gap-2.5">
             <FiTag className="text-blue-500" />
             Promo Code Management
           </h1>
@@ -115,9 +115,8 @@ const PromoCodeManagement = () => {
       {/* METRIC STRIP */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
         <div
-          className={`p-4 rounded-xl border transition ${
-            isDark ? "bg-slate-800/80 border-slate-700" : "bg-white border-slate-200"
-          }`}
+          className={`p-4 rounded-xl border transition ${isDark ? "bg-slate-800/80 border-slate-700" : "bg-white border-slate-200"
+            }`}
         >
           <span className="text-[11px] font-semibold text-slate-400 block uppercase tracking-wider">
             Total Codes
@@ -126,9 +125,8 @@ const PromoCodeManagement = () => {
         </div>
 
         <div
-          className={`p-4 rounded-xl border transition ${
-            isDark ? "bg-slate-800/80 border-slate-700" : "bg-white border-slate-200"
-          }`}
+          className={`p-4 rounded-xl border transition ${isDark ? "bg-slate-800/80 border-slate-700" : "bg-white border-slate-200"
+            }`}
         >
           <span className="text-[11px] font-semibold text-emerald-500 block uppercase tracking-wider">
             Active
@@ -137,9 +135,8 @@ const PromoCodeManagement = () => {
         </div>
 
         <div
-          className={`p-4 rounded-xl border transition ${
-            isDark ? "bg-slate-800/80 border-slate-700" : "bg-white border-slate-200"
-          }`}
+          className={`p-4 rounded-xl border transition ${isDark ? "bg-slate-800/80 border-slate-700" : "bg-white border-slate-200"
+            }`}
         >
           <span className="text-[11px] font-semibold text-rose-500 block uppercase tracking-wider">
             Expired
@@ -148,9 +145,8 @@ const PromoCodeManagement = () => {
         </div>
 
         <div
-          className={`p-4 rounded-xl border transition ${
-            isDark ? "bg-slate-800/80 border-slate-700" : "bg-white border-slate-200"
-          }`}
+          className={`p-4 rounded-xl border transition ${isDark ? "bg-slate-800/80 border-slate-700" : "bg-white border-slate-200"
+            }`}
         >
           <span className="text-[11px] font-semibold text-slate-400 block uppercase tracking-wider">
             Total Redemptions
@@ -171,20 +167,18 @@ const PromoCodeManagement = () => {
             placeholder="Search code or influencer..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className={`w-full pl-9 pr-4 py-2 rounded-xl text-xs sm:text-sm border outline-none transition ${
-              isDark
+            className={`w-full pl-9 pr-4 py-2 rounded-xl text-xs sm:text-sm border outline-none transition ${isDark
                 ? "bg-slate-800 border-slate-700 text-white placeholder-slate-400 focus:border-blue-500"
                 : "bg-white border-slate-200 text-slate-900 placeholder-slate-400 focus:border-blue-500"
-            }`}
+              }`}
           />
         </div>
 
         <div className="flex items-center gap-2">
           {/* Status Tabs */}
           <div
-            className={`flex rounded-xl p-1 border ${
-              isDark ? "bg-slate-800/80 border-slate-700" : "bg-slate-100 border-slate-200"
-            }`}
+            className={`flex rounded-xl p-1 border ${isDark ? "bg-slate-800/80 border-slate-700" : "bg-slate-100 border-slate-200"
+              }`}
           >
             {[
               { id: "all", label: "All" },
@@ -195,13 +189,12 @@ const PromoCodeManagement = () => {
               <button
                 key={tab.id}
                 onClick={() => setStatusFilter(tab.id)}
-                className={`px-3 py-1 rounded-lg text-xs font-semibold transition cursor-pointer ${
-                  statusFilter === tab.id
+                className={`px-3 py-1 rounded-lg text-xs font-semibold transition cursor-pointer ${statusFilter === tab.id
                     ? isDark
                       ? "bg-blue-600 text-white shadow-sm"
                       : "bg-white text-slate-900 shadow-sm"
                     : "text-slate-400 hover:text-white"
-                }`}
+                  }`}
               >
                 {tab.label}
               </button>
@@ -210,32 +203,29 @@ const PromoCodeManagement = () => {
 
           {/* View Toggle */}
           <div
-            className={`flex rounded-xl p-1 border ${
-              isDark ? "bg-slate-800/80 border-slate-700" : "bg-slate-100 border-slate-200"
-            }`}
+            className={`flex rounded-xl p-1 border ${isDark ? "bg-slate-800/80 border-slate-700" : "bg-slate-100 border-slate-200"
+              }`}
           >
             <button
               onClick={() => setView("cards")}
-              className={`p-1.5 rounded-lg text-xs font-medium transition cursor-pointer ${
-                view === "cards"
+              className={`p-1.5 rounded-lg text-xs font-medium transition cursor-pointer ${view === "cards"
                   ? isDark
                     ? "bg-slate-700 text-white shadow"
                     : "bg-white text-slate-900 shadow"
                   : "text-slate-400 hover:text-white"
-              }`}
+                }`}
               title="Card View"
             >
               <FiGrid size={15} />
             </button>
             <button
               onClick={() => setView("table")}
-              className={`p-1.5 rounded-lg text-xs font-medium transition cursor-pointer ${
-                view === "table"
+              className={`p-1.5 rounded-lg text-xs font-medium transition cursor-pointer ${view === "table"
                   ? isDark
                     ? "bg-slate-700 text-white shadow"
                     : "bg-white text-slate-900 shadow"
                   : "text-slate-400 hover:text-white"
-              }`}
+                }`}
               title="Table View"
             >
               <FiList size={15} />
@@ -252,9 +242,8 @@ const PromoCodeManagement = () => {
         </div>
       ) : filteredPromos.length === 0 ? (
         <div
-          className={`py-16 text-center rounded-2xl border ${
-            isDark ? "bg-slate-800/40 border-slate-700 text-slate-400" : "bg-slate-50 border-slate-200 text-slate-500"
-          }`}
+          className={`py-16 text-center rounded-2xl border ${isDark ? "bg-slate-800/40 border-slate-700 text-slate-400" : "bg-slate-50 border-slate-200 text-slate-500"
+            }`}
         >
           <FiTag size={36} className="mx-auto mb-3 opacity-30 text-blue-500" />
           <h3 className="font-bold text-base">No promo codes found</h3>

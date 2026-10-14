@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FiClipboard,
   FiBookOpen,
+  FiBriefcase,
   FiClock,
   FiCheckCircle,
   FiAward,
@@ -17,6 +19,9 @@ import {
   FiEdit2,
   FiTrash2,
   FiCheck,
+  FiSearch,
+  FiLayers,
+  FiFilter,
 } from "react-icons/fi";
 import { toast } from "react-hot-toast";
 import { useTheme } from "@/context/ThemeContext";
@@ -45,6 +50,10 @@ const MentorAssignments = () => {
   const { theme } = useTheme();
   const isDark = theme === "dark";
 
+  const [searchParams] = useSearchParams();
+  const initialDomainId = searchParams.get("domainId");
+  const initialCourseId = searchParams.get("courseId");
+
   const { data, isLoading, refetch } = useGetMentorAssignmentsQuery();
   const { data: coursesData } = useGetMentorCoursesQuery();
   const mentorCourses = coursesData?.courses || [];
@@ -55,6 +64,15 @@ const MentorAssignments = () => {
   const [deleteMentorAssignment] = useDeleteMentorAssignmentMutation();
 
   const assignments = data?.assignments || [];
+
+  // Filter & Search states
+  const [activeTab, setActiveTab] = useState(
+    initialDomainId ? "internships" : initialCourseId ? "courses" : "all"
+  );
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedProgramId, setSelectedProgramId] = useState(
+    initialDomainId || initialCourseId || ""
+  );
 
   // Modal states
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -81,6 +99,50 @@ const MentorAssignments = () => {
     selectedAssignment;
   const assignmentQuestions = currentAssignment?.questions || [];
   const [gradeSubmission, { isLoading: isGrading }] = useGradeMentorSubmissionMutation();
+
+  // Helper to determine type
+  const getAssignmentType = (a) => {
+    if (!a) return "course";
+    if (a.targetType === "internship" || Boolean(a.internshipDomain)) return "internship";
+    if (a.targetType === "course" || Boolean(a.course)) return "course";
+    if (a.targetType === "all") return "all";
+    return "course";
+  };
+
+  const courseCount = assignments.filter((a) => getAssignmentType(a) === "course").length;
+  const internshipCount = assignments.filter((a) => getAssignmentType(a) === "internship").length;
+
+  const filteredAssignments = assignments.filter((a) => {
+    const type = getAssignmentType(a);
+
+    // Tab filter
+    if (activeTab === "courses" && type !== "course") return false;
+    if (activeTab === "internships" && type !== "internship") return false;
+
+    // Specific program filter
+    if (selectedProgramId) {
+      const cId = a.course?._id || a.course;
+      const dId = a.internshipDomain?._id || a.internshipDomain;
+      if (cId !== selectedProgramId && dId !== selectedProgramId) {
+        return false;
+      }
+    }
+
+    // Search query filter
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase().trim();
+      const titleMatch = a.title?.toLowerCase().includes(q);
+      const descMatch = a.description?.toLowerCase().includes(q);
+      const courseMatch = a.course?.name?.toLowerCase().includes(q);
+      const domainMatch = a.internshipDomain?.name?.toLowerCase().includes(q);
+      const batchMatch = a.batch?.batchName?.toLowerCase().includes(q);
+      if (!titleMatch && !descMatch && !courseMatch && !domainMatch && !batchMatch) {
+        return false;
+      }
+    }
+
+    return true;
+  });
 
   const handleOpenGrade = (sub) => {
     setSelectedSubmission(sub);
@@ -134,16 +196,24 @@ const MentorAssignments = () => {
               isDark ? "text-white" : "text-midnight_text"
             }`}>
               <FiClipboard className="text-primary" />
-              Course Assignments & Student Evaluation
+              Assignments & Assessments
             </h1>
             <p className="text-sm text-gray mt-1">
-              Create assignments, prepare interactive questions for your courses, and grade student submissions.
+              Create assignments, prepare interactive questions for Courses & Industrial Internships, and grade student submissions.
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
-            <span className="hidden sm:inline-block px-3.5 py-1.5 rounded-full text-xs font-bold bg-primary/10 text-primary border border-primary/20">
-              {assignments.length} Course Assignment{assignments.length !== 1 ? "s" : ""}
+          <div className="flex flex-wrap items-center gap-2.5">
+            {/* Course Count Pill */}
+            <span className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+              <FiBookOpen size={13} />
+              {courseCount} Course{courseCount !== 1 ? "s" : ""}
+            </span>
+
+            {/* Internship Count Pill */}
+            <span className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20">
+              <FiBriefcase size={13} />
+              {internshipCount} Internship{internshipCount !== 1 ? "s" : ""}
             </span>
 
             <motion.button
@@ -155,8 +225,150 @@ const MentorAssignments = () => {
               }}
               className="flex items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-xs sm:text-sm font-semibold btn-primary shadow-md hover:shadow-lg transition cursor-pointer"
             >
-              <FiPlus className="w-4 h-4" /> Create Assignment & Questions
+              <FiPlus className="w-4 h-4" /> Create Assessment
             </motion.button>
+          </div>
+        </div>
+
+        {/* Filter & Tabs Bar */}
+        <div className={`p-3 sm:p-4 rounded-2xl border flex flex-col md:flex-row md:items-center justify-between gap-3 shadow-sm ${
+          isDark ? "bg-semidark border-dark_border" : "bg-white border-border"
+        }`}>
+          {/* Segmented Filter Tabs */}
+          <div className="flex items-center gap-1.5 p-1 rounded-xl bg-gray-100 dark:bg-darklight/60 border border-transparent dark:border-dark_border self-start sm:self-auto overflow-x-auto max-w-full">
+            <button
+              onClick={() => {
+                setActiveTab("all");
+                setSelectedProgramId("");
+              }}
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
+                activeTab === "all"
+                  ? "bg-primary text-white shadow-sm"
+                  : isDark
+                    ? "text-gray hover:text-white"
+                    : "text-midnight_text/70 hover:text-midnight_text"
+              }`}
+            >
+              <FiLayers size={13} />
+              All Assessments
+              <span className={`ml-1 px-1.5 py-0.2 rounded-full text-[10px] ${
+                activeTab === "all" ? "bg-white/20 text-white" : "bg-gray/20 text-gray"
+              }`}>
+                {assignments.length}
+              </span>
+            </button>
+
+            <button
+              onClick={() => {
+                setActiveTab("courses");
+                setSelectedProgramId("");
+              }}
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
+                activeTab === "courses"
+                  ? "bg-indigo-600 text-white shadow-sm"
+                  : isDark
+                    ? "text-gray hover:text-white"
+                    : "text-midnight_text/70 hover:text-midnight_text"
+              }`}
+            >
+              <FiBookOpen size={13} />
+              Course Assignments
+              <span className={`ml-1 px-1.5 py-0.2 rounded-full text-[10px] ${
+                activeTab === "courses" ? "bg-white/20 text-white" : "bg-gray/20 text-gray"
+              }`}>
+                {courseCount}
+              </span>
+            </button>
+
+            <button
+              onClick={() => {
+                setActiveTab("internships");
+                setSelectedProgramId("");
+              }}
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
+                activeTab === "internships"
+                  ? "bg-amber-600 text-white shadow-sm"
+                  : isDark
+                    ? "text-gray hover:text-white"
+                    : "text-midnight_text/70 hover:text-midnight_text"
+              }`}
+            >
+              <FiBriefcase size={13} />
+              Internship Assessments
+              <span className={`ml-1 px-1.5 py-0.2 rounded-full text-[10px] ${
+                activeTab === "internships" ? "bg-white/20 text-white" : "bg-gray/20 text-gray"
+              }`}>
+                {internshipCount}
+              </span>
+            </button>
+          </div>
+
+          {/* Search Box & Program Dropdown */}
+          <div className="flex items-center gap-2.5 flex-1 md:max-w-md justify-end">
+            <div className="relative w-full">
+              <FiSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray" size={15} />
+              <input
+                type="text"
+                placeholder={
+                  activeTab === "courses"
+                    ? "Search course assignments..."
+                    : activeTab === "internships"
+                    ? "Search internship assessments..."
+                    : "Search by title, domain, batch..."
+                }
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className={`w-full pl-9 pr-8 py-1.5 text-xs rounded-xl border outline-none transition ${
+                  isDark
+                    ? "bg-darklight border-dark_border text-white placeholder-gray focus:border-primary"
+                    : "bg-white border-border text-midnight_text placeholder-gray focus:border-primary"
+                }`}
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray hover:text-white text-xs cursor-pointer"
+                >
+                  <FiX size={13} />
+                </button>
+              )}
+            </div>
+
+            {/* Filter by specific Course */}
+            {activeTab === "courses" && mentorCourses.length > 0 && (
+              <select
+                value={selectedProgramId}
+                onChange={(e) => setSelectedProgramId(e.target.value)}
+                className={`shrink-0 max-w-[150px] truncate px-2.5 py-1.5 text-xs rounded-xl border outline-none cursor-pointer ${
+                  isDark ? "bg-darklight border-dark_border text-white" : "bg-white border-border text-midnight_text"
+                }`}
+              >
+                <option value="">All Courses</option>
+                {mentorCourses.map((c) => (
+                  <option key={c._id} value={c._id}>
+                    {c.name}
+                  </option>
+                ))}
+              </select>
+            )}
+
+            {/* Filter by specific Internship Domain */}
+            {activeTab === "internships" && mentorInternships.length > 0 && (
+              <select
+                value={selectedProgramId}
+                onChange={(e) => setSelectedProgramId(e.target.value)}
+                className={`shrink-0 max-w-[170px] truncate px-2.5 py-1.5 text-xs rounded-xl border outline-none cursor-pointer ${
+                  isDark ? "bg-darklight border-dark_border text-white" : "bg-white border-border text-midnight_text"
+                }`}
+              >
+                <option value="">All Domains</option>
+                {mentorInternships.map((d) => (
+                  <option key={d._id} value={d._id}>
+                    {d.name}
+                  </option>
+                ))}
+              </select>
+            )}
           </div>
         </div>
 
@@ -165,23 +377,46 @@ const MentorAssignments = () => {
           isDark ? "bg-semidark border-dark_border" : "bg-white border-border"
         }`}>
           {isLoading ? (
-            <div className="p-16 text-center text-sm text-gray">Loading assignments...</div>
-          ) : assignments.length === 0 ? (
+            <div className="p-16 text-center text-sm text-gray">Loading assessments...</div>
+          ) : filteredAssignments.length === 0 ? (
             <div className="p-16 text-center text-gray space-y-3">
               <FiClipboard size={40} className="mx-auto text-primary opacity-30" />
-              <p className="font-semibold text-base">No assignments for your courses</p>
-              <p className="text-xs max-w-sm mx-auto">
-                Click "Create Assignment & Questions" above to publish your first assignment for your students.
+              <p className="font-semibold text-base">
+                {assignments.length === 0
+                  ? "No assessments created yet"
+                  : activeTab === "internships"
+                  ? "No internship assessments found"
+                  : activeTab === "courses"
+                  ? "No course assignments found"
+                  : "No assessments match your search"}
               </p>
-              <button
-                onClick={() => {
-                  setEditAssignment(null);
-                  setIsModalOpen(true);
-                }}
-                className="mt-2 inline-flex items-center gap-2 px-4 py-2 rounded-xl btn-primary text-xs font-semibold cursor-pointer"
-              >
-                <FiPlus /> Create Assignment Now
-              </button>
+              <p className="text-xs max-w-sm mx-auto">
+                {assignments.length === 0
+                  ? "Click 'Create Assessment' above to publish your first assignment or exam for your students."
+                  : "Try switching tabs or clearing your search term to see other assessments."}
+              </p>
+              {assignments.length > 0 ? (
+                <button
+                  onClick={() => {
+                    setActiveTab("all");
+                    setSearchQuery("");
+                    setSelectedProgramId("");
+                  }}
+                  className="mt-2 inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-primary/10 text-primary border border-primary/20 text-xs font-semibold cursor-pointer hover:bg-primary/20 transition"
+                >
+                  Clear Filters
+                </button>
+              ) : (
+                <button
+                  onClick={() => {
+                    setEditAssignment(null);
+                    setIsModalOpen(true);
+                  }}
+                  className="mt-2 inline-flex items-center gap-2 px-4 py-2 rounded-xl btn-primary text-xs font-semibold cursor-pointer"
+                >
+                  <FiPlus /> Create Assessment Now
+                </button>
+              )}
             </div>
           ) : (
             <div className="overflow-x-auto">
@@ -190,8 +425,9 @@ const MentorAssignments = () => {
                   <tr className={`border-b text-[11px] uppercase text-gray font-semibold ${
                     isDark ? "border-dark_border bg-darklight/40" : "border-border bg-gray-50"
                   }`}>
-                    <th className="py-3.5 px-4">Assignment</th>
-                    <th className="py-3.5 px-4">Course / Batch</th>
+                    <th className="py-3.5 px-4">Assessment</th>
+                    <th className="py-3.5 px-4">Type</th>
+                    <th className="py-3.5 px-4">Program / Domain & Batch</th>
                     <th className="py-3.5 px-4">Questions & Marks</th>
                     <th className="py-3.5 px-4">Due Date</th>
                     <th className="py-3.5 px-4">Submissions</th>
@@ -199,72 +435,139 @@ const MentorAssignments = () => {
                   </tr>
                 </thead>
                 <tbody className={`divide-y ${isDark ? "divide-dark_border" : "divide-border"}`}>
-                  {assignments.map((a) => (
-                    <tr key={a._id} className="hover:bg-primary/5 transition">
-                      <td className="py-4 px-4 max-w-xs">
-                        <div className="font-bold text-sm line-clamp-1">{a.title}</div>
-                        <p className="text-[11px] text-gray line-clamp-1 mt-0.5">{a.description}</p>
-                      </td>
-                      <td className="py-4 px-4">
-                        <span className="font-semibold text-primary">{a.course?.name || "General"}</span>
-                        <div className="text-[11px] text-gray mt-0.5">{a.batch?.batchName || "All Batches"}</div>
-                      </td>
-                      <td className="py-4 px-4">
-                        <div className="font-semibold flex items-center gap-1">
-                          <FiHelpCircle className="text-primary" /> {a.questions?.length || 0} Questions
-                        </div>
-                        <span className="text-[11px] text-gray">Max {a.totalMarks || 100} pts</span>
-                      </td>
-                      <td className="py-4 px-4">
-                        {a.dueDate ? (
-                          <span className="font-semibold text-slate-300">
-                            {new Date(a.dueDate).toLocaleDateString()}
-                          </span>
-                        ) : (
-                          <span className="text-gray italic">No deadline</span>
-                        )}
-                      </td>
-                      <td className="py-4 px-4">
-                        <button
-                          onClick={() => setSelectedAssignment(a)}
-                          className="px-2.5 py-1 rounded-xl text-xs font-bold bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition cursor-pointer"
-                        >
-                          {a.totalSubmissions || 0} Submitted
-                        </button>
-                        {a.pendingReview > 0 && (
-                          <span className="block text-[10px] text-amber-400 font-semibold mt-1">
-                            {a.pendingReview} pending review
-                          </span>
-                        )}
-                      </td>
-                      <td className="py-4 px-4 text-right space-x-1.5">
-                        <button
-                          onClick={() => setSelectedAssignment(a)}
-                          className="p-2 rounded-lg text-primary hover:bg-primary/10 transition cursor-pointer"
-                          title="View & Grade Submissions"
-                        >
-                          <FiEye size={15} />
-                        </button>
-                        <button
-                          onClick={() => {
-                            setEditAssignment(a);
-                            setIsModalOpen(true);
-                          }}
-                          className="p-2 rounded-lg text-gray hover:text-white hover:bg-white/10 transition cursor-pointer"
-                          title="Edit Assignment"
-                        >
-                          <FiEdit2 size={15} />
-                        </button>
-                        <button
-                          onClick={() => handleDeleteAssignment(a._id, a.title)}
-                          className="p-2 rounded-lg text-red-500 hover:bg-red-500/10 transition cursor-pointer"
-                          title="Delete Assignment"
-                        >
-                          <FiTrash2 size={15} />
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
+                  {filteredAssignments.map((a) => {
+                    const type = getAssignmentType(a);
+                    const isInternship = type === "internship";
+                    const isCourse = type === "course";
+
+                    return (
+                      <tr key={a._id} className="hover:bg-primary/5 transition">
+                        {/* Title & Description */}
+                        <td className="py-4 px-4 max-w-xs">
+                          <div className="font-bold text-sm line-clamp-1">{a.title}</div>
+                          <p className="text-[11px] text-gray line-clamp-1 mt-0.5">{a.description}</p>
+                        </td>
+
+                        {/* Distinct Type Badge */}
+                        <td className="py-4 px-4 whitespace-nowrap">
+                          {isInternship ? (
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-500/10 text-amber-500 border border-amber-500/25">
+                              <FiBriefcase size={12} className="shrink-0" />
+                              Internship
+                            </span>
+                          ) : isCourse ? (
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-indigo-500/10 text-indigo-400 border border-indigo-500/25">
+                              <FiBookOpen size={12} className="shrink-0" />
+                              Course
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-blue-500/10 text-blue-400 border border-blue-500/25">
+                              <FiLayers size={12} className="shrink-0" />
+                              General
+                            </span>
+                          )}
+                        </td>
+
+                        {/* Program / Domain Name & Batch */}
+                        <td className="py-4 px-4 min-w-[200px] max-w-xs">
+                          {isInternship ? (
+                            <div>
+                              <div
+                                className="font-bold text-amber-500 dark:text-amber-400 text-xs line-clamp-1"
+                                title={a.internshipDomain?.name || "Industrial Internship"}
+                              >
+                                {a.internshipDomain?.name || "Industrial Internship"}
+                              </div>
+                              <div className="text-[11px] text-gray mt-1 flex items-center gap-1">
+                                <FiUsers size={11} className="shrink-0 text-gray" />
+                                <span>Batch: <strong className={isDark ? "text-slate-300" : "text-slate-700"}>{a.batch?.batchName || "All Batches"}</strong></span>
+                              </div>
+                            </div>
+                          ) : isCourse ? (
+                            <div>
+                              <div
+                                className="font-bold text-primary text-xs line-clamp-1"
+                                title={a.course?.name || "Course"}
+                              >
+                                {a.course?.name || "Course"}
+                              </div>
+                              <div className="text-[11px] text-gray mt-1 flex items-center gap-1">
+                                <FiUsers size={11} className="shrink-0 text-gray" />
+                                <span>Batch: <strong className={isDark ? "text-slate-300" : "text-slate-700"}>{a.batch?.batchName || "All Batches"}</strong></span>
+                              </div>
+                            </div>
+                          ) : (
+                            <div>
+                              <div className="font-semibold text-blue-400 text-xs">General Assessment</div>
+                              <div className="text-[11px] text-gray mt-1">All Enrolled Students</div>
+                            </div>
+                          )}
+                        </td>
+
+                        {/* Questions & Total Marks */}
+                        <td className="py-4 px-4 whitespace-nowrap">
+                          <div className="font-semibold flex items-center gap-1">
+                            <FiHelpCircle className="text-primary" /> {a.questions?.length || 0} Questions
+                          </div>
+                          <span className="text-[11px] text-gray">Max {a.totalMarks || 100} pts</span>
+                        </td>
+
+                        {/* Due Date */}
+                        <td className="py-4 px-4 whitespace-nowrap">
+                          {a.dueDate ? (
+                            <span className={`font-semibold ${isDark ? "text-slate-300" : "text-slate-700"}`}>
+                              {new Date(a.dueDate).toLocaleDateString()}
+                            </span>
+                          ) : (
+                            <span className="text-gray italic">No deadline</span>
+                          )}
+                        </td>
+
+                        {/* Submissions count */}
+                        <td className="py-4 px-4 whitespace-nowrap">
+                          <button
+                            onClick={() => setSelectedAssignment(a)}
+                            className="px-2.5 py-1 rounded-xl text-xs font-bold bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition cursor-pointer"
+                          >
+                            {a.totalSubmissions || 0} Submitted
+                          </button>
+                          {a.pendingReview > 0 && (
+                            <span className="block text-[10px] text-amber-400 font-semibold mt-1">
+                              {a.pendingReview} pending review
+                            </span>
+                          )}
+                        </td>
+
+                        {/* Action buttons */}
+                        <td className="py-4 px-4 text-right whitespace-nowrap space-x-1.5">
+                          <button
+                            onClick={() => setSelectedAssignment(a)}
+                            className="p-2 rounded-lg text-primary hover:bg-primary/10 transition cursor-pointer"
+                            title="View & Grade Submissions"
+                          >
+                            <FiEye size={15} />
+                          </button>
+                          <button
+                            onClick={() => {
+                              setEditAssignment(a);
+                              setIsModalOpen(true);
+                            }}
+                            className="p-2 rounded-lg text-gray hover:text-white hover:bg-white/10 transition cursor-pointer"
+                            title="Edit Assessment"
+                          >
+                            <FiEdit2 size={15} />
+                          </button>
+                          <button
+                            onClick={() => handleDeleteAssignment(a._id, a.title)}
+                            className="p-2 rounded-lg text-red-500 hover:bg-red-500/10 transition cursor-pointer"
+                            title="Delete Assessment"
+                          >
+                            <FiTrash2 size={15} />
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
@@ -303,9 +606,26 @@ const MentorAssignments = () => {
               {/* Modal Top */}
               <div className="p-5 border-b flex items-center justify-between border-border/40">
                 <div>
-                  <h3 className="text-lg font-bold">{selectedAssignment.title} — Submissions</h3>
-                  <p className="text-xs text-gray mt-0.5">
-                    Course: {selectedAssignment.course?.name} • Max Marks: {selectedAssignment.totalMarks || 100}
+                  <div className="flex items-center gap-2">
+                    <h3 className="text-lg font-bold">{selectedAssignment.title} — Submissions</h3>
+                    {getAssignmentType(selectedAssignment) === "internship" ? (
+                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/10 text-amber-500 border border-amber-500/25 flex items-center gap-1">
+                        <FiBriefcase size={10} /> Internship
+                      </span>
+                    ) : (
+                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-indigo-500/10 text-indigo-400 border border-indigo-500/25 flex items-center gap-1">
+                        <FiBookOpen size={10} /> Course
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-xs text-gray mt-1">
+                    {selectedAssignment.internshipDomain
+                      ? `Internship Domain: ${selectedAssignment.internshipDomain.name}`
+                      : selectedAssignment.course
+                      ? `Course: ${selectedAssignment.course.name}`
+                      : "General"}{" "}
+                    • Batch: {selectedAssignment.batch?.batchName || "All Batches"} • Max Marks:{" "}
+                    {selectedAssignment.totalMarks || 100}
                   </p>
                 </div>
                 <button
@@ -324,7 +644,9 @@ const MentorAssignments = () => {
                   <div className="p-12 text-center text-gray space-y-2">
                     <FiUsers size={36} className="mx-auto opacity-30 text-primary" />
                     <p className="font-semibold text-sm">No submissions yet</p>
-                    <p className="text-xs">Students enrolled in this course have not submitted work yet.</p>
+                    <p className="text-xs">
+                      Students enrolled in this {getAssignmentType(selectedAssignment) === "internship" ? "internship domain" : "course"} have not submitted work yet.
+                    </p>
                   </div>
                 ) : (
                   <div className="space-y-3">

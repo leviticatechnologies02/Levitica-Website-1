@@ -162,10 +162,11 @@ const AssignmentManagement = () => {
         </div>
 
         {/* Filter Bar */}
-        <div className={`p-4 rounded-2xl border flex flex-col md:flex-row gap-3 items-center justify-between ${
+        <div className={`p-3.5 sm:p-4 rounded-2xl border flex flex-col xl:flex-row items-stretch xl:items-center justify-between gap-3 ${
           isDark ? "bg-semidark border-dark_border" : "bg-white border-border"
         }`}>
-          <div className="w-full md:w-72 relative">
+          {/* Search Box */}
+          <div className="relative flex-1 min-w-[200px] max-w-sm">
             <FiSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray" size={16} />
             <input
               type="text"
@@ -180,7 +181,8 @@ const AssignmentManagement = () => {
             />
           </div>
 
-          <div className="w-full md:w-auto flex flex-wrap items-center gap-2.5">
+          {/* Filters Row - Single Line */}
+          <div className="flex items-center gap-2 sm:gap-2.5 flex-nowrap overflow-x-auto shrink-0 pb-1 xl:pb-0">
             {/* Target Type Filter */}
             <select
               value={selectedTargetType}
@@ -189,7 +191,7 @@ const AssignmentManagement = () => {
                 if (e.target.value === "course") setSelectedInternshipDomain("");
                 if (e.target.value === "internship") setSelectedCourse("");
               }}
-              className={`px-3 py-2 rounded-xl text-xs sm:text-sm border outline-none ${
+              className={`w-auto shrink-0 px-3 py-2 rounded-xl text-xs sm:text-sm border outline-none cursor-pointer ${
                 isDark ? "bg-darklight border-dark_border text-white" : "bg-white border-border text-black"
               }`}
             >
@@ -204,7 +206,7 @@ const AssignmentManagement = () => {
               <select
                 value={selectedCourse}
                 onChange={(e) => setSelectedCourse(e.target.value)}
-                className={`px-3 py-2 rounded-xl text-xs sm:text-sm border outline-none max-w-[160px] truncate ${
+                className={`w-auto shrink-0 max-w-[155px] truncate px-3 py-2 rounded-xl text-xs sm:text-sm border outline-none cursor-pointer ${
                   isDark ? "bg-darklight border-dark_border text-white" : "bg-white border-border text-black"
                 }`}
               >
@@ -222,7 +224,7 @@ const AssignmentManagement = () => {
               <select
                 value={selectedInternshipDomain}
                 onChange={(e) => setSelectedInternshipDomain(e.target.value)}
-                className={`px-3 py-2 rounded-xl text-xs sm:text-sm border outline-none max-w-[170px] truncate ${
+                className={`w-auto shrink-0 max-w-[170px] truncate px-3 py-2 rounded-xl text-xs sm:text-sm border outline-none cursor-pointer ${
                   isDark ? "bg-darklight border-dark_border text-white" : "bg-white border-border text-black"
                 }`}
               >
@@ -239,7 +241,7 @@ const AssignmentManagement = () => {
             <select
               value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value)}
-              className={`px-3 py-2 rounded-xl text-xs sm:text-sm border outline-none ${
+              className={`w-auto shrink-0 px-3 py-2 rounded-xl text-xs sm:text-sm border outline-none cursor-pointer ${
                 isDark ? "bg-darklight border-dark_border text-white" : "bg-white border-border text-black"
               }`}
             >

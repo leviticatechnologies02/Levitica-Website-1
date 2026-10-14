@@ -304,32 +304,45 @@ const MentorDashboard = () => {
                       className={`divide-y ${isDark ? "divide-dark_border" : "divide-border"
                         }`}
                     >
-                      {assignments.map((a) => (
-                        <tr key={a._id} className="hover:bg-primary/5 transition">
-                          <td className="py-3 px-4 font-semibold max-w-[180px] truncate">
-                            {a.title}
-                          </td>
-                          <td className="py-3 px-4 text-gray truncate">
-                            {a.course?.name || a.internshipDomain?.name || "All"}
-                          </td>
-                          <td className="py-3 px-4">
-                            {a.questions?.length || 0} Questions
-                          </td>
-                          <td className="py-3 px-4 text-gray">
-                            {a.dueDate
-                              ? new Date(a.dueDate).toLocaleDateString()
-                              : "No deadline"}
-                          </td>
-                          <td className="py-3 px-4 text-right">
-                            <Link
-                              to="/dashboard/mentor/assignments"
-                              className="inline-flex items-center gap-1 px-3 py-1 rounded-lg bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 font-semibold"
-                            >
-                              <FiEye size={12} /> Review
-                            </Link>
-                          </td>
-                        </tr>
-                      ))}
+                      {assignments.map((a) => {
+                        const isInternship = a.targetType === "internship" || Boolean(a.internshipDomain);
+                        return (
+                          <tr key={a._id} className="hover:bg-primary/5 transition">
+                            <td className="py-3 px-4 font-semibold max-w-[180px] truncate">
+                              {a.title}
+                            </td>
+                            <td className="py-3 px-4 max-w-[190px] truncate">
+                              {isInternship ? (
+                                <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-amber-500">
+                                  <FiBriefcase size={11} className="shrink-0" />
+                                  <span className="truncate">{a.internshipDomain?.name || "Internship"}</span>
+                                </span>
+                              ) : (
+                                <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-primary">
+                                  <FiBookOpen size={11} className="shrink-0" />
+                                  <span className="truncate">{a.course?.name || "Course"}</span>
+                                </span>
+                              )}
+                            </td>
+                            <td className="py-3 px-4">
+                              {a.questions?.length || 0} Questions
+                            </td>
+                            <td className="py-3 px-4 text-gray">
+                              {a.dueDate
+                                ? new Date(a.dueDate).toLocaleDateString()
+                                : "No deadline"}
+                            </td>
+                            <td className="py-3 px-4 text-right">
+                              <Link
+                                to="/dashboard/mentor/assignments"
+                                className="inline-flex items-center gap-1 px-3 py-1 rounded-lg bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 font-semibold"
+                              >
+                                <FiEye size={12} /> Review
+                              </Link>
+                            </td>
+                          </tr>
+                        );
+                      })}
                     </tbody>
                   </table>
                 </div>
