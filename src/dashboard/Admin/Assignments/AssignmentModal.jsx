@@ -179,9 +179,14 @@ const AssignmentModal = ({
   const updateMcqOption = (qIndex, optIndex, value) => {
     setQuestions((prev) => {
       const updated = [...prev];
+      const prevOptVal = updated[qIndex].options?.[optIndex];
       const opts = [...(updated[qIndex].options || [])];
       opts[optIndex] = value;
       updated[qIndex].options = opts;
+      // If this option was selected as the correct answer, keep it synchronized
+      if (updated[qIndex].correctAnswer && updated[qIndex].correctAnswer === prevOptVal) {
+        updated[qIndex].correctAnswer = value;
+      }
       return updated;
     });
   };
@@ -189,7 +194,11 @@ const AssignmentModal = ({
   const removeMcqOption = (qIndex, optIndex) => {
     setQuestions((prev) => {
       const updated = [...prev];
+      const removedOptVal = updated[qIndex].options?.[optIndex];
       updated[qIndex].options = updated[qIndex].options.filter((_, i) => i !== optIndex);
+      if (updated[qIndex].correctAnswer === removedOptVal) {
+        updated[qIndex].correctAnswer = "";
+      }
       return updated;
     });
   };
@@ -208,6 +217,21 @@ const AssignmentModal = ({
     }
 
     const validQuestions = questions.filter((q) => q.questionText.trim() !== "");
+
+    // Validate MCQ questions have a correct answer marked
+    for (let i = 0; i < validQuestions.length; i++) {
+      const q = validQuestions[i];
+      if (q.questionType === "mcq") {
+        if (!q.options || q.options.length < 2) {
+          toast.error(`Question ${i + 1} must have at least 2 options`);
+          return;
+        }
+        if (!q.correctAnswer || !q.correctAnswer.trim()) {
+          toast.error(`Please select the correct answer radio button for Question ${i + 1}`);
+          return;
+        }
+      }
+    }
 
     try {
       const formData = new FormData();

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import DetailsContent from "./DetailsContent";
 import InternshipPaymentForm from "./InternshipsPaymentForm";
 import Footer from "@/pages/public/Footer";
@@ -10,6 +11,9 @@ import { dummyInternshipDomains } from "./dummyDomains";
 const Internships = () => {
   const [showPaymentForm, setShowPaymentForm] = useState(false);
   const [selectedDomainId, setSelectedDomainId] = useState("");
+  const [searchParams] = useSearchParams();
+  const domainParam = searchParams.get("domain") || searchParams.get("id");
+
   const { data, isLoading, isError } =
     useGetAllInternshipsDomainsQuery({ isActive: true });
 
@@ -20,6 +24,19 @@ const Internships = () => {
       : dummyInternshipDomains;
 
   const hasData = Boolean(domains && domains.length > 0);
+
+  // Auto-scroll and highlight domain if specified in query parameter
+  useEffect(() => {
+    if (domainParam && domains && domains.length > 0) {
+      setSelectedDomainId(domainParam);
+      setTimeout(() => {
+        const el = document.getElementById(`domain-${domainParam}`);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+      }, 350);
+    }
+  }, [domainParam, domains]);
 
 
 
@@ -56,6 +73,7 @@ const Internships = () => {
           <div className="w-full lg:px-8">
             <DetailsContent
               domains={domains}
+              selectedDomainId={selectedDomainId}
               isLoading={isLoading && !hasData}
               isError={isError && !hasData}
               showPaymentForm={showPaymentForm}

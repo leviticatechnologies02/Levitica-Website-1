@@ -20,6 +20,16 @@ import {
   useGradeSubmissionMutation,
 } from "@/Services/admin/assignmentAdminService";
 
+const normalizeStr = (str) => {
+  if (!str || typeof str !== "string") return "";
+  return str.trim().toLowerCase().replace(/^[a-d][\.\)]\s*/, "");
+};
+
+const isOptionMatching = (optA, optB) => {
+  if (!optA || !optB) return false;
+  return normalizeStr(optA) === normalizeStr(optB);
+};
+
 const SubmissionsModal = ({ isOpen, onClose, assignment }) => {
   const { theme } = useTheme();
   const isDark = theme === "dark";
@@ -287,7 +297,25 @@ const SubmissionsModal = ({ isOpen, onClose, assignment }) => {
                             <div className="pt-1">
                               {q.questionType === "mcq" ? (
                                 <div className="space-y-1">
-                                  <p className="text-gray">Selected Option: <span className={`font-bold ${isDark ? "text-white" : "text-midnight_text"}`}>{studentAnswer?.selectedOption || "Not answered"}</span></p>
+                                  <div className="flex flex-wrap items-center gap-2">
+                                    <p className="text-gray">
+                                      Selected Option:{" "}
+                                      <span className={`font-bold ${isDark ? "text-white" : "text-midnight_text"}`}>
+                                        {studentAnswer?.selectedOption || "Not answered"}
+                                      </span>
+                                    </p>
+                                    {q.correctAnswer && studentAnswer?.selectedOption && (
+                                      isOptionMatching(studentAnswer.selectedOption, q.correctAnswer) ? (
+                                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-600 border border-emerald-500/30 flex items-center gap-1">
+                                          <FiCheck size={11} /> Correct
+                                        </span>
+                                      ) : (
+                                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-rose-500/15 text-rose-600 border border-rose-500/30 flex items-center gap-1">
+                                          <FiX size={11} /> Incorrect
+                                        </span>
+                                      )
+                                    )}
+                                  </div>
                                   {q.correctAnswer && (
                                     <p className={`text-[11px] font-medium ${isDark ? "text-emerald-400" : "text-emerald-700"}`}>Correct Answer: {q.correctAnswer}</p>
                                   )}
@@ -301,6 +329,35 @@ const SubmissionsModal = ({ isOpen, onClose, assignment }) => {
                           </div>
                         );
                       })}
+                    </div>
+                  ) : selectedSub.answers && selectedSub.answers.length > 0 ? (
+                    <div className="space-y-3">
+                      {selectedSub.answers.map((ans, idx) => (
+                        <div
+                          key={idx}
+                          className={`p-3.5 rounded-xl border text-xs space-y-2 ${
+                            isDark ? "bg-darklight/20 border-dark_border" : "bg-gray-50 border-border"
+                          }`}
+                        >
+                          <div className="flex items-start justify-between gap-2">
+                            <span className="font-semibold text-primary">Q{idx + 1}: {ans.questionText || `Question ${idx + 1}`}</span>
+                          </div>
+                          <div className="pt-1">
+                            {ans.selectedOption ? (
+                              <p className="text-gray">
+                                Selected Option:{" "}
+                                <span className={`font-bold ${isDark ? "text-white" : "text-midnight_text"}`}>
+                                  {ans.selectedOption}
+                                </span>
+                              </p>
+                            ) : (
+                              <p className="text-gray whitespace-pre-wrap">
+                                Answer: <span className={isDark ? "text-white" : "text-midnight_text"}>{ans.answerText || "No answer provided"}</span>
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   ) : (
                     <p className="text-xs text-gray italic">No structured questions in this assignment.</p>

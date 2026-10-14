@@ -16,9 +16,20 @@ import {
   FiPlus,
   FiEdit2,
   FiTrash2,
+  FiCheck,
 } from "react-icons/fi";
 import { toast } from "react-hot-toast";
 import { useTheme } from "@/context/ThemeContext";
+
+const normalizeStr = (str) => {
+  if (!str || typeof str !== "string") return "";
+  return str.trim().toLowerCase().replace(/^[a-d][\.\)]\s*/, "");
+};
+
+const isOptionMatching = (optA, optB) => {
+  if (!optA || !optB) return false;
+  return normalizeStr(optA) === normalizeStr(optB);
+};
 import {
   useGetMentorAssignmentsQuery,
   useGetMentorCoursesQuery,
@@ -64,6 +75,11 @@ const MentorAssignments = () => {
   });
 
   const submissions = submissionsData?.submissions || [];
+  const currentAssignment =
+    submissionsData?.assignment ||
+    assignments.find((item) => item._id === selectedAssignment?._id) ||
+    selectedAssignment;
+  const assignmentQuestions = currentAssignment?.questions || [];
   const [gradeSubmission, { isLoading: isGrading }] = useGradeMentorSubmissionMutation();
 
   const handleOpenGrade = (sub) => {
@@ -392,37 +408,170 @@ const MentorAssignments = () => {
                 {/* Answers List */}
                 <div className="space-y-3">
                   <h4 className="text-xs font-bold uppercase text-gray tracking-wider">Submitted Answers:</h4>
-                  {selectedSubmission.answers && selectedSubmission.answers.length > 0 ? (
-                    selectedSubmission.answers.map((ans, idx) => (
-                      <div
-                        key={idx}
-                        className={`p-3.5 rounded-xl border text-xs space-y-1.5 ${
-                          isDark ? "bg-darklight/40 border-dark_border" : "bg-slate-50 border-border"
-                        }`}
-                      >
-                        <span className="font-bold text-primary">Question {idx + 1} ({ans.questionType}):</span>
-                        {ans.selectedOption && (
-                          <p className={`font-semibold ${isDark ? "text-slate-200" : "text-slate-800"}`}>Selected Option: {ans.selectedOption}</p>
-                        )}
-                        {ans.answerText && (
-                          <p className={`whitespace-pre-wrap font-mono text-[11px] p-2 rounded-lg ${
-                            isDark ? "text-slate-300 bg-black/20" : "text-slate-800 bg-slate-200/50"
-                          }`}>
-                            {ans.answerText}
-                          </p>
-                        )}
-                        {ans.fileUrl && (
-                          <a
-                            href={ans.fileUrl}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="inline-flex items-center gap-1.5 text-primary hover:underline font-semibold"
-                          >
-                            <FiDownload size={12} /> Download Student Uploaded Solution
-                          </a>
-                        )}
-                      </div>
-                    ))
+                  {assignmentQuestions.length > 0 ? (
+                    assignmentQuestions.map((q, idx) => {
+                      const studentAnswer = (selectedSubmission.answers || []).find((a, aIdx) => {
+                        if (a.questionId && q._id && a.questionId.toString() === q._id.toString()) return true;
+                        if (a.questionText && q.questionText && a.questionText.trim().toLowerCase() === q.questionText.trim().toLowerCase()) return true;
+                        return aIdx === idx;
+                      });
+
+                      const correctAnswer = q.correctAnswer || q.correctOption || q.correct_answer || "";
+                      const isMcq = q.questionType === "mcq" || Boolean(q.options && q.options.length > 0) || Boolean(studentAnswer?.selectedOption);
+                      const isCorrect = correctAnswer && studentAnswer?.selectedOption && isOptionMatching(studentAnswer.selectedOption, correctAnswer);
+                      const isWrong = correctAnswer && studentAnswer?.selectedOption && !isCorrect;
+
+                      return (
+                        <div
+                          key={q._id || idx}
+                          className={`p-3.5 rounded-xl border text-xs space-y-2 ${
+                            isDark ? "bg-darklight/40 border-dark_border" : "bg-slate-50 border-border"
+                          }`}
+                        >
+                          <div className="flex items-start justify-between gap-2">
+                            <span className="font-bold text-primary">
+                              Q{idx + 1}. {q.questionText}
+                            </span>
+                            <span className="text-gray shrink-0 font-medium">
+                              {q.marks || 10} pts
+                            </span>
+                          </div>
+
+                          {isMcq ? (
+                            <div className="space-y-1.5 pt-0.5">
+                              <div className="flex flex-wrap items-center gap-2">
+                                <p className={`font-semibold ${isDark ? "text-slate-200" : "text-slate-800"}`}>
+                                  Selected Option:{" "}
+                                  <span className={studentAnswer?.selectedOption ? "font-bold" : "italic text-gray-400"}>
+                                    {studentAnswer?.selectedOption || "Not answered"}
+                                  </span>
+                                </p>
+                                {isCorrect && (
+                                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-600 border border-emerald-500/30 flex items-center gap-1">
+                                    <FiCheck size={11} /> Correct
+                                  </span>
+                                )}
+                                {isWrong && (
+                                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-rose-500/15 text-rose-600 border border-rose-500/30 flex items-center gap-1">
+                                    <FiX size={11} /> Incorrect
+                                  </span>
+                                )}
+                              </div>
+                              {correctAnswer && (
+                                <p className="text-[11px] font-medium text-emerald-600 dark:text-emerald-400">
+                                  Correct Answer: {correctAnswer}
+                                </p>
+                              )}
+                            </div>
+                          ) : (
+                            <div className="pt-1">
+                              <p className="text-gray mb-1 font-medium">Student Answer:</p>
+                              <p
+                                className={`whitespace-pre-wrap font-mono text-[11px] p-2.5 rounded-lg ${
+                                  isDark ? "text-slate-300 bg-black/25" : "text-slate-800 bg-slate-200/50"
+                                }`}
+                              >
+                                {studentAnswer?.answerText || "No answer provided"}
+                              </p>
+                            </div>
+                          )}
+
+                          {studentAnswer?.fileUrl && (
+                            <div className="pt-1">
+                              <a
+                                href={studentAnswer.fileUrl}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="inline-flex items-center gap-1.5 text-primary hover:underline font-semibold"
+                              >
+                                <FiDownload size={12} /> Download Student Uploaded Solution
+                              </a>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })
+                  ) : selectedSubmission.answers && selectedSubmission.answers.length > 0 ? (
+                    selectedSubmission.answers.map((ans, idx) => {
+                      const matchingQ = (currentAssignment?.questions || []).find(
+                        (q, qIdx) =>
+                          (ans.questionId && q._id && q._id.toString() === ans.questionId.toString()) ||
+                          (ans.questionText && q.questionText && ans.questionText.trim().toLowerCase() === q.questionText.trim().toLowerCase()) ||
+                          qIdx === idx
+                      );
+                      const correctAnswer = matchingQ?.correctAnswer || matchingQ?.correctOption || "";
+                      const isMcq = matchingQ?.questionType === "mcq" || Boolean(ans.selectedOption);
+                      const isCorrect = correctAnswer && ans.selectedOption && isOptionMatching(ans.selectedOption, correctAnswer);
+                      const isWrong = correctAnswer && ans.selectedOption && !isCorrect;
+
+                      return (
+                        <div
+                          key={idx}
+                          className={`p-3.5 rounded-xl border text-xs space-y-2 ${
+                            isDark ? "bg-darklight/40 border-dark_border" : "bg-slate-50 border-border"
+                          }`}
+                        >
+                          <div className="flex items-start justify-between gap-2">
+                            <span className="font-bold text-primary">
+                              Q{idx + 1}. {matchingQ?.questionText || ans.questionText || `Question ${idx + 1}`}
+                            </span>
+                            {matchingQ?.marks && <span className="text-gray shrink-0 font-medium">{matchingQ.marks} pts</span>}
+                          </div>
+
+                          {isMcq ? (
+                            <div className="space-y-1.5 pt-0.5">
+                              <div className="flex flex-wrap items-center gap-2">
+                                <p className={`font-semibold ${isDark ? "text-slate-200" : "text-slate-800"}`}>
+                                  Selected Option:{" "}
+                                  <span className={ans.selectedOption ? "font-bold" : "italic text-gray-400"}>
+                                    {ans.selectedOption || "Not answered"}
+                                  </span>
+                                </p>
+                                {isCorrect && (
+                                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-600 border border-emerald-500/30 flex items-center gap-1">
+                                    <FiCheck size={11} /> Correct
+                                  </span>
+                                )}
+                                {isWrong && (
+                                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-rose-500/15 text-rose-600 border border-rose-500/30 flex items-center gap-1">
+                                    <FiX size={11} /> Incorrect
+                                  </span>
+                                )}
+                              </div>
+                              {correctAnswer && (
+                                <p className="text-[11px] font-medium text-emerald-600 dark:text-emerald-400">
+                                  Correct Answer: {correctAnswer}
+                                </p>
+                              )}
+                            </div>
+                          ) : (
+                            <div className="pt-1">
+                              <p className="text-gray mb-1 font-medium">Student Answer:</p>
+                              <p
+                                className={`whitespace-pre-wrap font-mono text-[11px] p-2.5 rounded-lg ${
+                                  isDark ? "text-slate-300 bg-black/25" : "text-slate-800 bg-slate-200/50"
+                                }`}
+                              >
+                                {ans.answerText || "No answer provided"}
+                              </p>
+                            </div>
+                          )}
+
+                          {ans.fileUrl && (
+                            <div className="pt-1">
+                              <a
+                                href={ans.fileUrl}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="inline-flex items-center gap-1.5 text-primary hover:underline font-semibold"
+                              >
+                                <FiDownload size={12} /> Download Student Uploaded Solution
+                              </a>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })
                   ) : (
                     <p className="text-xs text-gray italic">No structured answers found.</p>
                   )}
@@ -446,12 +595,12 @@ const MentorAssignments = () => {
                 {/* Marks Awarded Input */}
                 <div className="space-y-1.5 pt-3 border-t border-border/40">
                   <label className="text-xs font-bold block">
-                    Marks Awarded (Max: {selectedAssignment?.totalMarks || 100} pts): <span className="text-rose-500">*</span>
+                    Marks Awarded (Max: {currentAssignment?.totalMarks || selectedAssignment?.totalMarks || 100} pts): <span className="text-rose-500">*</span>
                   </label>
                   <input
                     type="number"
                     min="0"
-                    max={selectedAssignment?.totalMarks || 100}
+                    max={currentAssignment?.totalMarks || selectedAssignment?.totalMarks || 100}
                     value={marksAwarded}
                     onChange={(e) => setMarksAwarded(e.target.value)}
                     placeholder="Enter score (e.g. 85)"

@@ -48,19 +48,59 @@ const MentorProgramDetailsModal = ({ program, type = "course", onClose }) => {
 
   const detailedCourse = fullCourseData?.data || program || {};
   const details = detailedCourse?.details || {};
-  const curriculum = Array.isArray(details?.curriculum) ? details.curriculum : [];
-  const objectives = Array.isArray(details?.objectives) ? details.objectives : [];
-  const requirements = Array.isArray(details?.requirements) ? details.requirements : [];
+
+  // Resolve curriculum: either from Course details.curriculum or InternshipDomain program.curriculum / modules
+  const rawCurriculum = Array.isArray(program?.curriculum) && program.curriculum.length > 0
+    ? program.curriculum
+    : Array.isArray(details?.curriculum) && details.curriculum.length > 0
+    ? details.curriculum
+    : Array.isArray(detailedCourse?.curriculum) && detailedCourse.curriculum.length > 0
+    ? detailedCourse.curriculum
+    : [];
+
+  const curriculum = rawCurriculum.length > 0
+    ? rawCurriculum
+    : Array.isArray(program?.modules) && program.modules.length > 0
+    ? program.modules.map((m, idx) => ({
+        week: idx + 1,
+        title: m.title || `Module ${idx + 1}`,
+        duration: m.duration || "",
+        sessions: Array.isArray(m.lessons) && m.lessons.length > 0
+          ? m.lessons
+          : [{ title: m.description || m.title || `Lesson ${idx + 1}` }]
+      }))
+    : [];
+
+  const objectives = Array.isArray(details?.objectives) && details.objectives.length > 0
+    ? details.objectives
+    : Array.isArray(program?.objectives) && program.objectives.length > 0
+    ? program.objectives
+    : [];
+
+  const requirements = Array.isArray(details?.requirements) && details.requirements.length > 0
+    ? details.requirements
+    : Array.isArray(program?.requirements) && program.requirements.length > 0
+    ? program.requirements
+    : [];
 
   // Filter batches for this program
   const allBatches = batchesData?.batches || [];
   const programBatches = allBatches.filter((b) => {
     if (isCourse) {
       const bCourseId = typeof b.courseId === "object" ? b.courseId?._id : b.courseId;
-      return bCourseId === program?._id || b.courseName === program?.name || b.courseId?.name === program?.name;
+      return (
+        bCourseId?.toString() === program?._id?.toString() ||
+        b.courseName === program?.name ||
+        b.courseId?.name === program?.name
+      );
     } else {
-      const bDomainId = typeof b.internshipDomain === "object" ? b.internshipDomain?._id : b.internshipDomain;
-      return bDomainId === program?._id || b.domainName === program?.name;
+      const bDomain = b.internshipDomainId || b.internshipDomain;
+      const bDomainId = typeof bDomain === "object" ? bDomain?._id : bDomain;
+      return (
+        bDomainId?.toString() === program?._id?.toString() ||
+        b.domainName === program?.name ||
+        bDomain?.name === program?.name
+      );
     }
   });
 
@@ -277,18 +317,17 @@ const MentorProgramDetailsModal = ({ program, type = "course", onClose }) => {
               <FiInfo size={14} /> Overview & Scope
             </button>
 
-            {isCourse && (
-              <button
-                onClick={() => setActiveTab("curriculum")}
-                className={`pb-3 px-3 text-xs sm:text-sm font-semibold border-b-2 transition flex items-center gap-2 whitespace-nowrap cursor-pointer ${
-                  activeTab === "curriculum"
-                    ? "border-primary text-primary"
-                    : "border-transparent text-gray hover:text-foreground"
-                }`}
-              >
-                <FiFileText size={14} /> Curriculum & Syllabus ({curriculum.length} Weeks)
-              </button>
-            )}
+            <button
+              onClick={() => setActiveTab("curriculum")}
+              className={`pb-3 px-3 text-xs sm:text-sm font-semibold border-b-2 transition flex items-center gap-2 whitespace-nowrap cursor-pointer ${
+                activeTab === "curriculum"
+                  ? "border-primary text-primary"
+                  : "border-transparent text-gray hover:text-foreground"
+              }`}
+            >
+              <FiFileText size={14} /> Curriculum & Syllabus
+              {curriculum.length > 0 && ` (${curriculum.length} ${curriculum.length === 1 ? "Week" : "Weeks"})`}
+            </button>
 
             <button
               onClick={() => setActiveTab("batches")}
@@ -433,10 +472,10 @@ const MentorProgramDetailsModal = ({ program, type = "course", onClose }) => {
               </div>
             )}
 
-            {/* TAB 2: CURRICULUM (COURSES ONLY) */}
-            {activeTab === "curriculum" && isCourse && (
+            {/* TAB 2: CURRICULUM */}
+            {activeTab === "curriculum" && (
               <div className="space-y-4">
-                {isDetailsLoading ? (
+                {isDetailsLoading && isCourse ? (
                   <div className="p-12 text-center text-sm text-gray space-y-2">
                     <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto" />
                     <p>Loading full course syllabus...</p>
@@ -450,10 +489,10 @@ const MentorProgramDetailsModal = ({ program, type = "course", onClose }) => {
                     <FiBookOpen size={36} className="mx-auto text-primary opacity-40" />
                     <h4 className="font-bold text-sm">Detailed syllabus is being updated</h4>
                     <p className="text-xs text-gray max-w-md mx-auto">
-                      Super Admin has not populated custom weekly module sessions for this course yet.
-                      You can follow the standard curriculum topics or view the full course page.
+                      Super Admin has not populated custom weekly module sessions for this {isCourse ? "course" : "internship"} yet.
+                      You can follow the standard curriculum topics or view the full {isCourse ? "course" : "internship"} page.
                     </p>
-                    {program?._id && (
+                    {isCourse && program?._id && (
                       <button
                         onClick={handleOpenFullPage}
                         className="px-4 py-2 rounded-xl text-xs font-semibold bg-primary text-white hover:opacity-90 transition cursor-pointer"
@@ -465,7 +504,7 @@ const MentorProgramDetailsModal = ({ program, type = "course", onClose }) => {
                 ) : (
                   <div className="space-y-3">
                     <div className="flex items-center justify-between text-xs text-gray pb-1">
-                      <span>{curriculum.length} Weeks Structured Syllabus</span>
+                      <span>{curriculum.length} {curriculum.length === 1 ? "Week" : "Weeks"} Structured Syllabus</span>
                       <button
                         onClick={() =>
                           setExpandedWeeks(

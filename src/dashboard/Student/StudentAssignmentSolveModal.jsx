@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
   FiX,
+  FiXCircle,
   FiCheckCircle,
   FiClock,
   FiAward,
@@ -21,6 +22,44 @@ import {
   useGetStudentAssignmentDetailsQuery,
 } from "@/Services/student/assignmentStudentService";
 
+// Helper functions for comparing student answers with question keys
+const normalizeStr = (str) => {
+  if (!str || typeof str !== "string") return "";
+  return str.trim().toLowerCase().replace(/^[a-d][\.\)]\s*/, "");
+};
+
+const isOptionMatching = (optA, optB) => {
+  if (!optA || !optB) return false;
+  return normalizeStr(optA) === normalizeStr(optB);
+};
+
+const getCorrectAnswerForQuestion = (q, currentAns) => {
+  if (q.correctAnswer && typeof q.correctAnswer === "string" && q.correctAnswer.trim() !== "") {
+    return q.correctAnswer.trim();
+  }
+  if (q.correctOption && typeof q.correctOption === "string" && q.correctOption.trim() !== "") {
+    return q.correctOption.trim();
+  }
+  if (q.correct_answer && typeof q.correct_answer === "string" && q.correct_answer.trim() !== "") {
+    return q.correct_answer.trim();
+  }
+  if (q.answer && typeof q.answer === "string" && q.answer.trim() !== "") {
+    return q.answer.trim();
+  }
+  // Check if saved as option index
+  if (
+    q.options &&
+    q.options.length > 0 &&
+    (typeof q.correctAnswer === "number" || (!isNaN(q.correctAnswer) && q.correctAnswer !== null && q.correctAnswer !== ""))
+  ) {
+    const idx = Number(q.correctAnswer);
+    if (idx >= 0 && idx < q.options.length) {
+      return q.options[idx];
+    }
+  }
+  return currentAns?.correctAnswer || "";
+};
+
 const StudentAssignmentSolveModal = ({ isOpen, onClose, assignment, refetchList }) => {
   const { theme } = useTheme();
   const isDark = theme === "dark";
@@ -30,19 +69,31 @@ const StudentAssignmentSolveModal = ({ isOpen, onClose, assignment, refetchList 
   // Fetch complete, live details when modal opens
   const { data: detailsData } = useGetStudentAssignmentDetailsQuery(assignment?._id, {
     skip: !assignment?._id || !isOpen,
+    refetchOnMountOrArgChange: true,
   });
 
-  const currentAssignment = detailsData?.assignment || assignment;
+  // Ensure fetched details actually match this assignment and not cached data from another assignment
+  const fetchedAssignment =
+    detailsData?.assignment?._id?.toString() === assignment?._id?.toString()
+      ? detailsData.assignment
+      : null;
+
+  const currentAssignment = fetchedAssignment || assignment;
   const mySubmission = currentAssignment?.mySubmission;
 
   const status = currentAssignment?.submissionStatus || mySubmission?.status;
-  const isGraded = status === "graded";
+  const isGraded = status === "graded" || mySubmission?.status === "graded";
   const isResubmitRequested = status === "resubmit_requested";
   const isSubmitted =
     status === "submitted" ||
     status === "resubmitted" ||
     status === "late_submitted" ||
-    status === "graded";
+    isGraded;
+
+  // Evaluated: Either graded or marks were assigned
+  const isEvaluated =
+    isGraded ||
+    (mySubmission?.marksAwarded !== null && mySubmission?.marksAwarded !== undefined);
 
   // Editable only if:
   // 1) Not yet submitted, OR
@@ -63,6 +114,7 @@ const StudentAssignmentSolveModal = ({ isOpen, onClose, assignment, refetchList 
       const answerMap = {};
       (mySubmission.answers || []).forEach((a, idx) => {
         const ansObj = {
+          ...a,
           answerText: a.answerText || "",
           selectedOption: a.selectedOption || null,
         };
@@ -83,7 +135,7 @@ const StudentAssignmentSolveModal = ({ isOpen, onClose, assignment, refetchList 
       setFiles([]);
       setAnswers({});
     }
-  }, [currentAssignment, mySubmission, isOpen]);
+  }, [assignment?._id, currentAssignment?._id, mySubmission, isOpen]);
 
   // Robust answer lookup for a question
   const getQuestionAnswer = (q, idx) => {
@@ -371,61 +423,296 @@ const StudentAssignmentSolveModal = ({ isOpen, onClose, assignment, refetchList 
                 {currentAssignment.questions.map((q, idx) => {
                   const qKey = q._id ? q._id.toString() : q.questionText;
                   const currentAns = getQuestionAnswer(q, idx);
+                  const correctAnswer = getCorrectAnswerForQuestion(q, currentAns);
+                  const hasCorrectAnswer = Boolean(correctAnswer && correctAnswer.trim() !== "");
+                  const isSelectedAnswerCorrect =
+                    hasCorrectAnswer &&
+                    currentAns?.selectedOption &&
+                    isOptionMatching(currentAns.selectedOption, correctAnswer);
+                  const isSelectedAnswerWrong =
+                    hasCorrectAnswer &&
+                    currentAns?.selectedOption &&
+                    !isOptionMatching(currentAns.selectedOption, correctAnswer);
+                  const isNotAnswered = !currentAns?.selectedOption && !currentAns?.answerText;
+
+                  let cardBorderClass = isDark
+                    ? "bg-darklight/40 border-dark_border"
+                    : "bg-gray-50/80 border-border";
+
+                  if (isEvaluated && hasCorrectAnswer && q.questionType === "mcq") {
+                    if (isSelectedAnswerCorrect) {
+                      cardBorderClass += " border-l-4 border-l-emerald-500";
+                    } else if (isSelectedAnswerWrong) {
+                      cardBorderClass += " border-l-4 border-l-rose-500";
+                    }
+                  }
 
                   return (
                     <div
                       key={idx}
-                      className={`p-4 rounded-xl border space-y-3 transition ${
-                        isDark ? "bg-darklight/40 border-dark_border" : "bg-gray-50/80 border-border"
-                      }`}
+                      className={`p-4 rounded-xl border space-y-3 transition ${cardBorderClass}`}
                     >
+                      {/* Question Header & Points */}
                       <div className="flex items-start justify-between gap-2">
                         <span className="font-semibold text-xs sm:text-sm">
                           <span className="text-primary font-bold">Q{idx + 1}.</span> {q.questionText}
                         </span>
-                        <span className="text-xs px-2 py-0.5 rounded-md bg-primary/10 text-primary font-bold shrink-0">
-                          {q.marks || 10} pts
-                        </span>
+
+                        <div className="flex items-center gap-1.5 shrink-0">
+                          {isEvaluated && q.questionType === "mcq" && (
+                            hasCorrectAnswer ? (
+                              isSelectedAnswerCorrect ? (
+                                <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30 font-bold flex items-center gap-1">
+                                  <FiCheck size={12} className="text-emerald-600 dark:text-emerald-400" /> Correct
+                                </span>
+                              ) : isSelectedAnswerWrong ? (
+                                <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-rose-500/15 text-rose-700 dark:text-rose-400 border border-rose-500/30 font-bold flex items-center gap-1">
+                                  <FiX size={12} className="text-rose-600 dark:text-rose-400" /> Incorrect
+                                </span>
+                              ) : isNotAnswered ? (
+                                <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-700 dark:text-amber-400 border border-amber-500/30 font-bold flex items-center gap-1">
+                                  <FiAlertCircle size={12} /> Not Answered
+                                </span>
+                              ) : null
+                            ) : (
+                              <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20 font-medium">
+                                Evaluated
+                              </span>
+                            )
+                          )}
+
+                          <span
+                            className={`text-xs px-2.5 py-0.5 rounded-md font-bold shrink-0 ${
+                              isEvaluated && hasCorrectAnswer && q.questionType === "mcq"
+                                ? isSelectedAnswerCorrect
+                                  ? "bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20"
+                                  : "bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20"
+                                : "bg-primary/10 text-primary"
+                            }`}
+                          >
+                            {isEvaluated && hasCorrectAnswer && q.questionType === "mcq"
+                              ? isSelectedAnswerCorrect
+                                ? `${q.marks || 10} / ${q.marks || 10} pts`
+                                : `0 / ${q.marks || 10} pts`
+                              : `${q.marks || 10} pts`}
+                          </span>
+                        </div>
                       </div>
 
                       {/* Question Answer Inputs */}
                       {q.questionType === "mcq" ? (
-                        <div className="space-y-2 pl-2">
+                        <div className="space-y-2 pl-1 sm:pl-2">
                           {(q.options || []).map((opt, optIdx) => {
-                            const isSelected = currentAns.selectedOption === opt;
-                            return (
-                              <label
-                                key={optIdx}
-                                className={`flex items-center gap-3 p-3 rounded-xl border text-xs transition ${
-                                  isSelected
-                                    ? "bg-primary text-white border-primary font-semibold shadow-sm"
-                                    : isDark
-                                    ? "bg-darklight border-dark_border hover:border-gray-500 text-gray-200"
-                                    : "bg-white border-border hover:border-gray-300 text-midnight_text"
-                                } ${isReadOnly ? "cursor-default" : "cursor-pointer"}`}
-                              >
+                            const isSelected = isOptionMatching(currentAns.selectedOption, opt);
+                            const isCorrectOption =
+                              hasCorrectAnswer && isOptionMatching(opt, correctAnswer);
+
+                            let containerClass = "";
+                            let badgeContent = null;
+                            let radioElement = null;
+
+                            if (isEvaluated) {
+                              if (hasCorrectAnswer) {
+                                if (isSelected && isCorrectOption) {
+                                  // Student selected this and it's correct
+                                  containerClass = isDark
+                                    ? "bg-emerald-950/35 border-emerald-500 text-emerald-200 font-semibold shadow-sm"
+                                    : "bg-emerald-50 border-emerald-500 text-emerald-950 font-semibold shadow-sm";
+                                  badgeContent = (
+                                    <span className="text-[10px] px-2.5 py-0.5 rounded-md font-bold bg-emerald-600 text-white flex items-center gap-1 shrink-0 shadow-xs">
+                                      <FiCheck size={12} /> Correct • Your Answer
+                                    </span>
+                                  );
+                                  radioElement = (
+                                    <div className="w-4 h-4 rounded-full bg-emerald-600 text-white flex items-center justify-center shrink-0">
+                                      <FiCheck size={11} />
+                                    </div>
+                                  );
+                                } else if (isSelected && !isCorrectOption) {
+                                  // Student selected this and it is wrong
+                                  containerClass = isDark
+                                    ? "bg-rose-950/35 border-rose-500 text-rose-200 font-semibold shadow-sm"
+                                    : "bg-rose-50 border-rose-500 text-rose-950 font-semibold shadow-sm";
+                                  badgeContent = (
+                                    <span className="text-[10px] px-2.5 py-0.5 rounded-md font-bold bg-rose-600 text-white flex items-center gap-1 shrink-0 shadow-xs">
+                                      <FiX size={12} /> Incorrect • Your Answer
+                                    </span>
+                                  );
+                                  radioElement = (
+                                    <div className="w-4 h-4 rounded-full bg-rose-600 text-white flex items-center justify-center shrink-0">
+                                      <FiX size={11} />
+                                    </div>
+                                  );
+                                } else if (!isSelected && isCorrectOption) {
+                                  // The actual correct answer that student didn't choose
+                                  containerClass = isDark
+                                    ? "bg-emerald-950/20 border-emerald-500 text-emerald-200 font-semibold border-2"
+                                    : "bg-emerald-50/80 border-emerald-500 text-emerald-950 font-semibold border-2";
+                                  badgeContent = (
+                                    <span className="text-[10px] px-2.5 py-0.5 rounded-md font-bold bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30 flex items-center gap-1 shrink-0">
+                                      <FiCheck size={12} /> Correct Answer
+                                    </span>
+                                  );
+                                  radioElement = (
+                                    <div className="w-4 h-4 rounded-full border-2 border-emerald-600 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
+                                      <FiCheck size={10} />
+                                    </div>
+                                  );
+                                } else {
+                                  // Neutral unselected option
+                                  containerClass = isDark
+                                    ? "bg-darklight/30 border-dark_border/60 text-gray-400 opacity-60"
+                                    : "bg-white/60 border-border/60 text-gray-500 opacity-60";
+                                  radioElement = (
+                                    <input
+                                      type="radio"
+                                      disabled
+                                      checked={false}
+                                      className="w-4 h-4 opacity-40 shrink-0"
+                                    />
+                                  );
+                                }
+                              } else {
+                                // Evaluated, but no correct answer key was configured by instructor
+                                if (isSelected) {
+                                  containerClass = isDark
+                                    ? "bg-primary/20 border-primary text-white font-semibold"
+                                    : "bg-primary/10 border-primary text-midnight_text font-semibold";
+                                  badgeContent = (
+                                    <span className="text-[10px] px-2 py-0.5 rounded-md font-bold bg-primary text-white shrink-0">
+                                      Your Submitted Answer
+                                    </span>
+                                  );
+                                } else {
+                                  containerClass = isDark
+                                    ? "bg-darklight/30 border-dark_border/60 text-gray-400 opacity-60"
+                                    : "bg-white/60 border-border/60 text-gray-500 opacity-60";
+                                }
+                                radioElement = (
+                                  <input
+                                    type="radio"
+                                    disabled
+                                    checked={Boolean(isSelected)}
+                                    className="accent-primary w-4 h-4 opacity-75 shrink-0"
+                                  />
+                                );
+                              }
+                            } else {
+                              // Pre-evaluation state (active test or under review)
+                              if (isSelected) {
+                                containerClass =
+                                  "bg-primary text-white border-primary font-semibold shadow-sm";
+                                badgeContent = (
+                                  <span className="text-[10px] px-2 py-0.5 rounded-md font-bold bg-white/20 text-white shrink-0">
+                                    Your Answer
+                                  </span>
+                                );
+                              } else {
+                                containerClass = isDark
+                                  ? "bg-darklight border-dark_border hover:border-gray-500 text-gray-200"
+                                  : "bg-white border-border hover:border-gray-300 text-midnight_text";
+                              }
+                              radioElement = (
                                 <input
                                   type="radio"
                                   name={`q_${idx}`}
                                   disabled={isReadOnly}
                                   checked={Boolean(isSelected)}
                                   onChange={() =>
-                                    !isReadOnly && handleAnswerChange(qKey, "selectedOption", opt)
+                                    !isReadOnly &&
+                                    handleAnswerChange(qKey, "selectedOption", opt)
                                   }
-                                  className="accent-primary w-4 h-4 cursor-pointer disabled:cursor-default"
+                                  className="accent-primary w-4 h-4 cursor-pointer disabled:cursor-default shrink-0"
                                 />
-                                <span className="flex-1">{opt}</span>
-                                {isSelected && (
-                                  <span className="text-[10px] px-2 py-0.5 rounded-md font-bold bg-white/20 text-white">
-                                    Your Answer
-                                  </span>
-                                )}
+                              );
+                            }
+
+                            return (
+                              <label
+                                key={optIdx}
+                                className={`flex items-center gap-3 p-3 rounded-xl border text-xs transition ${containerClass} ${
+                                  isReadOnly ? "cursor-default" : "cursor-pointer"
+                                }`}
+                              >
+                                {radioElement}
+                                <span className="flex-1 leading-snug">{opt}</span>
+                                {badgeContent}
                               </label>
                             );
                           })}
+
+                          {/* Post-evaluation Correct/Incorrect Explanation Banner */}
+                          {isEvaluated && (
+                            hasCorrectAnswer ? (
+                              isSelectedAnswerCorrect ? (
+                                <div
+                                  className={`mt-2 p-2.5 rounded-xl border flex items-center gap-2 text-xs ${
+                                    isDark
+                                      ? "bg-emerald-950/25 border-emerald-500/30 text-emerald-300"
+                                      : "bg-emerald-50 border-emerald-200 text-emerald-900"
+                                  }`}
+                                >
+                                  <FiCheckCircle
+                                    size={15}
+                                    className="text-emerald-600 dark:text-emerald-400 shrink-0"
+                                  />
+                                  <span>
+                                    <strong>Correct!</strong> You selected the right answer (+
+                                    {q.marks || 10} pts).
+                                  </span>
+                                </div>
+                              ) : (
+                                <div
+                                  className={`mt-2 p-3 rounded-xl border space-y-1.5 text-xs ${
+                                    isDark
+                                      ? "bg-rose-950/20 border-rose-500/30 text-rose-200"
+                                      : "bg-rose-50/70 border-rose-200 text-rose-900"
+                                  }`}
+                                >
+                                  <div className="flex items-start gap-2">
+                                    <FiXCircle
+                                      size={16}
+                                      className="text-rose-600 dark:text-rose-400 shrink-0 mt-0.5"
+                                    />
+                                    <div>
+                                      <p>
+                                        <strong>
+                                          {isNotAnswered
+                                            ? "You did not answer this question."
+                                            : "Your answer was incorrect."}
+                                        </strong>{" "}
+                                        The correct answer is:{" "}
+                                        <span className="font-bold underline text-emerald-700 dark:text-emerald-300 decoration-emerald-500">
+                                          {correctAnswer}
+                                        </span>
+                                      </p>
+                                      {q.instructions && (
+                                        <p className="mt-1 text-[11px] opacity-85">
+                                          {q.instructions}
+                                        </p>
+                                      )}
+                                    </div>
+                                  </div>
+                                </div>
+                              )
+                            ) : (
+                              <div
+                                className={`mt-2 p-2.5 rounded-xl border flex items-center gap-2 text-xs ${
+                                  isDark
+                                    ? "bg-darklight/40 border-dark_border text-gray-300"
+                                    : "bg-gray-50 border-border text-gray-700"
+                                }`}
+                              >
+                                <FiHelpCircle size={15} className="text-primary shrink-0" />
+                                <span>
+                                  Your submitted answer has been recorded. (No automated answer key was configured by the instructor for this question).
+                                </span>
+                              </div>
+                            )
+                          )}
                         </div>
                       ) : (
-                        <div className="space-y-1">
+                        <div className="space-y-2">
                           <textarea
                             rows={3}
                             disabled={isReadOnly}
@@ -444,6 +731,24 @@ const StudentAssignmentSolveModal = ({ isOpen, onClose, assignment, refetchList 
                                 : "bg-white border-border text-black focus:border-primary"
                             }`}
                           />
+
+                          {/* Expected / Model Solution if provided */}
+                          {isEvaluated && correctAnswer && (
+                            <div
+                              className={`p-3 rounded-xl border text-xs space-y-1 ${
+                                isDark
+                                  ? "bg-darklight/40 border-dark_border text-gray-200"
+                                  : "bg-emerald-50/70 border-emerald-200 text-emerald-950"
+                              }`}
+                            >
+                              <span className="font-bold text-emerald-700 dark:text-emerald-400 flex items-center gap-1.5">
+                                <FiCheckCircle size={13} /> Model / Expected Solution:
+                              </span>
+                              <p className="whitespace-pre-wrap leading-relaxed opacity-95 pl-5">
+                                {correctAnswer}
+                              </p>
+                            </div>
+                          )}
                         </div>
                       )}
                     </div>

@@ -65,11 +65,10 @@ const MentorSettings = () => {
 
   return (
     <div className="min-h-screen py-6 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-3xl mx-auto space-y-6">
+      <div className="max-w-7xl mx-auto space-y-6">
         <div>
-          <h1 className={`text-2xl sm:text-3xl font-bold flex items-center gap-2.5 ${
-            isDark ? "text-white" : "text-midnight_text"
-          }`}>
+          <h1 className={`text-2xl sm:text-3xl font-bold flex items-center gap-2.5 ${isDark ? "text-white" : "text-midnight_text"
+            }`}>
             <FiUser className="text-primary" />
             Mentor Profile & Security
           </h1>
@@ -78,9 +77,8 @@ const MentorSettings = () => {
           </p>
         </div>
 
-        <div className={`p-6 sm:p-8 rounded-3xl border shadow-sm ${
-          isDark ? "bg-semidark border-dark_border text-white" : "bg-white border-border text-midnight_text"
-        }`}>
+        <div className={`p-6 sm:p-8 rounded-3xl border shadow-sm ${isDark ? "bg-semidark border-dark_border text-white" : "bg-white border-border text-midnight_text"
+          }`}>
           {isLoading ? (
             <div className="p-12 text-center text-sm text-gray">Loading profile...</div>
           ) : (
@@ -97,9 +95,8 @@ const MentorSettings = () => {
                       type="text"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      className={`w-full px-4 py-2.5 rounded-xl text-sm border outline-none ${
-                        isDark ? "bg-darklight border-dark_border text-white" : "bg-white border-border"
-                      }`}
+                      className={`w-full px-4 py-2.5 rounded-xl text-sm border outline-none ${isDark ? "bg-darklight border-dark_border text-white" : "bg-white border-border"
+                        }`}
                     />
                   </div>
 
@@ -109,9 +106,8 @@ const MentorSettings = () => {
                       type="email"
                       disabled
                       value={mentor?.email || ""}
-                      className={`w-full px-4 py-2.5 rounded-xl text-sm border outline-none opacity-60 cursor-not-allowed ${
-                        isDark ? "bg-darklight border-dark_border text-white" : "bg-gray-100 border-border"
-                      }`}
+                      className={`w-full px-4 py-2.5 rounded-xl text-sm border outline-none opacity-60 cursor-not-allowed ${isDark ? "bg-darklight border-dark_border text-white" : "bg-gray-100 border-border"
+                        }`}
                     />
                     <span className="text-[10px] text-gray mt-0.5 block">Managed by Super Admin</span>
                   </div>
@@ -122,9 +118,8 @@ const MentorSettings = () => {
                       type="text"
                       value={mobile}
                       onChange={(e) => setMobile(e.target.value)}
-                      className={`w-full px-4 py-2.5 rounded-xl text-sm border outline-none ${
-                        isDark ? "bg-darklight border-dark_border text-white" : "bg-white border-border"
-                      }`}
+                      className={`w-full px-4 py-2.5 rounded-xl text-sm border outline-none ${isDark ? "bg-darklight border-dark_border text-white" : "bg-white border-border"
+                        }`}
                     />
                   </div>
                 </div>
@@ -138,9 +133,8 @@ const MentorSettings = () => {
                     value={expertise}
                     onChange={(e) => setExpertise(e.target.value)}
                     placeholder="e.g. React, Python, Data Science"
-                    className={`w-full px-4 py-2.5 rounded-xl text-sm border outline-none ${
-                      isDark ? "bg-darklight border-dark_border text-white" : "bg-white border-border"
-                    }`}
+                    className={`w-full px-4 py-2.5 rounded-xl text-sm border outline-none ${isDark ? "bg-darklight border-dark_border text-white" : "bg-white border-border"
+                      }`}
                   />
                 </div>
               </div>
@@ -162,9 +156,8 @@ const MentorSettings = () => {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="Min 6 characters"
-                      className={`w-full px-4 py-2.5 rounded-xl text-sm border outline-none ${
-                        isDark ? "bg-darklight border-dark_border text-white" : "bg-white border-border"
-                      }`}
+                      className={`w-full px-4 py-2.5 rounded-xl text-sm border outline-none ${isDark ? "bg-darklight border-dark_border text-white" : "bg-white border-border"
+                        }`}
                     />
                   </div>
 
@@ -175,9 +168,8 @@ const MentorSettings = () => {
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       placeholder="Repeat new password"
-                      className={`w-full px-4 py-2.5 rounded-xl text-sm border outline-none ${
-                        isDark ? "bg-darklight border-dark_border text-white" : "bg-white border-border"
-                      }`}
+                      className={`w-full px-4 py-2.5 rounded-xl text-sm border outline-none ${isDark ? "bg-darklight border-dark_border text-white" : "bg-white border-border"
+                        }`}
                     />
                   </div>
                 </div>

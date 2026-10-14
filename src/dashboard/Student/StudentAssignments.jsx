@@ -331,12 +331,15 @@ const StudentAssignments = () => {
       </div>
 
       {/* Solving & Submission Modal */}
-      <StudentAssignmentSolveModal
-        isOpen={Boolean(selectedAssignment)}
-        onClose={() => setSelectedAssignment(null)}
-        assignment={selectedAssignment}
-        refetchList={refetch}
-      />
+      {selectedAssignment && (
+        <StudentAssignmentSolveModal
+          key={selectedAssignment._id}
+          isOpen={Boolean(selectedAssignment)}
+          onClose={() => setSelectedAssignment(null)}
+          assignment={selectedAssignment}
+          refetchList={refetch}
+        />
+      )}
     </div>
   );
 };

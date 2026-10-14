@@ -6,7 +6,7 @@ import { GiAchievement } from "react-icons/gi";
 import { Link, useNavigate } from "react-router-dom";
 import { HiArrowRight, HiArrowLeft } from "react-icons/hi";
 
-const DetailsContent = ({ domains, isLoading, isError, showPaymentForm, setShowPaymentForm, onInternshipClick }) => {
+const DetailsContent = ({ domains, selectedDomainId, isLoading, isError, showPaymentForm, setShowPaymentForm, onInternshipClick }) => {
   const navigate = useNavigate();
 
   const formatDurations = (durations = []) =>
@@ -101,12 +101,19 @@ const DetailsContent = ({ domains, isLoading, isError, showPaymentForm, setShowP
             <div className="absolute top-1/2 left-1/3 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse" style={{ animationDelay: '4s' }}></div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10">
-              {domains.map((domain) => (
-                <div
-                  key={domain._id}
-                  onClick={() => onInternshipClick && onInternshipClick(domain._id)}
-                  className="bg-white/70 backdrop-blur-xl border border-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-3xl p-7 flex flex-col h-full cursor-pointer transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:bg-white/90 group"
-                >
+              {domains.map((domain) => {
+                const isSelected = Boolean(selectedDomainId && (domain._id?.toString() === selectedDomainId.toString() || domain.id === selectedDomainId));
+                return (
+                  <div
+                    key={domain._id}
+                    id={`domain-${domain._id}`}
+                    onClick={() => onInternshipClick && onInternshipClick(domain._id)}
+                    className={`backdrop-blur-xl rounded-3xl p-7 flex flex-col h-full cursor-pointer transition-all duration-500 group ${
+                      isSelected
+                        ? "bg-white border-2 border-primary ring-4 ring-primary/20 shadow-2xl scale-[1.02]"
+                        : "bg-white/70 border border-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:-translate-y-2 hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:bg-white/90"
+                    }`}
+                  >
 
                   {/* Small Icon & Category */}
                   <div className="flex items-center justify-between mb-4">
@@ -149,7 +156,8 @@ const DetailsContent = ({ domains, isLoading, isError, showPaymentForm, setShowP
                     </button>
                   </div>
                 </div>
-              ))}
+              );
+            })}
             </div>
           </div>
 
